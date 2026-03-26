@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours Tailwind CSS — Développement Web</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Fira+Code:wght@400;500;600&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════
+   VARIABLES & RESET
+════════════════════════════════════════ */
+:root {
+  --bg:        #0c0a08;
+  --surface:   #161410;
+  --surface2:  #1f1c17;
+  --surface3:  #282420;
+  --border:    #332e27;
+  --text:      #f0ebe4;
+  --muted:     #9a8f82;
+  --amber:     #f59e0b;
+  --amber-l:   #fcd34d;
+  --amber-d:   #d97706;
+  --sky:       #38bdf8;
+  --rose:      #fb7185;
+  --emerald:   #34d399;
+  --violet:    #a78bfa;
+  --w: 880px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.75;
+  font-size:16px;
+}
+
+/* ════════════════════════════════════════
+   HEADER
+════════════════════════════════════════ */
+header{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:70px 40px 55px;
+  position:relative;
+  overflow:hidden;
+}
+header::before{
+  content:'';
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 800px 500px at 100% 0%,rgba(245,158,11,.14) 0%,transparent 60%),
+    radial-gradient(ellipse 500px 400px at 0% 100%,rgba(56,189,248,.07) 0%,transparent 60%);
+  pointer-events:none;
+}
+/* diagonal stripe accent */
+header::after{
+  content:'';
+  position:absolute;
+  right:-60px;top:0;
+  width:220px;height:100%;
+  background:repeating-linear-gradient(
+    -55deg,
+    rgba(245,158,11,.06) 0px,rgba(245,158,11,.06) 2px,
+    transparent 2px,transparent 18px
+  );
+  pointer-events:none;
+}
+.header-inner{max-width:var(--w);margin:0 auto;position:relative;z-index:1}
+
+.mod-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid rgba(245,158,11,.35);
+  background:rgba(245,158,11,.08);
+  color:var(--amber);
+  font-family:'Fira Code',monospace;
+  font-size:11px;letter-spacing:2.5px;text-transform:uppercase;
+  padding:5px 14px;border-radius:20px;margin-bottom:22px;
+}
+.mod-tag::before{content:'▸ '}
+
+h1{
+  font-family:'Syne',sans-serif;
+  font-weight:800;
+  font-size:clamp(54px,9vw,96px);
+  line-height:.9;
+  letter-spacing:-3px;
+  margin-bottom:20px;
+}
+h1 em{
+  font-style:normal;
+  background:linear-gradient(95deg,var(--amber),var(--amber-l));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+h1 .sub{
+  display:block;
+  font-family:'Nunito',sans-serif;
+  font-size:clamp(16px,2.5vw,22px);
+  font-weight:300;
+  letter-spacing:.5px;
+  color:var(--muted);
+  -webkit-text-fill-color:var(--muted);
+  margin-top:14px;
+}
+
+.hdr-meta{
+  display:flex;gap:24px;flex-wrap:wrap;
+  margin-top:28px;
+  font-family:'Fira Code',monospace;
+  font-size:12px;color:var(--muted);
+}
+.hdr-meta strong{color:var(--text)}
+.pip{color:var(--amber);margin:0 4px}
+
+/* ════════════════════════════════════════
+   NAV
+════════════════════════════════════════ */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(12,10,8,.94);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+.nav-i{
+  max-width:var(--w);margin:0 auto;
+  display:flex;overflow-x:auto;scrollbar-width:none;
+  padding:0 40px;
+}
+.nav-i::-webkit-scrollbar{display:none}
+nav a{
+  display:block;padding:13px 18px;
+  color:var(--muted);text-decoration:none;
+  font-size:13px;font-weight:700;white-space:nowrap;
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:all .2s;letter-spacing:.3px;
+}
+nav a:hover{color:var(--amber);border-bottom-color:var(--amber)}
+
+/* ════════════════════════════════════════
+   MAIN
+════════════════════════════════════════ */
+main{max-width:var(--w);margin:0 auto;padding:70px 40px 120px}
+section{margin-bottom:90px;scroll-margin-top:56px}
+
+.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.sec-num{
+  font-family:'Fira Code',monospace;
+  font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--amber)
+}
+.sec-line{flex:1;height:1px;background:var(--border)}
+
+h2{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(28px,5vw,38px);
+  font-weight:800;margin-bottom:28px;line-height:1.1;
+}
+h2 .hl{color:var(--amber)}
+
+h3{
+  font-family:'Syne',sans-serif;
+  font-size:20px;font-weight:700;
+  margin:46px 0 14px;
+  display:flex;align-items:center;gap:10px;
+}
+h3 .num-badge{
+  background:var(--amber);color:var(--bg);
+  font-family:'Fira Code',monospace;
+  font-size:11px;font-weight:600;
+  padding:2px 9px;border-radius:4px;
+  letter-spacing:.5px;
+}
+
+p{margin-bottom:16px;color:#cfc8be}
+
+/* ════════════════════════════════════════
+   CALLOUTS
+════════════════════════════════════════ */
+.box{padding:18px 22px;margin:22px 0;border-radius:6px;border:1px solid;font-size:15px}
+.box-def{border-color:rgba(56,189,248,.3);background:rgba(56,189,248,.06)}
+.box-def strong{color:var(--sky);font-family:'Fira Code',monospace;font-size:13px}
+.box-tip{border-color:rgba(52,211,153,.3);background:rgba(52,211,153,.06)}
+.box-tip::before{content:'💡 '}
+.box-warn{border-color:rgba(251,113,133,.3);background:rgba(251,113,133,.06)}
+.box-warn::before{content:'⚠️ '}
+.box-amber{border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.06)}
+.box-amber::before{content:'✦ '}
+
+/* ════════════════════════════════════════
+   CODE
+════════════════════════════════════════ */
+pre{
+  background:var(--surface);
+  border:1px solid var(--border);
+  padding:22px 24px;border-radius:8px;
+  overflow-x:auto;margin:18px 0;
+  font-family:'Fira Code',monospace;
+  font-size:13px;line-height:1.75;
+  position:relative;
+}
+pre .lt{
+  position:absolute;top:10px;right:14px;
+  font-size:9px;letter-spacing:2px;
+  color:var(--muted);text-transform:uppercase;
+}
+code{font-family:'Fira Code',monospace;font-size:.86em}
+p code,li code{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  padding:2px 7px;border-radius:4px;
+  color:var(--amber-l);
+}
+
+/* Syntax */
+.t  {color:#f0ebe4}
+.k  {color:#fb7185}
+.cl {color:#f59e0b}          /* Tailwind class */
+.cl2{color:#fcd34d}          /* class variant */
+.cl3{color:#34d399}          /* responsive prefix */
+.cl4{color:#a78bfa}          /* state prefix */
+.at {color:#38bdf8}          /* HTML attr */
+.av {color:#86efac}          /* attr value */
+.tg {color:#7ee787}          /* HTML tag */
+.cm {color:#4a4540;font-style:italic}
+.p  {color:#38bdf8}          /* prop name */
+.v  {color:#86efac}          /* value */
+.s  {color:#f59e0b}          /* string */
+.n  {color:#34d399}          /* number */
+
+/* ════════════════════════════════════════
+   TABLES
+════════════════════════════════════════ */
+.tw{overflow-x:auto;margin:22px 0}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{
+  background:var(--surface2);color:var(--amber);
+  padding:11px 16px;text-align:left;
+  font-family:'Fira Code',monospace;
+  font-size:10px;letter-spacing:1px;text-transform:uppercase;
+  border-bottom:2px solid var(--amber-d);
+}
+td{padding:11px 16px;border-bottom:1px solid var(--border);color:#cfc8be;vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--surface)}
+td code{background:var(--surface2);border:1px solid var(--border);padding:1px 6px;border-radius:3px;color:var(--amber-l)}
+
+/* ════════════════════════════════════════
+   CLASS PILL DEMOS
+════════════════════════════════════════ */
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.pill{
+  font-family:'Fira Code',monospace;font-size:13px;
+  padding:5px 14px;border-radius:20px;
+  border:1px solid var(--border);
+  background:var(--surface2);color:var(--amber-l);
+  white-space:nowrap;
+}
+.pill.sky{color:var(--sky);border-color:rgba(56,189,248,.3);background:rgba(56,189,248,.08)}
+.pill.emerald{color:var(--emerald);border-color:rgba(52,211,153,.3);background:rgba(52,211,153,.08)}
+.pill.rose{color:var(--rose);border-color:rgba(251,113,133,.3);background:rgba(251,113,133,.08)}
+.pill.violet{color:var(--violet);border-color:rgba(167,139,250,.3);background:rgba(167,139,250,.08)}
+
+/* ════════════════════════════════════════
+   COLOUR SWATCHES
+════════════════════════════════════════ */
+.sw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin:20px 0}
+.sw-card{border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.sw-strip{height:42px}
+.sw-info{background:var(--surface2);padding:8px 12px}
+.sw-info code{font-family:'Fira Code',monospace;font-size:12px;color:var(--muted)}
+.sw-info span{display:block;font-size:12px;color:var(--text);margin-bottom:2px}
+
+/* ════════════════════════════════════════
+   MODIFIER TABLE
+════════════════════════════════════════ */
+.mod-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+  gap:12px;margin:20px 0;
+}
+.mod-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-left:3px solid var(--amber);
+  padding:14px 16px;
+  border-radius:0 6px 6px 0;
+}
+.mod-card.sky-l{border-left-color:var(--sky)}
+.mod-card.rose-l{border-left-color:var(--rose)}
+.mod-card.em-l{border-left-color:var(--emerald)}
+.mod-card.vi-l{border-left-color:var(--violet)}
+.mod-card code{display:block;font-family:'Fira Code',monospace;font-size:14px;color:var(--amber-l);margin-bottom:6px}
+.mod-card.sky-l code{color:var(--sky)}
+.mod-card.rose-l code{color:var(--rose)}
+.mod-card.em-l code{color:var(--emerald)}
+.mod-card.vi-l code{color:var(--violet)}
+.mod-card p{font-size:13px;margin:0;color:var(--muted)}
+
+/* ════════════════════════════════════════
+   RESPONSIVE VISUAL
+════════════════════════════════════════ */
+.bp-row{
+  display:flex;align-items:flex-end;gap:6px;
+  margin:20px 0;flex-wrap:wrap;
+}
+.bp-bar{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.bp-block{
+  border-radius:4px;
+  font-family:'Fira Code',monospace;
+  font-size:11px;text-align:center;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--bg);font-weight:600;
+}
+.bp-label{font-family:'Fira Code',monospace;font-size:11px;color:var(--muted)}
+
+/* ════════════════════════════════════════
+   FLEX LIVE DEMO
+════════════════════════════════════════ */
+.fdemo{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:16px;margin:14px 0;
+}
+.fdemo-title{
+  font-family:'Fira Code',monospace;
+  font-size:11px;color:var(--amber);
+  letter-spacing:1px;text-transform:uppercase;
+  margin-bottom:10px;
+}
+.fbox{
+  display:flex;gap:8px;
+  padding:14px;
+  background:rgba(245,158,11,.04);
+  border:1px dashed rgba(245,158,11,.2);
+  border-radius:4px;
+}
+.fi{
+  background:rgba(245,158,11,.18);
+  border:1px solid rgba(245,158,11,.4);
+  color:var(--amber);
+  padding:10px 16px;border-radius:4px;
+  font-family:'Fira Code',monospace;font-size:12px;
+  text-align:center;
+}
+
+/* ════════════════════════════════════════
+   COMPARISON TABLE (CSS vs Tailwind)
+════════════════════════════════════════ */
+.cmp{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:14px;margin:22px 0;
+}
+.cmp-col{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:8px;overflow:hidden;
+}
+.cmp-head{
+  background:var(--surface2);
+  padding:10px 18px;
+  font-family:'Fira Code',monospace;
+  font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  border-bottom:1px solid var(--border);
+}
+.cmp-head.css{color:#79c0ff}
+.cmp-head.tw{color:var(--amber)}
+.cmp-col pre{margin:0;border:none;border-radius:0;background:transparent;padding:16px 20px}
+
+/* ════════════════════════════════════════
+   DEMO SECTION WRAPPER
+════════════════════════════════════════ */
+.demo-wrap{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;overflow:hidden;
+  margin-top:28px;
+}
+.demo-hdr{
+  background:var(--surface2);
+  padding:14px 22px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+}
+.dots span{width:12px;height:12px;border-radius:50%;display:inline-block}
+.dots .r{background:#ff5f57}.dots .y{background:#ffbd2e}.dots .g{background:#28ca42}
+.fname{
+  font-family:'Fira Code',monospace;
+  font-size:12px;color:var(--muted);margin-left:8px;
+}
+.demo-body{padding:26px}
+
+/* ════════════════════════════════════════
+   STEPS
+════════════════════════════════════════ */
+.steps{list-style:none;counter-reset:st}
+.steps li{
+  counter-increment:st;
+  padding:14px 18px 14px 64px;
+  position:relative;
+  background:var(--surface);
+  border-left:2px solid var(--border);
+  border-radius:0 6px 6px 0;
+  margin-bottom:4px;
+}
+.steps li::before{
+  content:counter(st);
+  position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  width:28px;height:28px;
+  background:var(--amber);color:var(--bg);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fira Code',monospace;font-size:13px;font-weight:700;
+}
+.steps li strong{color:var(--amber)}
+
+/* ════════════════════════════════════════
+   COMMIT BADGE
+════════════════════════════════════════ */
+.commit{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(52,211,153,.1);
+  border:1px solid rgba(52,211,153,.3);
+  color:var(--emerald);
+  font-family:'Fira Code',monospace;
+  font-size:12px;padding:6px 14px;
+  border-radius:6px;margin:10px 0;
+}
+.commit::before{content:'⬡ '}
+
+/* ════════════════════════════════════════
+   FILE BADGE
+════════════════════════════════════════ */
+.fb{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'Fira Code',monospace;
+  font-size:12px;padding:4px 12px;
+  border-radius:20px;margin:4px 2px;
+}
+.fb-a{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);color:var(--amber)}
+.fb-s{background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.3);color:var(--sky)}
+.fb-g{background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.3);color:var(--emerald)}
+
+/* ════════════════════════════════════════
+   REFS
+════════════════════════════════════════ */
+.ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
+.ref-card{
+  display:block;text-decoration:none;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-left:3px solid var(--amber);
+  padding:18px 20px;border-radius:0 8px 8px 0;
+  transition:all .2s;
+}
+.ref-card:hover{transform:translateX(4px);background:var(--surface2);border-left-color:var(--sky)}
+.ref-card strong{color:var(--text);font-size:15px;display:block;margin-bottom:4px}
+.ref-card .url{font-family:'Fira Code',monospace;font-size:11px;color:var(--amber)}
+.ref-card p{font-size:13px;color:var(--muted);margin:6px 0 0}
+
+/* ════════════════════════════════════════
+   FOOTER
+════════════════════════════════════════ */
+footer{
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  text-align:center;padding:28px;
+  font-family:'Fira Code',monospace;
+  font-size:12px;color:var(--muted);letter-spacing:1px;
+}
+
+@media(max-width:640px){
+  header,main{padding-left:20px;padding-right:20px}
+  .nav-i{padding:0 16px}
+  .ref-grid,.cmp{grid-template-columns:1fr}
+  h1{font-size:52px;letter-spacing:-2px}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════ HEADER ════════ -->
+<header>
+  <div class="header-inner">
+    <div class="mod-tag">Module 03 — Développement Web Front-End</div>
+    <h1>
+      <em>Tailwind</em> CSS
+      <span class="sub">Utility-First CSS Framework</span>
+    </h1>
+    <div class="hdr-meta">
+      <span class="pip">◆</span>
+      <span><strong>Niveau :</strong> Intermédiaire</span>
+      <span class="pip">◆</span>
+      <span><strong>Durée :</strong> 8 heures</span>
+      <span class="pip">◆</span>
+      <span><strong>Prérequis :</strong> Modules 01 HTML · 02 CSS</span>
+      <span class="pip">◆</span>
+      <span><strong>Version :</strong> Tailwind CSS v3 / v4</span>
+    </div>
+  </div>
+</header>
+
+<!-- ════════ NAV ════════ -->
+<nav>
+  <div class="nav-i">
+    <a href="#presentation">1. Présentation</a>
+    <a href="#environnement">2. Environnement</a>
+    <a href="#concepts">3. Concepts</a>
+    <a href="#references">4. Références</a>
+    <a href="#demo">5. Démo</a>
+  </div>
+</nav>
+
+<!-- ════════ MAIN ════════ -->
+<main>
+
+<!-- ══════════════════════════════════════
+     SECTION 1 — PRÉSENTATION
+══════════════════════════════════════ -->
+<section id="presentation">
+  <div class="eyebrow"><span class="sec-num">Section 01</span><div class="sec-line"></div></div>
+  <h2>Présentation de <span class="hl">Tailwind CSS</span></h2>
+
+  <p>
+    <strong>Tailwind CSS</strong> est un framework CSS <em>utility-first</em> (utilitaire en premier) :
+    plutôt que de fournir des composants pré-stylisés (comme Bootstrap), il propose des
+    <strong>centaines de petites classes CSS atomiques</strong> que l'on compose directement dans le HTML
+    pour construire n'importe quelle interface.
+  </p>
+
+  <div class="box box-def">
+    <strong>Utility-First — Le principe fondamental</strong><br>
+    Chaque classe Tailwind correspond à <em>une et une seule</em> déclaration CSS.
+    On assemble ces briques directement dans l'attribut <code>class</code> de chaque élément HTML,
+    sans jamais écrire de CSS personnalisé (dans la majorité des cas).
+  </div>
+
+  <h3><span class="num-badge">—</span> CSS Traditionnel vs Tailwind</h3>
+
+  <div class="cmp">
+    <div class="cmp-col">
+      <div class="cmp-head css">CSS Traditionnel</div>
+      <pre><code><span class="cm">/* style.css */</span>
+<span class="cl">.</span><span class="p">carte</span> {
+  <span class="p">background-color</span>: <span class="v">#1a1a24</span>;
+  <span class="p">padding</span>:          <span class="n">24</span>px;
+  <span class="p">border-radius</span>:    <span class="n">12</span>px;
+  <span class="p">border</span>:           <span class="n">1</span>px solid <span class="v">#2e2e40</span>;
+  <span class="p">box-shadow</span>:       <span class="n">0</span> <span class="n">4</span>px <span class="n">20</span>px <span class="n">0</span>
+                    <span class="v">rgba(0,0,0,.4)</span>;
+}
+<span class="cl">.</span><span class="p">carte</span>:<span class="cl2">hover</span> {
+  <span class="p">transform</span>: <span class="v">translateY(-4px)</span>;
+}
+<span class="cm">/* index.html */</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"carte"</span><span class="tg">&gt;</span>...<span class="tg">&lt;/div&gt;</span>
+</code></pre>
+    </div>
+    <div class="cmp-col">
+      <div class="cmp-head tw">Tailwind CSS</div>
+      <pre><code><span class="cm">&lt;!-- Pas de CSS séparé ! --&gt;</span>
+
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"</span>
+  <span class="cl">bg-slate-800</span>
+  <span class="cl">p-6</span>
+  <span class="cl">rounded-xl</span>
+  <span class="cl">border border-slate-700</span>
+  <span class="cl">shadow-xl</span>
+  <span class="cl4">hover</span>:<span class="cl2">-translate-y-1</span>
+  <span class="cl">transition-transform</span>
+<span class="av">"</span><span class="tg">&gt;</span>
+  ...
+<span class="tg">&lt;/div&gt;</span>
+</code></pre>
+    </div>
+  </div>
+
+  <h3><span class="num-badge">—</span> Avantages &amp; Inconvénients</h3>
+  <div class="tw">
+    <table>
+      <tr><th>Avantages ✅</th><th>Inconvénients ⚠️</th></tr>
+      <tr>
+        <td>Pas besoin de nommer des classes CSS (fin du problème de nommage)</td>
+        <td>Attribut <code>class</code> HTML plus verbeux et long</td>
+      </tr>
+      <tr>
+        <td>CSS généré = seulement les classes utilisées (très léger en production)</td>
+        <td>Courbe d'apprentissage initiale (mémoriser les utilitaires)</td>
+      </tr>
+      <tr>
+        <td>Pas de conflit de styles, tout est colocalisé dans le HTML</td>
+        <td>Peut rendre le HTML difficile à lire pour les novices</td>
+      </tr>
+      <tr>
+        <td>Personnalisation facile via <code>tailwind.config.js</code></td>
+        <td>Nécessite un outil de build (Node.js) dans le workflow standard</td>
+      </tr>
+      <tr>
+        <td>Design system intégré (palette de couleurs, échelle d'espacement cohérente)</td>
+        <td>Réutilisation de styles → recourir à <code>@apply</code> ou aux composants</td>
+      </tr>
+      <tr>
+        <td>Responsive &amp; dark mode intégrés via préfixes</td>
+        <td>Moins adapté aux projets avec beaucoup de CSS unique complexe</td>
+      </tr>
+    </table>
+  </div>
+
+  <h3><span class="num-badge">—</span> Comparaison avec d'autres approches</h3>
+  <div class="tw">
+    <table>
+      <tr><th>Framework</th><th>Approche</th><th>Contrôle visuel</th><th>Taille</th></tr>
+      <tr><td><strong>Bootstrap</strong></td><td>Composants pré-stylisés</td><td>⭐⭐</td><td>~30 KB</td></tr>
+      <tr><td><strong>Bulma</strong></td><td>Composants CSS purs</td><td>⭐⭐</td><td>~25 KB</td></tr>
+      <tr><td><strong>Tailwind CSS</strong></td><td>Utility-first</td><td>⭐⭐⭐⭐⭐</td><td>~5–20 KB*</td></tr>
+      <tr><td><strong>CSS Modules</strong></td><td>CSS scopé par composant</td><td>⭐⭐⭐⭐</td><td>Variable</td></tr>
+      <tr><td><strong>Vanilla CSS</strong></td><td>CSS pur</td><td>⭐⭐⭐⭐⭐</td><td>Variable</td></tr>
+    </table>
+    <p style="font-size:13px;color:var(--muted);margin-top:8px">* Taille en production après purge des classes non utilisées (PurgeCSS intégré).</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SECTION 2 — ENVIRONNEMENT
+══════════════════════════════════════ -->
+<section id="environnement">
+  <div class="eyebrow"><span class="sec-num">Section 02</span><div class="sec-line"></div></div>
+  <h2>Mise en place de <span class="hl">l'environnement</span></h2>
+
+  <p>
+    Il existe plusieurs façons d'intégrer Tailwind CSS dans un projet.
+    Nous couvrons les deux méthodes principales : la <strong>CDN Play</strong> (idéale pour apprendre)
+    et l'<strong>installation via npm</strong> (recommandée pour la production).
+  </p>
+
+  <h3><span class="num-badge">01</span> Méthode CDN — Play (sans installation)</h3>
+  <p>
+    La façon la plus rapide de démarrer avec Tailwind. Parfait pour le prototypage et les cours.
+    Il suffit d'ajouter un seul <code>&lt;script&gt;</code> dans le <code>&lt;head&gt;</code> de la page.
+  </p>
+
+  <div class="box box-warn">
+    La méthode CDN est réservée au <strong>développement et au prototypage</strong>.
+    Elle ne génère pas de fichier CSS optimisé et ne supporte pas la personnalisation avancée.
+    En production, utilisez toujours l'installation npm.
+  </div>
+
+  <pre><code><span class="tg">&lt;!DOCTYPE html&gt;</span>
+<span class="tg">&lt;html</span> <span class="at">lang</span>=<span class="av">"fr"</span><span class="tg">&gt;</span>
+<span class="tg">&lt;head&gt;</span>
+  <span class="tg">&lt;meta</span> <span class="at">charset</span>=<span class="av">"UTF-8"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;meta</span> <span class="at">name</span>=<span class="av">"viewport"</span> <span class="at">content</span>=<span class="av">"width=device-width, initial-scale=1.0"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;title&gt;</span>Mon Portfolio<span class="tg">&lt;/title&gt;</span>
+
+  <span class="cm">&lt;!-- ✅ Tailwind CSS via CDN Play (développement uniquement) --&gt;</span>
+  <span class="tg">&lt;script</span> <span class="at">src</span>=<span class="av">"https://cdn.tailwindcss.com"</span><span class="tg">&gt;&lt;/script&gt;</span>
+
+<span class="tg">&lt;/head&gt;</span>
+<span class="tg">&lt;body</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-gray-900 text-white</span>"</span><span class="tg">&gt;</span>
+
+  <span class="tg">&lt;h1</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-4xl font-bold text-amber-400</span>"</span><span class="tg">&gt;</span>
+    Mon Portfolio
+  <span class="tg">&lt;/h1&gt;</span>
+
+<span class="tg">&lt;/body&gt;</span>
+<span class="tg">&lt;/html&gt;</span>
+<span class="lt">HTML</span></code></pre>
+
+  <h3><span class="num-badge">02</span> Méthode npm — Installation locale (production)</h3>
+  <p>
+    L'installation via npm permet de générer un fichier CSS optimisé contenant
+    <em>uniquement</em> les classes utilisées dans votre projet (purge automatique).
+  </p>
+
+  <pre><code><span class="cm"># Pré-requis : Node.js installé (https://nodejs.org)</span>
+
+<span class="cm"># 1. Initialiser un projet npm dans le dossier du portfolio</span>
+npm init -y
+
+<span class="cm"># 2. Installer Tailwind CSS et ses dépendances</span>
+npm install -D tailwindcss postcss autoprefixer
+
+<span class="cm"># 3. Générer le fichier de configuration Tailwind</span>
+npx tailwindcss init
+
+<span class="cm"># → Crée tailwind.config.js à la racine du projet</span>
+<span class="lt">BASH</span></code></pre>
+
+  <pre><code><span class="cm">// tailwind.config.js — Configuration de base</span>
+<span class="cm">/** @type {import('tailwindcss').Config} */</span>
+module.exports = {
+  <span class="cm">// 👇 Indiquer TOUS les fichiers HTML/JS qui utilisent des classes Tailwind</span>
+  <span class="p">content</span>: [
+    <span class="s">"./*.html"</span>,           <span class="cm">// toutes les pages HTML à la racine</span>
+    <span class="s">"./src/**/*.{html,js}"</span> <span class="cm">// fichiers dans /src</span>
+  ],
+  <span class="p">theme</span>: {
+    <span class="p">extend</span>: {
+      <span class="cm">// Personnalisations ici (Section 3j)</span>
+    },
+  },
+  <span class="p">plugins</span>: [],
+}
+<span class="lt">JS</span></code></pre>
+
+  <pre><code><span class="cm">/* src/input.css — Fichier CSS source (3 directives obligatoires) */</span>
+@tailwind <span class="cl">base</span>;        <span class="cm">/* Reset CSS de Tailwind (Preflight) */</span>
+@tailwind <span class="cl">components</span>;   <span class="cm">/* Classes composants (@apply) */</span>
+@tailwind <span class="cl">utilities</span>;    <span class="cm">/* Toutes les classes utilitaires */</span>
+<span class="lt">CSS</span></code></pre>
+
+  <pre><code><span class="cm"># 4. Lancer le compilateur en mode surveillance (watch)</span>
+npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch
+
+<span class="cm"># Tailwind surveille les fichiers HTML, recompile dès qu'une classe change</span>
+<span class="cm"># → Génère dist/output.css avec SEULEMENT les classes utilisées</span>
+<span class="lt">BASH</span></code></pre>
+
+  <pre><code><span class="cm">&lt;!-- Lier le CSS compilé dans toutes les pages HTML --&gt;</span>
+<span class="tg">&lt;head&gt;</span>
+  <span class="tg">&lt;link</span> <span class="at">rel</span>=<span class="av">"stylesheet"</span> <span class="at">href</span>=<span class="av">"dist/output.css"</span><span class="tg">&gt;</span>
+<span class="tg">&lt;/head&gt;</span>
+<span class="lt">HTML</span></code></pre>
+
+  <div class="box box-tip">
+    <strong>Structure du projet avec Tailwind :</strong><br>
+    <code>fullStack_portfolio/</code><br>
+    <code>├── tailwind.config.js</code> — configuration<br>
+    <code>├── package.json</code> — dépendances npm<br>
+    <code>├── src/input.css</code> — fichier CSS source (directives @tailwind)<br>
+    <code>├── dist/output.css</code> — CSS compilé (lié dans les HTML)<br>
+    <code>├── lister-projets.html</code><br>
+    <code>├── detailler-projet.html</code><br>
+    <code>└── ajouter-projet.html</code>
+  </div>
+
+  <h3><span class="num-badge">03</span> Méthode CDN avec configuration (Tailwind v3+)</h3>
+  <p>
+    Pour utiliser la CDN tout en personnalisant la configuration (couleurs, polices…),
+    il est possible d'injecter la configuration directement dans la page via un script :
+  </p>
+  <pre><code><span class="tg">&lt;script</span> <span class="at">src</span>=<span class="av">"https://cdn.tailwindcss.com"</span><span class="tg">&gt;&lt;/script&gt;</span>
+<span class="tg">&lt;script&gt;</span>
+  tailwind.config = {
+    <span class="p">theme</span>: {
+      <span class="p">extend</span>: {
+        <span class="p">colors</span>: {
+          <span class="s">'portfolio-accent'</span>: <span class="s">'#7c3aed'</span>,
+          <span class="s">'portfolio-fond'</span>:   <span class="s">'#0f0f13'</span>,
+        },
+        <span class="p">fontFamily</span>: {
+          <span class="s">'titre'</span>: [<span class="s">'Georgia'</span>, <span class="s">'serif'</span>],
+        }
+      }
+    }
+  }
+<span class="tg">&lt;/script&gt;</span>
+<span class="lt">HTML</span></code></pre>
+</section>
+
+<!-- ══════════════════════════════════════
+     SECTION 3 — CONCEPTS
+══════════════════════════════════════ -->
+<section id="concepts">
+  <div class="eyebrow"><span class="sec-num">Section 03</span><div class="sec-line"></div></div>
+  <h2>Concepts <span class="hl">fondamentaux</span></h2>
+
+  <div class="box box-amber">
+    <strong>Convention de nommage Tailwind</strong> : la plupart des classes suivent le patron
+    <code>[propriété]-[valeur]</code> ou <code>[propriété]-[couleur]-[nuance]</code>.
+    Exemples : <code>text-xl</code>, <code>bg-blue-500</code>, <code>p-4</code>, <code>border-2</code>.
+    Les préfixes comme <code>hover:</code>, <code>md:</code> ajoutent des conditions.
+  </div>
+
+  <!-- ── 3a Couleurs ── -->
+  <h3 id="couleurs"><span class="num-badge">a</span> Couleurs</h3>
+  <p>
+    Tailwind intègre une <strong>palette de couleurs complète et harmonieuse</strong> organisée en
+    familles de 11 nuances (50 → 950). Chaque couleur peut être appliquée au texte,
+    à l'arrière-plan, aux bordures, aux ombres, etc.
+  </p>
+
+  <div class="box box-def">
+    <strong>Syntaxe générale :</strong><br>
+    <code>[propriété]-[famille]-[nuance]</code><br>
+    Exemples : <code>text-amber-400</code>, <code>bg-slate-900</code>, <code>border-rose-500</code>
+  </div>
+
+  <!-- Swatches visuels -->
+  <div class="sw-grid">
+    <div class="sw-card">
+      <div class="sw-strip" style="background:linear-gradient(90deg,#f8fafc,#e2e8f0,#64748b,#1e293b)"></div>
+      <div class="sw-info"><span>Slate</span><code>slate-50 → slate-900</code></div>
+    </div>
+    <div class="sw-card">
+      <div class="sw-strip" style="background:linear-gradient(90deg,#eff6ff,#bfdbfe,#3b82f6,#1e3a5f)"></div>
+      <div class="sw-info"><span>Blue</span><code>blue-50 → blue-900</code></div>
+    </div>
+    <div class="sw-card">
+      <div class="sw-strip" style="background:linear-gradient(90deg,#f0fdf4,#bbf7d0,#22c55e,#14532d)"></div>
+      <div class="sw-info"><span>Green</span><code>green-50 → green-900</code></div>
+    </div>
+    <div class="sw-card">
+      <div class="sw-strip" style="background:linear-gradient(90deg,#fefce8,#fde68a,#f59e0b,#78350f)"></div>
+      <div class="sw-info"><span>Amber</span><code>amber-50 → amber-900</code></div>
+    </div>
+    <div class="sw-card">
+      <div class="sw-strip" style="background:linear-gradient(90deg,#fff1f2,#fecdd3,#f43f5e,#4c0519)"></div>
+      <div class="sw-info"><span>Rose</span><code>rose-50 → rose-900</code></div>
+    </div>
+    <div class="sw-card">
+      <div class="sw-strip" style="background:linear-gradient(90deg,#f5f3ff,#ddd6fe,#8b5cf6,#2e1065)"></div>
+      <div class="sw-info"><span>Violet</span><code>violet-50 → violet-900</code></div>
+    </div>
+  </div>
+
+  <pre><code><span class="cm">&lt;!-- Couleur du TEXTE --&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-gray-300</span>"</span><span class="tg">&gt;</span>Texte gris clair<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-amber-400</span>"</span><span class="tg">&gt;</span>Texte ambre<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-blue-500</span>"</span><span class="tg">&gt;</span>Texte bleu<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-white</span>"</span><span class="tg">&gt;</span>Texte blanc<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-transparent</span>"</span><span class="tg">&gt;</span>Texte transparent<span class="tg">&lt;/p&gt;</span>
+
+<span class="cm">&lt;!-- Couleur d'ARRIÈRE-PLAN --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-slate-900</span>"</span><span class="tg">&gt;</span>Fond sombre<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-violet-600</span>"</span><span class="tg">&gt;</span>Fond violet<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-transparent</span>"</span><span class="tg">&gt;</span>Fond transparent<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Couleur de BORDURE --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">border border-amber-500</span>"</span><span class="tg">&gt;</span>Bordure ambre<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Opacité de la couleur (suffixe /[opacité]) --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-violet-600/20</span>"</span><span class="tg">&gt;</span>Violet à 20% d'opacité<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;p</span>   <span class="at">class</span>=<span class="av">"<span class="cl">text-white/70</span>"</span><span class="tg">&gt;</span>Blanc à 70% d'opacité<span class="tg">&lt;/p&gt;</span>
+<span class="lt">HTML</span></code></pre>
+
+  <div class="tw"><table>
+    <tr><th>Préfixe</th><th>Propriété CSS</th><th>Exemple</th></tr>
+    <tr><td><code>text-</code></td><td><code>color</code></td><td><code>text-blue-600</code></td></tr>
+    <tr><td><code>bg-</code></td><td><code>background-color</code></td><td><code>bg-slate-800</code></td></tr>
+    <tr><td><code>border-</code></td><td><code>border-color</code></td><td><code>border-rose-400</code></td></tr>
+    <tr><td><code>ring-</code></td><td><code>box-shadow (ring)</code></td><td><code>ring-2 ring-violet-500</code></td></tr>
+    <tr><td><code>shadow-</code></td><td><code>box-shadow color</code></td><td><code>shadow-amber-500/40</code></td></tr>
+    <tr><td><code>placeholder-</code></td><td><code>placeholder color</code></td><td><code>placeholder-gray-500</code></td></tr>
+    <tr><td><code>from- / to-</code></td><td>Dégradé</td><td><code>from-violet-500 to-cyan-400</code></td></tr>
+  </table></div>
+
+  <!-- ── 3b Typographie ── -->
+  <h3 id="typo"><span class="num-badge">b</span> Typographie</h3>
+  <p>Tailwind propose un système complet de classes pour contrôler tous les aspects typographiques.</p>
+
+  <pre><code><span class="cm">&lt;!-- TAILLE de police --&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-xs</span>"</span><span class="tg">&gt;</span>text-xs — 12px<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-sm</span>"</span><span class="tg">&gt;</span>text-sm — 14px<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-base</span>"</span><span class="tg">&gt;</span>text-base — 16px (défaut)<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-lg</span>"</span><span class="tg">&gt;</span>text-lg — 18px<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-xl</span>"</span><span class="tg">&gt;</span>text-xl — 20px<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-2xl</span>"</span><span class="tg">&gt;</span>text-2xl — 24px<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-4xl</span>"</span><span class="tg">&gt;</span>text-4xl — 36px<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-6xl</span>"</span><span class="tg">&gt;</span>text-6xl — 60px<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-9xl</span>"</span><span class="tg">&gt;</span>text-9xl — 128px<span class="tg">&lt;/p&gt;</span>
+
+<span class="cm">&lt;!-- GRAISSE (font-weight) --&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">font-thin</span>"</span><span class="tg">&gt;</span>Thin (100)<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">font-light</span>"</span><span class="tg">&gt;</span>Light (300)<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">font-normal</span>"</span><span class="tg">&gt;</span>Normal (400)<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">font-semibold</span>"</span><span class="tg">&gt;</span>SemiBold (600)<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">font-bold</span>"</span><span class="tg">&gt;</span>Bold (700)<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">font-black</span>"</span><span class="tg">&gt;</span>Black (900)<span class="tg">&lt;/p&gt;</span>
+
+<span class="cm">&lt;!-- INTERLIGNAGE (line-height) --&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">leading-none</span>"</span><span class="tg">&gt;</span>leading-none (1)<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">leading-tight</span>"</span><span class="tg">&gt;</span>leading-tight (1.25)<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">leading-normal</span>"</span><span class="tg">&gt;</span>leading-normal (1.5)<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">leading-loose</span>"</span><span class="tg">&gt;</span>leading-loose (2)<span class="tg">&lt;/p&gt;</span>
+
+<span class="cm">&lt;!-- ALIGNEMENT --&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-left</span>"</span><span class="tg">&gt;</span>Gauche<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-center</span>"</span><span class="tg">&gt;</span>Centré<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-right</span>"</span><span class="tg">&gt;</span>Droite<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-justify</span>"</span><span class="tg">&gt;</span>Justifié<span class="tg">&lt;/p&gt;</span>
+
+<span class="cm">&lt;!-- DÉCORATION --&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">underline</span>"</span><span class="tg">&gt;</span>Souligné<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">line-through</span>"</span><span class="tg">&gt;</span>Barré<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">no-underline</span>"</span><span class="tg">&gt;</span>Sans décoration<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">uppercase</span>"</span><span class="tg">&gt;</span>Majuscules<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">capitalize</span>"</span><span class="tg">&gt;</span>Première Lettre Capitale<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">italic</span>"</span><span class="tg">&gt;</span>Italique<span class="tg">&lt;/p&gt;</span>
+
+<span class="cm">&lt;!-- INTERLETTRAGE (letter-spacing) --&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">tracking-tighter</span>"</span><span class="tg">&gt;</span>Très resserré<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">tracking-normal</span>"</span><span class="tg">&gt;</span>Normal<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">tracking-widest</span>"</span><span class="tg">&gt;</span>Très espacé<span class="tg">&lt;/p&gt;</span>
+
+<span class="cm">&lt;!-- DÉBORDEMENT DE TEXTE --&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">truncate</span>"</span><span class="tg">&gt;</span>Texte tronqué avec ellipsis...<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">line-clamp-3</span>"</span><span class="tg">&gt;</span>Limité à 3 lignes...<span class="tg">&lt;/p&gt;</span>
+<span class="lt">HTML</span></code></pre>
+
+  <!-- ── 3c Arrière-plan ── -->
+  <h3 id="bg"><span class="num-badge">c</span> Arrière-plan</h3>
+  <p>Les classes <code>bg-</code> gèrent toutes les propriétés liées aux arrière-plans.</p>
+
+  <pre><code><span class="cm">&lt;!-- Couleur de fond (voir section couleurs) --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-slate-950</span>"</span><span class="tg">&gt;</span>Fond très sombre<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- DÉGRADÉS --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-gradient-to-r from-violet-600 to-cyan-400</span>"</span><span class="tg">&gt;</span>
+  Dégradé gauche → droite
+<span class="tg">&lt;/div&gt;</span>
+
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-gradient-to-br from-amber-400 via-rose-500 to-violet-600</span>"</span><span class="tg">&gt;</span>
+  Dégradé diagonal avec 3 couleurs
+<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Direction du dégradé : to-t to-b to-l to-r to-tl to-tr to-bl to-br --&gt;</span>
+
+<span class="cm">&lt;!-- IMAGE de fond --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-[url('hero.jpg')] bg-cover bg-center bg-no-repeat</span>"</span><span class="tg">&gt;</span>
+  Section héro avec image de fond
+<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Taille du fond --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-cover</span>"</span><span class="tg">&gt;</span>Couvre tout l'élément<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-contain</span>"</span><span class="tg">&gt;</span>Contenu entier visible<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-auto</span>"</span><span class="tg">&gt;</span>Taille originale<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Position --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-center</span>"</span><span class="tg">&gt;</span>Centré<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-top</span>"</span><span class="tg">&gt;</span>Haut<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-bottom</span>"</span><span class="tg">&gt;</span>Bas<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Répétition --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-no-repeat</span>"</span><span class="tg">&gt;</span>Sans répétition<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-repeat-x</span>"</span><span class="tg">&gt;</span>Répétition horizontale<span class="tg">&lt;/div&gt;</span>
+<span class="lt">HTML</span></code></pre>
+
+  <!-- ── 3d Dimensionnement ── -->
+  <h3 id="dim"><span class="num-badge">d</span> Dimensionnement</h3>
+  <p>Tailwind utilise une <strong>échelle d'espacement</strong> de base 4px (1 unité = 4px).
+  Ainsi <code>w-4</code> = 16px, <code>w-8</code> = 32px, etc.</p>
+
+  <pre><code><span class="cm">&lt;!-- LARGEUR (width) --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">w-4</span>"</span><span class="tg">&gt;</span>16px<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">w-8</span>"</span><span class="tg">&gt;</span>32px<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">w-16</span>"</span><span class="tg">&gt;</span>64px<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">w-64</span>"</span><span class="tg">&gt;</span>256px<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Largeurs fractionnelles --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">w-1/2</span>"</span><span class="tg">&gt;</span>50%<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">w-1/3</span>"</span><span class="tg">&gt;</span>33.33%<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">w-2/3</span>"</span><span class="tg">&gt;</span>66.67%<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">w-full</span>"</span><span class="tg">&gt;</span>100%<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">w-screen</span>"</span><span class="tg">&gt;</span>100vw<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">w-auto</span>"</span><span class="tg">&gt;</span>auto<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Contraintes min / max --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">min-w-0 max-w-sm</span>"</span><span class="tg">&gt;</span>max-w-sm = 384px<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">max-w-xl</span>"</span><span class="tg">&gt;</span>max-w-xl = 576px<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">max-w-4xl</span>"</span><span class="tg">&gt;</span>max-w-4xl = 896px<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">max-w-screen-lg</span>"</span><span class="tg">&gt;</span>1024px<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- HAUTEUR (height) --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">h-16</span>"</span><span class="tg">&gt;</span>64px<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">h-screen</span>"</span><span class="tg">&gt;</span>100vh<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">h-full</span>"</span><span class="tg">&gt;</span>100%<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">min-h-screen</span>"</span><span class="tg">&gt;</span>min-height 100vh<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Taille CARRÉE (w + h identiques) --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">size-10</span>"</span><span class="tg">&gt;</span>40x40px (Tailwind v3.3+)<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- VALEURS ARBITRAIRES avec [] --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">w-[420px] h-[320px]</span>"</span><span class="tg">&gt;</span>Dimensions précises<span class="tg">&lt;/div&gt;</span>
+<span class="lt">HTML</span></code></pre>
+
+  <!-- ── 3e Bordures ── -->
+  <h3 id="borders"><span class="num-badge">e</span> Bordures</h3>
+  <pre><code><span class="cm">&lt;!-- Épaisseur --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">border</span>"</span><span class="tg">&gt;</span>1px (défaut)<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">border-2</span>"</span><span class="tg">&gt;</span>2px<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">border-4</span>"</span><span class="tg">&gt;</span>4px<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">border-0</span>"</span><span class="tg">&gt;</span>Aucune bordure<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Côtés spécifiques --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">border-t-2</span>"</span><span class="tg">&gt;</span>Haut 2px<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">border-b-4</span>"</span><span class="tg">&gt;</span>Bas 4px<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">border-l-4 border-violet-500</span>"</span><span class="tg">&gt;</span>Gauche violet<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">border-x-2</span>"</span><span class="tg">&gt;</span>Gauche + Droite<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">border-y-2</span>"</span><span class="tg">&gt;</span>Haut + Bas<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Style de bordure --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">border-2 border-solid</span>"</span><span class="tg">&gt;</span>Trait plein<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">border-2 border-dashed</span>"</span><span class="tg">&gt;</span>Tirets<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">border-2 border-dotted</span>"</span><span class="tg">&gt;</span>Pointillés<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Coins arrondis (border-radius) --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">rounded</span>"</span><span class="tg">&gt;</span>4px<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">rounded-md</span>"</span><span class="tg">&gt;</span>6px<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">rounded-lg</span>"</span><span class="tg">&gt;</span>8px<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">rounded-xl</span>"</span><span class="tg">&gt;</span>12px<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">rounded-2xl</span>"</span><span class="tg">&gt;</span>16px<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">rounded-full</span>"</span><span class="tg">&gt;</span>Cercle/Pilule<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">rounded-none</span>"</span><span class="tg">&gt;</span>Pas d'arrondi<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Coins individuels --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">rounded-t-xl rounded-b-none</span>"</span><span class="tg">&gt;</span>Seulement en haut<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Ring (outline glow) --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">ring-2 ring-violet-500 ring-offset-2 ring-offset-slate-900</span>"</span><span class="tg">&gt;</span>
+  Focus ring style
+<span class="tg">&lt;/div&gt;</span>
+<span class="lt">HTML</span></code></pre>
+
+  <!-- ── 3f Espacement ── -->
+  <h3 id="spacing"><span class="num-badge">f</span> Espacement</h3>
+  <p>
+    Les classes <code>p-</code> (padding) et <code>m-</code> (margin) utilisent la même échelle numérique.
+    Chaque entier = 4px (rem en réalité : <code>p-4</code> = <code>1rem</code> = 16px).
+  </p>
+
+  <div class="tw"><table>
+    <tr><th>Classe</th><th>CSS</th><th>Valeur</th></tr>
+    <tr><td><code>p-0</code></td><td><code>padding: 0</code></td><td>0px</td></tr>
+    <tr><td><code>p-1</code></td><td><code>padding: 0.25rem</code></td><td>4px</td></tr>
+    <tr><td><code>p-2</code></td><td><code>padding: 0.5rem</code></td><td>8px</td></tr>
+    <tr><td><code>p-4</code></td><td><code>padding: 1rem</code></td><td>16px</td></tr>
+    <tr><td><code>p-6</code></td><td><code>padding: 1.5rem</code></td><td>24px</td></tr>
+    <tr><td><code>p-8</code></td><td><code>padding: 2rem</code></td><td>32px</td></tr>
+    <tr><td><code>p-10</code></td><td><code>padding: 2.5rem</code></td><td>40px</td></tr>
+    <tr><td><code>p-16</code></td><td><code>padding: 4rem</code></td><td>64px</td></tr>
+  </table></div>
+
+  <pre><code><span class="cm">&lt;!-- PADDING — tous les côtés --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">p-4</span>"</span><span class="tg">&gt;</span>padding: 1rem (16px)<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Axes --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">px-6 py-3</span>"</span><span class="tg">&gt;</span>horizontal 24px | vertical 12px<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Côtés individuels : pt pr pb pl --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">pt-8 pb-4 pl-6 pr-2</span>"</span><span class="tg">&gt;</span>Côtés distincts<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- MARGIN --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">m-4</span>"</span><span class="tg">&gt;</span>margin: 16px<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">mx-auto</span>"</span><span class="tg">&gt;</span>Centrage horizontal<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">mt-8 mb-4</span>"</span><span class="tg">&gt;</span>Top 32px | Bottom 16px<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">-mt-4</span>"</span><span class="tg">&gt;</span>Margin NÉGATIVE (superposition)<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- GAP (pour flex/grid) --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex gap-4</span>"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;div&gt;</span>Item 1<span class="tg">&lt;/div&gt;</span>
+  <span class="tg">&lt;div&gt;</span>Item 2<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- SPACE (espace entre enfants — alternative à gap) --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex space-x-4</span>"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;div&gt;</span>Item 1<span class="tg">&lt;/div&gt;</span>
+  <span class="tg">&lt;div&gt;</span>Item 2<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;/div&gt;</span>
+<span class="lt">HTML</span></code></pre>
+
+  <!-- ── 3g Modificateur ── -->
+  <h3 id="modificateur"><span class="num-badge">g</span> Modificateur</h3>
+  <p>
+    Les <strong>modificateurs</strong> (ou <em>variants</em>) sont des préfixes qui conditionnent l'application
+    d'une classe. On les applique avec la syntaxe <code>[modificateur]:[classe]</code>.
+  </p>
+
+  <div class="mod-grid">
+    <div class="mod-card sky-l"><code>hover:</code><p>Au survol de la souris</p></div>
+    <div class="mod-card rose-l"><code>focus:</code><p>Quand l'élément est sélectionné (clavier/clic)</p></div>
+    <div class="mod-card em-l"><code>active:</code><p>Pendant le clic/appui</p></div>
+    <div class="mod-card vi-l"><code>disabled:</code><p>Quand l'élément est désactivé</p></div>
+    <div class="mod-card sky-l"><code>group-hover:</code><p>Quand le parent <code>.group</code> est survolé</p></div>
+    <div class="mod-card rose-l"><code>peer-focus:</code><p>Quand le frère <code>.peer</code> est en focus</p></div>
+    <div class="mod-card em-l"><code>dark:</code><p>En mode sombre (prefers-color-scheme)</p></div>
+    <div class="mod-card vi-l"><code>first: / last:</code><p>Premier / dernier enfant</p></div>
+    <div class="mod-card"><code>odd: / even:</code><p>Enfants impairs / pairs</p></div>
+    <div class="mod-card sky-l"><code>placeholder:</code><p>Texte placeholder d'un input</p></div>
+    <div class="mod-card rose-l"><code>before: / after:</code><p>Pseudo-éléments ::before / ::after</p></div>
+    <div class="mod-card em-l"><code>checked:</code><p>Checkbox/radio cochée</p></div>
+  </div>
+
+  <pre><code><span class="cm">&lt;!-- hover: — au survol --&gt;</span>
+<span class="tg">&lt;button</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-violet-600</span> <span class="cl4">hover</span>:<span class="cl2">bg-violet-500</span> <span class="cl4">hover</span>:<span class="cl2">-translate-y-1</span> <span class="cl">transition-all</span>"</span><span class="tg">&gt;</span>
+  Bouton<span class="tg">&lt;/button&gt;</span>
+
+<span class="cm">&lt;!-- focus: — accessibilité formulaires --&gt;</span>
+<span class="tg">&lt;input</span> <span class="at">class</span>=<span class="av">"<span class="cl">border border-slate-600</span>
+             <span class="cl4">focus</span>:<span class="cl2">outline-none</span>
+             <span class="cl4">focus</span>:<span class="cl2">ring-2</span> <span class="cl4">focus</span>:<span class="cl2">ring-violet-500</span>
+             <span class="cl4">focus</span>:<span class="cl2">border-violet-500</span>"</span><span class="tg">&gt;</span>
+
+<span class="cm">&lt;!-- group-hover: — enfant réagit au survol du parent --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">group rounded-xl overflow-hidden</span>"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;img</span> <span class="at">class</span>=<span class="av">"<span class="cl">transition-transform</span> <span class="cl4">group-hover</span>:<span class="cl2">scale-105</span>"</span>
+       <span class="at">src</span>=<span class="av">"projet.jpg"</span> <span class="at">alt</span>=<span class="av">"Projet"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">opacity-0 transition-opacity</span> <span class="cl4">group-hover</span>:<span class="cl2">opacity-100</span>"</span><span class="tg">&gt;</span>
+    Visible au survol<span class="tg">&lt;/p&gt;</span>
+<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- dark: — mode sombre --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-white text-black</span> <span class="cl4">dark</span>:<span class="cl2">bg-slate-900</span> <span class="cl4">dark</span>:<span class="cl2">text-white</span>"</span><span class="tg">&gt;</span>
+  S'adapte au mode sombre du système<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- first: / last: / odd: / even: --&gt;</span>
+<span class="tg">&lt;ul&gt;</span>
+  <span class="tg">&lt;li</span> <span class="at">class</span>=<span class="av">"<span class="cl">p-3 border-b</span>
+             <span class="cl4">first</span>:<span class="cl2">rounded-t-lg</span>
+             <span class="cl4">last</span>:<span class="cl2">border-b-0 last:rounded-b-lg</span>
+             <span class="cl4">odd</span>:<span class="cl2">bg-slate-800</span>
+             <span class="cl4">even</span>:<span class="cl2">bg-slate-700</span>"</span><span class="tg">&gt;</span>Élément<span class="tg">&lt;/li&gt;</span>
+<span class="tg">&lt;/ul&gt;</span>
+<span class="lt">HTML</span></code></pre>
+
+  <!-- ── 3h Flexbox ── -->
+  <h3 id="flex-tw"><span class="num-badge">h</span> Boîtes flexibles (Flexbox)</h3>
+  <p>
+    Tailwind traduit toutes les propriétés Flexbox en classes utilitaires.
+    Le pattern est simple : <code>flex</code> active Flexbox, puis on compose avec <code>flex-</code>,
+    <code>justify-</code>, <code>items-</code>, <code>gap-</code>.
+  </p>
+
+  <pre><code><span class="cm">&lt;!-- Activation + direction --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex</span>"</span><span class="tg">&gt;</span>           Ligne (défaut)<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex flex-col</span>"</span><span class="tg">&gt;</span> Colonne<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex flex-row-reverse</span>"</span><span class="tg">&gt;</span> Ligne inversée<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Retour à la ligne --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex flex-wrap</span>"</span><span class="tg">&gt;</span>Avec retour à la ligne<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex flex-nowrap</span>"</span><span class="tg">&gt;</span>Sans retour à la ligne<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Axe principal (justify-content) --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex justify-start</span>"</span><span class="tg">&gt;</span>Début<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex justify-center</span>"</span><span class="tg">&gt;</span>Centre<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex justify-end</span>"</span><span class="tg">&gt;</span>Fin<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex justify-between</span>"</span><span class="tg">&gt;</span>Espace entre<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex justify-around</span>"</span><span class="tg">&gt;</span>Espace autour<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex justify-evenly</span>"</span><span class="tg">&gt;</span>Espace égal<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Axe transversal (align-items) --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex items-start</span>"</span><span class="tg">&gt;</span>Haut<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex items-center</span>"</span><span class="tg">&gt;</span>Centré vertical<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex items-end</span>"</span><span class="tg">&gt;</span>Bas<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex items-stretch</span>"</span><span class="tg">&gt;</span>Étirement<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Centrage parfait (vertical + horizontal) --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex items-center justify-center min-h-screen</span>"</span><span class="tg">&gt;</span>
+  Centré parfaitement sur toute la hauteur
+<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Espacement entre éléments --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex gap-4</span>"</span><span class="tg">&gt;</span>          Gap uniforme 16px<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex gap-x-6 gap-y-2</span>"</span><span class="tg">&gt;</span>Gap horizontal/vertical<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Propriétés sur les ÉLÉMENTS flex --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex gap-4</span>"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex-1</span>"</span><span class="tg">&gt;</span>Occupe tout l'espace dispo<span class="tg">&lt;/div&gt;</span>
+  <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex-none w-32</span>"</span><span class="tg">&gt;</span>Taille fixe 128px<span class="tg">&lt;/div&gt;</span>
+  <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex-auto</span>"</span><span class="tg">&gt;</span>flex: 1 1 auto<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- self-: alignement individuel --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">self-center</span>"</span><span class="tg">&gt;</span>Centré sur l'axe transversal<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">self-end</span>"</span><span class="tg">&gt;</span>En bas<span class="tg">&lt;/div&gt;</span>
+<span class="lt">HTML</span></code></pre>
+
+  <p>Exemples visuels (rendu en live CSS) :</p>
+  <div class="fdemo">
+    <div class="fdemo-title">flex justify-between items-center gap-4</div>
+    <div class="fbox" style="justify-content:space-between;align-items:center">
+      <div class="fi">Logo</div>
+      <div class="fi" style="flex:1;text-align:center">Navigation</div>
+      <div class="fi">CTA</div>
+    </div>
+  </div>
+  <div class="fdemo">
+    <div class="fdemo-title">flex flex-wrap gap-4 (grille de cartes)</div>
+    <div class="fbox" style="flex-wrap:wrap;gap:10px">
+      <div class="fi" style="flex:1 1 120px">Card 1</div>
+      <div class="fi" style="flex:1 1 120px">Card 2</div>
+      <div class="fi" style="flex:1 1 120px">Card 3</div>
+      <div class="fi" style="flex:1 1 120px">Card 4</div>
+    </div>
+  </div>
+  <div class="fdemo">
+    <div class="fdemo-title">flex flex-col gap-3 (liste verticale)</div>
+    <div class="fbox" style="flex-direction:column;gap:10px">
+      <div class="fi">Élément 1</div>
+      <div class="fi">Élément 2</div>
+      <div class="fi">Élément 3</div>
+    </div>
+  </div>
+
+  <!-- ── 3i Responsive ── -->
+  <h3 id="responsive"><span class="num-badge">i</span> Responsive Design</h3>
+  <p>
+    Tailwind est <strong>mobile-first</strong> : les classes sans préfixe s'appliquent à toutes les tailles.
+    Les préfixes de breakpoint activent des styles <em>à partir d'une certaine largeur</em>.
+  </p>
+
+  <div class="bp-row">
+    <div class="bp-bar">
+      <div class="bp-block" style="width:60px;height:80px;background:#f59e0b">
+        <span style="color:#0c0a08;writing-mode:vertical-rl;font-size:10px;transform:rotate(180deg)">base</span>
+      </div>
+      <div class="bp-label">0px+</div>
+      <div class="bp-label" style="color:var(--amber)">sm: 640px</div>
+    </div>
+    <div class="bp-bar">
+      <div class="bp-block" style="width:100px;height:80px;background:#38bdf8">
+        <span style="color:#0c0a08;font-size:10px">sm:</span>
+      </div>
+      <div class="bp-label">640px+</div>
+    </div>
+    <div class="bp-bar">
+      <div class="bp-block" style="width:140px;height:80px;background:#34d399">
+        <span style="color:#0c0a08;font-size:10px">md:</span>
+      </div>
+      <div class="bp-label">768px+</div>
+    </div>
+    <div class="bp-bar">
+      <div class="bp-block" style="width:180px;height:80px;background:#a78bfa">
+        <span style="color:#0c0a08;font-size:10px">lg:</span>
+      </div>
+      <div class="bp-label">1024px+</div>
+    </div>
+    <div class="bp-bar">
+      <div class="bp-block" style="width:220px;height:80px;background:#fb7185">
+        <span style="color:#0c0a08;font-size:10px">xl:</span>
+      </div>
+      <div class="bp-label">1280px+</div>
+    </div>
+    <div class="bp-bar">
+      <div class="bp-block" style="width:260px;height:80px;background:#f59e0b">
+        <span style="color:#0c0a08;font-size:10px">2xl:</span>
+      </div>
+      <div class="bp-label">1536px+</div>
+    </div>
+  </div>
+
+  <div class="tw"><table>
+    <tr><th>Préfixe</th><th>Breakpoint</th><th>Équivalent CSS</th></tr>
+    <tr><td>(aucun)</td><td>0px → ∞ (mobile)</td><td>Pas de media query</td></tr>
+    <tr><td><code>sm:</code></td><td>640px+</td><td><code>@media (min-width: 640px)</code></td></tr>
+    <tr><td><code>md:</code></td><td>768px+</td><td><code>@media (min-width: 768px)</code></td></tr>
+    <tr><td><code>lg:</code></td><td>1024px+</td><td><code>@media (min-width: 1024px)</code></td></tr>
+    <tr><td><code>xl:</code></td><td>1280px+</td><td><code>@media (min-width: 1280px)</code></td></tr>
+    <tr><td><code>2xl:</code></td><td>1536px+</td><td><code>@media (min-width: 1536px)</code></td></tr>
+  </table></div>
+
+  <pre><code><span class="cm">&lt;!-- Grille responsive : 1 colonne → 2 → 3 selon l'écran --&gt;</span>
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex flex-col</span> <span class="cl3">md</span>:<span class="cl2">flex-row</span> <span class="cl">flex-wrap gap-6</span>"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">w-full</span> <span class="cl3">md</span>:<span class="cl2">w-1/2</span> <span class="cl3">lg</span>:<span class="cl2">w-1/3</span>"</span><span class="tg">&gt;</span>Carte<span class="tg">&lt;/div&gt;</span>
+  <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">w-full</span> <span class="cl3">md</span>:<span class="cl2">w-1/2</span> <span class="cl3">lg</span>:<span class="cl2">w-1/3</span>"</span><span class="tg">&gt;</span>Carte<span class="tg">&lt;/div&gt;</span>
+  <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">w-full</span> <span class="cl3">md</span>:<span class="cl2">w-full</span> <span class="cl3">lg</span>:<span class="cl2">w-1/3</span>"</span><span class="tg">&gt;</span>Carte<span class="tg">&lt;/div&gt;</span>
+<span class="tg">&lt;/div&gt;</span>
+
+<span class="cm">&lt;!-- Typographie responsive --&gt;</span>
+<span class="tg">&lt;h1</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-3xl</span> <span class="cl3">md</span>:<span class="cl2">text-5xl</span> <span class="cl3">lg</span>:<span class="cl2">text-7xl</span> <span class="cl">font-bold</span>"</span><span class="tg">&gt;</span>
+  Titre adaptatif
+<span class="tg">&lt;/h1&gt;</span>
+
+<span class="cm">&lt;!-- Navigation : hamburger sur mobile, liens sur desktop --&gt;</span>
+<span class="tg">&lt;button</span> <span class="at">class</span>=<span class="av">"<span class="cl">block</span> <span class="cl3">md</span>:<span class="cl2">hidden</span>"</span><span class="tg">&gt;</span>☰<span class="tg">&lt;/button&gt;</span>
+<span class="tg">&lt;nav</span>    <span class="at">class</span>=<span class="av">"<span class="cl">hidden</span> <span class="cl3">md</span>:<span class="cl2">flex</span> <span class="cl">gap-6</span>"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;a</span> <span class="at">href</span>=<span class="av">"#"</span><span class="tg">&gt;</span>Projets<span class="tg">&lt;/a&gt;</span>
+  <span class="tg">&lt;a</span> <span class="at">href</span>=<span class="av">"#"</span><span class="tg">&gt;</span>Contact<span class="tg">&lt;/a&gt;</span>
+<span class="tg">&lt;/nav&gt;</span>
+
+<span class="cm">&lt;!-- Padding adaptatif --&gt;</span>
+<span class="tg">&lt;section</span> <span class="at">class</span>=<span class="av">"<span class="cl">px-4</span> <span class="cl3">sm</span>:<span class="cl2">px-6</span> <span class="cl3">md</span>:<span class="cl2">px-10</span> <span class="cl3">lg</span>:<span class="cl2">px-20</span>"</span><span class="tg">&gt;</span>
+  Contenu avec padding croissant
+<span class="tg">&lt;/section&gt;</span>
+<span class="lt">HTML</span></code></pre>
+
+  <!-- ── 3j Personnalisation ── -->
+  <h3 id="custom"><span class="num-badge">j</span> Personnalisation</h3>
+  <p>
+    La puissance de Tailwind réside dans sa <strong>personnalisabilité totale</strong> via
+    <code>tailwind.config.js</code>. On peut étendre (ou remplacer) n'importe quelle valeur
+    du design system par défaut.
+  </p>
+
+  <pre><code><span class="cm">// tailwind.config.js — Personnalisation complète du portfolio</span>
+module.exports = {
+  <span class="p">content</span>: [<span class="s">"./*.html"</span>],
+  <span class="p">darkMode</span>: <span class="s">'class'</span>,          <span class="cm">// mode sombre via class="dark"</span>
+  <span class="p">theme</span>: {
+    <span class="p">extend</span>: {               <span class="cm">// EXTEND = ajoute SANS écraser le défaut</span>
+
+      <span class="cm">/* Couleurs personnalisées */</span>
+      <span class="p">colors</span>: {
+        <span class="s">'portfolio'</span>: {
+          <span class="s">'fond'</span>:    <span class="s">'#0f0f13'</span>,
+          <span class="s">'surface'</span>: <span class="s">'#1a1a24'</span>,
+          <span class="s">'accent'</span>:  <span class="s">'#7c3aed'</span>,
+          <span class="s">'accent2'</span>: <span class="s">'#06b6d4'</span>,
+        }
+      },
+
+      <span class="cm">/* Polices */</span>
+      <span class="p">fontFamily</span>: {
+        <span class="s">'titre'</span>: [<span class="s">'Georgia'</span>, <span class="s">'Times New Roman'</span>, <span class="s">'serif'</span>],
+        <span class="s">'code'</span>:  [<span class="s">'Courier New'</span>, <span class="s">'monospace'</span>],
+      },
+
+      <span class="cm">/* Espacements supplémentaires */</span>
+      <span class="p">spacing</span>: {
+        <span class="s">'18'</span>: <span class="s">'4.5rem'</span>,   <span class="cm">// 72px — non dispo dans Tailwind de base</span>
+        <span class="s">'88'</span>: <span class="s">'22rem'</span>,
+      },
+
+      <span class="cm">/* Border radius personnalisé */</span>
+      <span class="p">borderRadius</span>: {
+        <span class="s">'card'</span>: <span class="s">'12px'</span>,
+      },
+
+      <span class="cm">/* Animations */</span>
+      <span class="p">animation</span>: {
+        <span class="s">'fade-in'</span>: <span class="s">'fadeIn 0.5s ease-in-out'</span>,
+        <span class="s">'slide-up'</span>: <span class="s">'slideUp 0.3s ease-out'</span>,
+      },
+      <span class="p">keyframes</span>: {
+        <span class="p">fadeIn</span>: {
+          <span class="s">'0%'</span>:   { <span class="p">opacity</span>: <span class="s">'0'</span> },
+          <span class="s">'100%'</span>: { <span class="p">opacity</span>: <span class="s">'1'</span> },
+        },
+        <span class="p">slideUp</span>: {
+          <span class="s">'0%'</span>:   { <span class="p">transform</span>: <span class="s">'translateY(20px)'</span>, <span class="p">opacity</span>: <span class="s">'0'</span> },
+          <span class="s">'100%'</span>: { <span class="p">transform</span>: <span class="s">'translateY(0)'</span>,    <span class="p">opacity</span>: <span class="s">'1'</span> },
+        },
+      },
+
+      <span class="cm">/* Largeur max du conteneur */</span>
+      <span class="p">maxWidth</span>: {
+        <span class="s">'portfolio'</span>: <span class="s">'1100px'</span>,
+      },
+    },
+  },
+  <span class="p">plugins</span>: [],
+}
+<span class="lt">JS</span></code></pre>
+
+  <pre><code><span class="cm">&lt;!-- Utilisation des valeurs personnalisées --&gt;</span>
+<span class="tg">&lt;body</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-portfolio-fond text-white font-titre</span>"</span><span class="tg">&gt;</span>
+
+<span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">max-w-portfolio mx-auto px-6</span>"</span><span class="tg">&gt;</span>
+
+  <span class="tg">&lt;h1</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-portfolio-accent font-titre text-5xl</span>"</span><span class="tg">&gt;</span>
+    Mon Portfolio
+  <span class="tg">&lt;/h1&gt;</span>
+
+  <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-portfolio-surface rounded-card p-6 animate-fade-in</span>"</span><span class="tg">&gt;</span>
+    Carte avec animation
+  <span class="tg">&lt;/div&gt;</span>
+
+<span class="tg">&lt;/div&gt;</span>
+<span class="lt">HTML</span></code></pre>
+
+  <div class="box box-tip">
+    <strong>Valeurs arbitraires</strong> : pour utiliser une valeur exacte non couverte par Tailwind,
+    utilisez la syntaxe crochets <code>[]</code> directement dans la classe :
+    <code>w-[420px]</code>, <code>text-[#e63946]</code>, <code>bg-[url('img.jpg')]</code>,
+    <code>top-[calc(50%-20px)]</code>. Très utile pour les one-offs sans surcharger la config.
+  </div>
+
+  <pre><code><span class="cm">&lt;!-- @apply — réutiliser des classes Tailwind dans du CSS --&gt;</span>
+<span class="cm">/* src/input.css */</span>
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer <span class="cl">components</span> {
+  <span class="cm">/* Créer un composant réutilisable .btn */</span>
+  .<span class="cl">btn</span> {
+    @apply <span class="cl">inline-flex items-center gap-2 px-5 py-2.5 rounded-lg</span>
+           <span class="cl">font-semibold text-sm transition-all duration-200</span>
+           <span class="cl4">focus</span>:<span class="cl2">outline-none focus:ring-2 focus:ring-offset-2</span>;
+  }
+  .<span class="cl">btn-primaire</span> {
+    @apply <span class="cl">bg-violet-600 text-white</span>
+           <span class="cl4">hover</span>:<span class="cl2">bg-violet-500</span>
+           <span class="cl">focus:ring-violet-500</span>;
+  }
+  .<span class="cl">btn-danger</span> {
+    @apply <span class="cl">bg-transparent border-2 border-rose-500 text-rose-400</span>
+           <span class="cl4">hover</span>:<span class="cl2">bg-rose-500 hover:text-white</span>;
+  }
+  .<span class="cl">carte-projet</span> {
+    @apply <span class="cl">bg-slate-800 border border-slate-700 rounded-xl overflow-hidden</span>
+           <span class="cl">transition-transform duration-200</span>
+           <span class="cl4">hover</span>:<span class="cl2">-translate-y-1 hover:shadow-xl</span>;
+  }
+}
+<span class="lt">CSS</span></code></pre>
+</section>
+
+<!-- ══════════════════════════════════════
+     SECTION 4 — RÉFÉRENCES
+══════════════════════════════════════ -->
+<section id="references">
+  <div class="eyebrow"><span class="sec-num">Section 04</span><div class="sec-line"></div></div>
+  <h2>Références</h2>
+  <p>Ressources officielles et outils pour maîtriser Tailwind CSS :</p>
+
+  <div class="ref-grid">
+    <a class="ref-card" href="https://tailwindcss.com/docs" target="_blank">
+      <strong>Documentation officielle Tailwind</strong>
+      <div class="url">tailwindcss.com/docs</div>
+      <p>La référence complète. Chaque classe est documentée avec exemples et code CSS généré.</p>
+    </a>
+    <a class="ref-card" href="https://tailwindcss.com/docs/installation/play-cdn" target="_blank">
+      <strong>Tailwind Play CDN</strong>
+      <div class="url">tailwindcss.com/docs/installation/play-cdn</div>
+      <p>Documentation de la méthode CDN pour démarrer sans installation.</p>
+    </a>
+    <a class="ref-card" href="https://play.tailwindcss.com" target="_blank">
+      <strong>Tailwind Play — Éditeur en ligne</strong>
+      <div class="url">play.tailwindcss.com</div>
+      <p>Éditeur interactif officiel : écrivez du HTML avec Tailwind et voyez le résultat en temps réel.</p>
+    </a>
+    <a class="ref-card" href="https://tailwindcomponents.com" target="_blank">
+      <strong>Tailwind Components</strong>
+      <div class="url">tailwindcomponents.com</div>
+      <p>Bibliothèque de composants Tailwind gratuits : cartes, formulaires, navigations…</p>
+    </a>
+    <a class="ref-card" href="https://www.tailwind-variants.org" target="_blank">
+      <strong>Tailwind Variants</strong>
+      <div class="url">tailwind-variants.org</div>
+      <p>Bibliothèque pour créer des variants de composants avec Tailwind (utile avec React/Vue).</p>
+    </a>
+    <a class="ref-card" href="https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss" target="_blank">
+      <strong>VS Code — Tailwind CSS IntelliSense</strong>
+      <div class="url">Extension VS Code officielle</div>
+      <p>Autocomplétion, documentation au survol, linting des classes Tailwind dans VS Code. Indispensable.</p>
+    </a>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SECTION 5 — DÉMO
+══════════════════════════════════════ -->
+<section id="demo">
+  <div class="eyebrow"><span class="sec-num">Section 05</span><div class="sec-line"></div></div>
+  <h2>Démo — <span class="hl">Refactorisation du Portfolio</span></h2>
+
+  <p>
+    Nous allons <strong>réécrire les trois pages HTML+CSS du portfolio</strong> en utilisant exclusivement
+    des classes Tailwind CSS. La feuille <code>style.css</code> est remplacée par les utilitaires Tailwind.
+  </p>
+
+  <div class="box box-amber">
+    <strong>Stratégie de refactorisation</strong><br>
+    1. Remplacer chaque règle CSS par les classes Tailwind équivalentes directement dans le HTML.<br>
+    2. Utiliser <code>@apply</code> dans le CSS uniquement pour les composants très répétitifs (boutons, cartes).<br>
+    3. Supprimer <code>style.css</code> et lier <code>dist/output.css</code> compilé par Tailwind.
+  </div>
+
+  <!-- ── SETUP ── -->
+  <h3>Mise en place (méthode CDN pour le cours)</h3>
+  <pre><code><span class="cm">&lt;!-- Dans &lt;head&gt; de chaque page HTML --&gt;</span>
+<span class="tg">&lt;script</span> <span class="at">src</span>=<span class="av">"https://cdn.tailwindcss.com"</span><span class="tg">&gt;&lt;/script&gt;</span>
+<span class="tg">&lt;script&gt;</span>
+  tailwind.config = {
+    <span class="p">theme</span>: {
+      <span class="p">extend</span>: {
+        <span class="p">colors</span>: {
+          <span class="s">'p'</span>: {
+            <span class="s">'fond'</span>:    <span class="s">'#0f0f13'</span>,
+            <span class="s">'surface'</span>: <span class="s">'#1a1a24'</span>,
+            <span class="s">'bord'</span>:    <span class="s">'#2e2e40'</span>,
+            <span class="s">'accent'</span>:  <span class="s">'#7c3aed'</span>,
+            <span class="s">'accent2'</span>: <span class="s">'#06b6d4'</span>,
+            <span class="s">'danger'</span>:  <span class="s">'#ef4444'</span>,
+          }
+        },
+        <span class="p">fontFamily</span>: {
+          <span class="s">'titre'</span>: [<span class="s">'Georgia'</span>, <span class="s">'serif'</span>]
+        }
+      }
+    }
+  }
+<span class="tg">&lt;/script&gt;</span>
+<span class="lt">HTML</span></code></pre>
+
+  <!-- ── PAGE 1 ── -->
+  <div style="margin-top:40px">
+    <span class="fb fb-a">📄 lister-projets.html</span>
+    <h3>Page 1 — Liste des projets (refactorisée)</h3>
+
+    <div class="demo-wrap">
+      <div class="demo-hdr">
+        <div class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+        <span class="fname">lister-projets.html — version Tailwind</span>
+      </div>
+      <div class="demo-body">
+<pre><code><span class="tg">&lt;!DOCTYPE html&gt;</span>
+<span class="tg">&lt;html</span> <span class="at">lang</span>=<span class="av">"fr"</span><span class="tg">&gt;</span>
+<span class="tg">&lt;head&gt;</span>
+  <span class="tg">&lt;meta</span> <span class="at">charset</span>=<span class="av">"UTF-8"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;meta</span> <span class="at">name</span>=<span class="av">"viewport"</span> <span class="at">content</span>=<span class="av">"width=device-width, initial-scale=1.0"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;title&gt;</span>Portfolio — Projets<span class="tg">&lt;/title&gt;</span>
+  <span class="tg">&lt;script</span> <span class="at">src</span>=<span class="av">"https://cdn.tailwindcss.com"</span><span class="tg">&gt;&lt;/script&gt;</span>
+  <span class="cm">&lt;!-- config Tailwind (voir ci-dessus) --&gt;</span>
+<span class="tg">&lt;/head&gt;</span>
+
+<span class="cm">&lt;!-- bg-p-fond → background: #0f0f13 —— min-h-screen flex flex-col → layout collant --&gt;</span>
+<span class="tg">&lt;body</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-p-fond text-gray-200 min-h-screen flex flex-col font-sans</span>"</span><span class="tg">&gt;</span>
+
+  <span class="cm">&lt;!-- ══ HEADER ══ --&gt;</span>
+  <span class="tg">&lt;header</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-p-surface border-b border-p-bord</span>"</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">max-w-5xl mx-auto px-6 py-8
+                flex items-center justify-between gap-4</span>"</span><span class="tg">&gt;</span>
+      <span class="tg">&lt;div&gt;</span>
+        <span class="tg">&lt;h1</span> <span class="at">class</span>=<span class="av">"<span class="cl">font-titre text-3xl font-bold text-white</span>"</span><span class="tg">&gt;</span>
+          Mon <span class="tg">&lt;span</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-p-accent</span>"</span><span class="tg">&gt;</span>Portfolio<span class="tg">&lt;/span&gt;</span>
+        <span class="tg">&lt;/h1&gt;</span>
+        <span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-sm text-gray-400 mt-1</span>"</span><span class="tg">&gt;</span>Développeur Full Stack<span class="tg">&lt;/p&gt;</span>
+      <span class="tg">&lt;/div&gt;</span>
+      <span class="tg">&lt;a</span> <span class="at">href</span>=<span class="av">"ajouter-projet.html"</span>
+         <span class="at">class</span>=<span class="av">"<span class="cl">inline-flex items-center gap-2 bg-p-accent text-white
+                px-5 py-2.5 rounded-lg font-semibold text-sm
+                </span><span class="cl4">hover</span>:<span class="cl2">bg-violet-500 transition-colors</span>"</span><span class="tg">&gt;</span>
+        + Nouveau projet
+      <span class="tg">&lt;/a&gt;</span>
+    <span class="tg">&lt;/div&gt;</span>
+  <span class="tg">&lt;/header&gt;</span>
+
+  <span class="cm">&lt;!-- ══ NAVIGATION ══ --&gt;</span>
+  <span class="tg">&lt;nav</span> <span class="at">class</span>=<span class="av">"<span class="cl">sticky top-0 z-50 bg-p-fond/95 backdrop-blur
+              border-b border-p-bord</span>"</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">max-w-5xl mx-auto px-6 flex</span>"</span><span class="tg">&gt;</span>
+      <span class="tg">&lt;a</span> <span class="at">href</span>=<span class="av">"lister-projets.html"</span>
+         <span class="at">class</span>=<span class="av">"<span class="cl">px-4 py-3 text-sm font-bold text-white
+                border-b-2 border-p-accent</span>"</span><span class="tg">&gt;</span>
+        Tous les projets
+      <span class="tg">&lt;/a&gt;</span>
+      <span class="tg">&lt;a</span> <span class="at">href</span>=<span class="av">"ajouter-projet.html"</span>
+         <span class="at">class</span>=<span class="av">"<span class="cl">px-4 py-3 text-sm font-bold text-gray-400
+                border-b-2 border-transparent
+                </span><span class="cl4">hover</span>:<span class="cl2">text-white hover:border-p-accent transition-colors</span>"</span><span class="tg">&gt;</span>
+        Ajouter un projet
+      <span class="tg">&lt;/a&gt;</span>
+    <span class="tg">&lt;/div&gt;</span>
+  <span class="tg">&lt;/nav&gt;</span>
+
+  <span class="cm">&lt;!-- ══ MAIN ══ --&gt;</span>
+  <span class="tg">&lt;main</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex-1 py-16</span>"</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">max-w-5xl mx-auto px-6</span>"</span><span class="tg">&gt;</span>
+
+      <span class="tg">&lt;h2</span> <span class="at">class</span>=<span class="av">"<span class="cl">font-titre text-3xl font-bold text-white mb-10
+                pb-4 border-b-2 border-p-bord</span>"</span><span class="tg">&gt;</span>
+        Tous les projets
+      <span class="tg">&lt;/h2&gt;</span>
+
+      <span class="cm">&lt;!-- Grille flex responsive --&gt;</span>
+      <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex flex-wrap gap-6</span>"</span><span class="tg">&gt;</span>
+
+        <span class="cm">&lt;!-- ─── Carte Projet ─── --&gt;</span>
+        <span class="tg">&lt;article</span> <span class="at">class</span>=<span class="av">"<span class="cl">w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.33%-16px)]
+                        bg-p-surface border border-p-bord border-t-2 border-t-p-accent
+                        rounded-xl overflow-hidden flex flex-col
+                        transition-transform duration-200
+                        </span><span class="cl4">hover</span>:<span class="cl2">-translate-y-1 hover:shadow-2xl</span>"</span><span class="tg">&gt;</span>
+
+          <span class="cm">&lt;!-- Image --&gt;</span>
+          <span class="tg">&lt;img</span>
+            <span class="at">src</span>=<span class="av">"images/projet1.jpg"</span>
+            <span class="at">alt</span>=<span class="av">"Application E-commerce"</span>
+            <span class="at">class</span>=<span class="av">"<span class="cl">w-full h-48 object-cover object-top</span>"</span>
+          <span class="tg">&gt;</span>
+
+          <span class="cm">&lt;!-- Corps --&gt;</span>
+          <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex-1 p-5</span>"</span><span class="tg">&gt;</span>
+            <span class="tg">&lt;h3</span> <span class="at">class</span>=<span class="av">"<span class="cl">font-titre text-lg font-bold</span>"</span><span class="tg">&gt;</span>
+              <span class="tg">&lt;a</span> <span class="at">href</span>=<span class="av">"detailler-projet.html"</span>
+                 <span class="at">class</span>=<span class="av">"<span class="cl">text-white </span><span class="cl4">hover</span>:<span class="cl2">text-p-accent transition-colors</span>"</span><span class="tg">&gt;</span>
+                Application E-commerce
+              <span class="tg">&lt;/a&gt;</span>
+            <span class="tg">&lt;/h3&gt;</span>
+          <span class="tg">&lt;/div&gt;</span>
+
+          <span class="cm">&lt;!-- Pied de carte --&gt;</span>
+          <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex justify-end p-4 border-t border-p-bord</span>"</span><span class="tg">&gt;</span>
+            <span class="tg">&lt;button</span>
+              <span class="at">type</span>=<span class="av">"button"</span>
+              <span class="at">class</span>=<span class="av">"<span class="cl">px-4 py-2 text-sm font-semibold rounded-lg
+                     border-2 border-red-500 text-red-400
+                     </span><span class="cl4">hover</span>:<span class="cl2">bg-red-500 hover:text-white transition-all</span>"</span>
+            <span class="tg">&gt;</span>
+              Supprimer
+            <span class="tg">&lt;/button&gt;</span>
+          <span class="tg">&lt;/div&gt;</span>
+        <span class="tg">&lt;/article&gt;</span>
+
+        <span class="cm">&lt;!-- Répéter pour chaque projet... --&gt;</span>
+
+      <span class="tg">&lt;/div&gt;</span>
+    <span class="tg">&lt;/div&gt;</span>
+  <span class="tg">&lt;/main&gt;</span>
+
+  <span class="cm">&lt;!-- ══ FOOTER ══ --&gt;</span>
+  <span class="tg">&lt;footer</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-p-surface border-t border-p-bord mt-auto</span>"</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">max-w-5xl mx-auto px-6 py-8
+                flex items-center justify-between flex-wrap gap-4</span>"</span><span class="tg">&gt;</span>
+      <span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-sm text-gray-500</span>"</span><span class="tg">&gt;</span>&amp;copy; 2025 Mon Portfolio<span class="tg">&lt;/p&gt;</span>
+      <span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-sm text-gray-500</span>"</span><span class="tg">&gt;</span>Réalisé avec HTML &amp;amp; Tailwind CSS<span class="tg">&lt;/p&gt;</span>
+    <span class="tg">&lt;/div&gt;</span>
+  <span class="tg">&lt;/footer&gt;</span>
+
+<span class="tg">&lt;/body&gt;</span>
+<span class="tg">&lt;/html&gt;</span>
+<span class="lt">HTML</span></code></pre>
+      </div>
+    </div>
+    <div class="commit">git add lister-projets.html &amp;&amp; git commit -m "refactor: liste projets → Tailwind CSS"</div>
+  </div>
+
+  <!-- ── PAGE 2 ── -->
+  <div style="margin-top:50px">
+    <span class="fb fb-s">📄 detailler-projet.html</span>
+    <h3>Page 2 — Détail projet (refactorisée)</h3>
+
+    <div class="demo-wrap">
+      <div class="demo-hdr">
+        <div class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+        <span class="fname">detailler-projet.html — version Tailwind</span>
+      </div>
+      <div class="demo-body">
+<pre><code><span class="cm">&lt;!-- ... &lt;head&gt; identique avec script Tailwind ... --&gt;</span>
+<span class="tg">&lt;body</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-p-fond text-gray-200 min-h-screen flex flex-col font-sans</span>"</span><span class="tg">&gt;</span>
+
+  <span class="cm">&lt;!-- Header + Nav identiques à lister-projets --&gt;</span>
+
+  <span class="tg">&lt;main</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex-1 py-16</span>"</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">max-w-5xl mx-auto px-6</span>"</span><span class="tg">&gt;</span>
+
+      <span class="cm">&lt;!-- Lien retour --&gt;</span>
+      <span class="tg">&lt;a</span> <span class="at">href</span>=<span class="av">"lister-projets.html"</span>
+         <span class="at">class</span>=<span class="av">"<span class="cl">inline-flex items-center gap-2 text-sm text-gray-400 mb-10
+                </span><span class="cl4">hover</span>:<span class="cl2">text-white transition-colors</span>"</span><span class="tg">&gt;</span>
+        &amp;larr; Retour à la liste
+      <span class="tg">&lt;/a&gt;</span>
+
+      <span class="cm">&lt;!-- Layout principal : image + infos côte à côte sur grand écran --&gt;</span>
+      <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex flex-col lg:flex-row gap-12 items-start</span>"</span><span class="tg">&gt;</span>
+
+        <span class="cm">&lt;!-- Image --&gt;</span>
+        <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">w-full lg:w-[420px] flex-shrink-0
+                    rounded-xl overflow-hidden border border-p-bord</span>"</span><span class="tg">&gt;</span>
+          <span class="tg">&lt;img</span>
+            <span class="at">src</span>=<span class="av">"images/projet1.jpg"</span>
+            <span class="at">alt</span>=<span class="av">"Application E-commerce"</span>
+            <span class="at">class</span>=<span class="av">"<span class="cl">w-full h-auto object-cover</span>"</span>
+          <span class="tg">&gt;</span>
+        <span class="tg">&lt;/div&gt;</span>
+
+        <span class="cm">&lt;!-- Informations --&gt;</span>
+        <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex-1 space-y-8</span>"</span><span class="tg">&gt;</span>
+
+          <span class="cm">&lt;!-- Titre --&gt;</span>
+          <span class="tg">&lt;h2</span> <span class="at">class</span>=<span class="av">"<span class="cl">font-titre text-4xl font-bold text-white</span>"</span><span class="tg">&gt;</span>
+            Application E-commerce
+          <span class="tg">&lt;/h2&gt;</span>
+
+          <span class="cm">&lt;!-- Description --&gt;</span>
+          <span class="tg">&lt;div&gt;</span>
+            <span class="tg">&lt;h3</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-lg font-semibold text-p-accent2 mb-3</span>"</span><span class="tg">&gt;</span>Description<span class="tg">&lt;/h3&gt;</span>
+            <span class="tg">&lt;p</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-gray-400 leading-relaxed</span>"</span><span class="tg">&gt;</span>
+              Application de commerce électronique complète avec catalogue,
+              panier, commandes et tableau de bord admin.
+            <span class="tg">&lt;/p&gt;</span>
+          <span class="tg">&lt;/div&gt;</span>
+
+          <span class="cm">&lt;!-- Technologies : liste ordonnée stylisée --&gt;</span>
+          <span class="tg">&lt;div&gt;</span>
+            <span class="tg">&lt;h3</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-lg font-semibold text-p-accent2 mb-3</span>"</span><span class="tg">&gt;</span>
+              Technologies utilisées
+            <span class="tg">&lt;/h3&gt;</span>
+            <span class="tg">&lt;ol</span> <span class="at">class</span>=<span class="av">"<span class="cl">space-y-2</span>"</span><span class="tg">&gt;</span>
+              <span class="tg">&lt;li</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex items-center gap-3 px-4 py-2.5
+                          bg-p-surface border-l-4 border-p-accent2 rounded-r-lg
+                          text-sm text-gray-300</span>"</span><span class="tg">&gt;</span>
+                <span class="tg">&lt;span</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex-shrink-0 w-6 h-6 rounded-full bg-p-accent2
+                               flex items-center justify-center
+                               text-xs font-bold text-p-fond</span>"</span><span class="tg">&gt;</span>1<span class="tg">&lt;/span&gt;</span>
+                HTML5
+              <span class="tg">&lt;/li&gt;</span>
+              <span class="tg">&lt;li</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex items-center gap-3 px-4 py-2.5
+                          bg-p-surface border-l-4 border-p-accent2 rounded-r-lg
+                          text-sm text-gray-300</span>"</span><span class="tg">&gt;</span>
+                <span class="tg">&lt;span</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex-shrink-0 w-6 h-6 rounded-full bg-p-accent2
+                               flex items-center justify-center
+                               text-xs font-bold text-p-fond</span>"</span><span class="tg">&gt;</span>2<span class="tg">&lt;/span&gt;</span>
+                CSS3 / Tailwind
+              <span class="tg">&lt;/li&gt;</span>
+              <span class="tg">&lt;li</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex items-center gap-3 px-4 py-2.5
+                          bg-p-surface border-l-4 border-p-accent2 rounded-r-lg
+                          text-sm text-gray-300</span>"</span><span class="tg">&gt;</span>
+                <span class="tg">&lt;span</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex-shrink-0 w-6 h-6 rounded-full bg-p-accent2
+                               flex items-center justify-center
+                               text-xs font-bold text-p-fond</span>"</span><span class="tg">&gt;</span>3<span class="tg">&lt;/span&gt;</span>
+                JavaScript / Node.js
+              <span class="tg">&lt;/li&gt;</span>
+              <span class="cm">&lt;!-- ... autres technologies ... --&gt;</span>
+            <span class="tg">&lt;/ol&gt;</span>
+          <span class="tg">&lt;/div&gt;</span>
+
+        <span class="tg">&lt;/div&gt;</span>
+      <span class="tg">&lt;/div&gt;</span>
+    <span class="tg">&lt;/div&gt;</span>
+  <span class="tg">&lt;/main&gt;</span>
+
+  <span class="cm">&lt;!-- Footer identique --&gt;</span>
+<span class="tg">&lt;/body&gt;</span>
+<span class="lt">HTML</span></code></pre>
+      </div>
+    </div>
+    <div class="commit">git add detailler-projet.html &amp;&amp; git commit -m "refactor: détail projet → Tailwind CSS"</div>
+  </div>
+
+  <!-- ── PAGE 3 ── -->
+  <div style="margin-top:50px">
+    <span class="fb fb-g">📄 ajouter-projet.html</span>
+    <h3>Page 3 — Formulaire d'ajout (refactorisé)</h3>
+
+    <div class="demo-wrap">
+      <div class="demo-hdr">
+        <div class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+        <span class="fname">ajouter-projet.html — version Tailwind</span>
+      </div>
+      <div class="demo-body">
+<pre><code><span class="tg">&lt;body</span> <span class="at">class</span>=<span class="av">"<span class="cl">bg-p-fond text-gray-200 min-h-screen flex flex-col</span>"</span><span class="tg">&gt;</span>
+
+  <span class="cm">&lt;!-- Header + Nav identiques --&gt;</span>
+
+  <span class="tg">&lt;main</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex-1 py-16</span>"</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">max-w-5xl mx-auto px-6</span>"</span><span class="tg">&gt;</span>
+
+      <span class="tg">&lt;h2</span> <span class="at">class</span>=<span class="av">"<span class="cl">font-titre text-3xl font-bold text-white mb-10
+                pb-4 border-b-2 border-p-bord</span>"</span><span class="tg">&gt;</span>
+        Ajouter un projet
+      <span class="tg">&lt;/h2&gt;</span>
+
+      <span class="cm">&lt;!-- Formulaire dans une carte --&gt;</span>
+      <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">max-w-2xl bg-p-surface border border-p-bord rounded-xl p-8</span>"</span><span class="tg">&gt;</span>
+        <span class="tg">&lt;form</span> <span class="at">action</span>=<span class="av">"#"</span> <span class="at">method</span>=<span class="av">"POST"</span> <span class="at">enctype</span>=<span class="av">"multipart/form-data"</span>
+              <span class="at">class</span>=<span class="av">"<span class="cl">space-y-6</span>"</span><span class="tg">&gt;</span>
+
+          <span class="cm">&lt;!-- Libellé --&gt;</span>
+          <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex flex-col gap-2</span>"</span><span class="tg">&gt;</span>
+            <span class="tg">&lt;label</span> <span class="at">for</span>=<span class="av">"libelle"</span>
+                   <span class="at">class</span>=<span class="av">"<span class="cl">text-sm font-semibold text-gray-300</span>"</span><span class="tg">&gt;</span>
+              Libellé <span class="tg">&lt;span</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-red-400</span>"</span><span class="tg">&gt;</span>*<span class="tg">&lt;/span&gt;</span>
+            <span class="tg">&lt;/label&gt;</span>
+            <span class="tg">&lt;input</span>
+              <span class="at">type</span>=<span class="av">"text"</span> <span class="at">id</span>=<span class="av">"libelle"</span> <span class="at">name</span>=<span class="av">"libelle"</span>
+              <span class="at">placeholder</span>=<span class="av">"Ex : Application E-commerce"</span>
+              <span class="at">required</span>
+              <span class="at">class</span>=<span class="av">"<span class="cl">w-full bg-p-fond border border-p-bord border-l-4
+                     border-l-p-accent text-gray-200 rounded-lg px-4 py-3
+                     text-sm placeholder-gray-500
+                     </span><span class="cl4">focus</span>:<span class="cl2">outline-none focus:ring-2 focus:ring-p-accent
+                     focus:border-p-accent transition-all</span>"</span>
+            <span class="tg">&gt;</span>
+          <span class="tg">&lt;/div&gt;</span>
+
+          <span class="cm">&lt;!-- Description --&gt;</span>
+          <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex flex-col gap-2</span>"</span><span class="tg">&gt;</span>
+            <span class="tg">&lt;label</span> <span class="at">for</span>=<span class="av">"description"</span>
+                   <span class="at">class</span>=<span class="av">"<span class="cl">text-sm font-semibold text-gray-300</span>"</span><span class="tg">&gt;</span>
+              Description <span class="tg">&lt;span</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-red-400</span>"</span><span class="tg">&gt;</span>*<span class="tg">&lt;/span&gt;</span>
+            <span class="tg">&lt;/label&gt;</span>
+            <span class="tg">&lt;textarea</span>
+              <span class="at">id</span>=<span class="av">"description"</span> <span class="at">name</span>=<span class="av">"description"</span> <span class="at">rows</span>=<span class="av">"5"</span>
+              <span class="at">placeholder</span>=<span class="av">"Décrivez le projet..."</span> <span class="at">required</span>
+              <span class="at">class</span>=<span class="av">"<span class="cl">w-full bg-p-fond border border-p-bord
+                     text-gray-200 rounded-lg px-4 py-3 text-sm
+                     placeholder-gray-500 resize-none
+                     </span><span class="cl4">focus</span>:<span class="cl2">outline-none focus:ring-2 focus:ring-p-accent
+                     focus:border-p-accent transition-all</span>"</span>
+            <span class="tg">&gt;&lt;/textarea&gt;</span>
+          <span class="tg">&lt;/div&gt;</span>
+
+          <span class="cm">&lt;!-- Image --&gt;</span>
+          <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex flex-col gap-2</span>"</span><span class="tg">&gt;</span>
+            <span class="tg">&lt;label</span> <span class="at">class</span>=<span class="av">"<span class="cl">text-sm font-semibold text-gray-300</span>"</span><span class="tg">&gt;</span>
+              Image du projet
+            <span class="tg">&lt;/label&gt;</span>
+            <span class="tg">&lt;input</span>
+              <span class="at">type</span>=<span class="av">"file"</span> <span class="at">name</span>=<span class="av">"image"</span>
+              <span class="at">accept</span>=<span class="av">"image/*"</span>
+              <span class="at">class</span>=<span class="av">"<span class="cl">w-full text-sm text-gray-400 bg-p-fond
+                     border border-p-bord rounded-lg px-4 py-3
+                     file:mr-4 file:py-2 file:px-4 file:rounded-lg
+                     file:border-0 file:bg-p-accent file:text-white
+                     file:text-sm file:font-semibold
+                     </span><span class="cl4">hover</span>:<span class="cl2">file:bg-violet-500</span>"</span>
+            <span class="tg">&gt;</span>
+          <span class="tg">&lt;/div&gt;</span>
+
+          <span class="cm">&lt;!-- Technologies (checkboxes) --&gt;</span>
+          <span class="tg">&lt;fieldset</span> <span class="at">class</span>=<span class="av">"<span class="cl">border border-p-bord rounded-lg p-5</span>"</span><span class="tg">&gt;</span>
+            <span class="tg">&lt;legend</span> <span class="at">class</span>=<span class="av">"<span class="cl">px-2 text-sm font-semibold text-gray-300</span>"</span><span class="tg">&gt;</span>
+              Technologies
+            <span class="tg">&lt;/legend&gt;</span>
+            <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex flex-wrap gap-3 mt-2</span>"</span><span class="tg">&gt;</span>
+              <span class="tg">&lt;label</span>
+                <span class="at">class</span>=<span class="av">"<span class="cl">flex items-center gap-2 px-4 py-2
+                       bg-p-fond border border-p-bord rounded-lg
+                       text-sm text-gray-300 cursor-pointer
+                       </span><span class="cl4">hover</span>:<span class="cl2">border-p-accent2 hover:text-p-accent2 transition-colors</span>"</span><span class="tg">&gt;</span>
+                <span class="tg">&lt;input</span> <span class="at">type</span>=<span class="av">"checkbox"</span> <span class="at">name</span>=<span class="av">"tech"</span> <span class="at">value</span>=<span class="av">"html"</span>
+                       <span class="at">class</span>=<span class="av">"<span class="cl">accent-p-accent</span>"</span><span class="tg">&gt;</span>
+                HTML5
+              <span class="tg">&lt;/label&gt;</span>
+              <span class="tg">&lt;label</span>
+                <span class="at">class</span>=<span class="av">"<span class="cl">flex items-center gap-2 px-4 py-2
+                       bg-p-fond border border-p-bord rounded-lg
+                       text-sm text-gray-300 cursor-pointer
+                       </span><span class="cl4">hover</span>:<span class="cl2">border-p-accent2 hover:text-p-accent2 transition-colors</span>"</span><span class="tg">&gt;</span>
+                <span class="tg">&lt;input</span> <span class="at">type</span>=<span class="av">"checkbox"</span> <span class="at">name</span>=<span class="av">"tech"</span> <span class="at">value</span>=<span class="av">"tailwind"</span>
+                       <span class="at">class</span>=<span class="av">"<span class="cl">accent-p-accent</span>"</span><span class="tg">&gt;</span>
+                Tailwind CSS
+              <span class="tg">&lt;/label&gt;</span>
+              <span class="cm">&lt;!-- Autres labels identiques... --&gt;</span>
+            <span class="tg">&lt;/div&gt;</span>
+          <span class="tg">&lt;/fieldset&gt;</span>
+
+          <span class="cm">&lt;!-- Date --&gt;</span>
+          <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex flex-col gap-2</span>"</span><span class="tg">&gt;</span>
+            <span class="tg">&lt;label</span> <span class="at">for</span>=<span class="av">"date"</span>
+                   <span class="at">class</span>=<span class="av">"<span class="cl">text-sm font-semibold text-gray-300</span>"</span><span class="tg">&gt;</span>
+              Date de réalisation
+            <span class="tg">&lt;/label&gt;</span>
+            <span class="tg">&lt;input</span>
+              <span class="at">type</span>=<span class="av">"date"</span> <span class="at">id</span>=<span class="av">"date"</span> <span class="at">name</span>=<span class="av">"date"</span>
+              <span class="at">class</span>=<span class="av">"<span class="cl">w-full bg-p-fond border border-p-bord
+                     text-gray-200 rounded-lg px-4 py-3 text-sm
+                     </span><span class="cl4">focus</span>:<span class="cl2">outline-none focus:ring-2 focus:ring-p-accent</span>"</span>
+            <span class="tg">&gt;</span>
+          <span class="tg">&lt;/div&gt;</span>
+
+          <span class="cm">&lt;!-- Boutons --&gt;</span>
+          <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"<span class="cl">flex items-center gap-4 flex-wrap pt-4 border-t border-p-bord</span>"</span><span class="tg">&gt;</span>
+            <span class="tg">&lt;button</span>
+              <span class="at">type</span>=<span class="av">"submit"</span>
+              <span class="at">class</span>=<span class="av">"<span class="cl">flex-1 sm:flex-none px-8 py-3 bg-p-accent text-white
+                     rounded-lg font-semibold text-sm
+                     </span><span class="cl4">hover</span>:<span class="cl2">bg-violet-500 transition-colors</span>"</span><span class="tg">&gt;</span>
+              Ajouter le projet
+            <span class="tg">&lt;/button&gt;</span>
+            <span class="tg">&lt;button</span>
+              <span class="at">type</span>=<span class="av">"reset"</span>
+              <span class="at">class</span>=<span class="av">"<span class="cl">px-6 py-3 bg-transparent border border-p-bord
+                     text-gray-400 rounded-lg font-semibold text-sm
+                     </span><span class="cl4">hover</span>:<span class="cl2">border-gray-400 hover:text-gray-200 transition-all</span>"</span><span class="tg">&gt;</span>
+              Réinitialiser
+            <span class="tg">&lt;/button&gt;</span>
+            <span class="tg">&lt;a</span> <span class="at">href</span>=<span class="av">"lister-projets.html"</span>
+               <span class="at">class</span>=<span class="av">"<span class="cl">text-sm text-gray-500 </span><span class="cl4">hover</span>:<span class="cl2">text-gray-300 transition-colors</span>"</span><span class="tg">&gt;</span>
+              Annuler
+            <span class="tg">&lt;/a&gt;</span>
+          <span class="tg">&lt;/div&gt;</span>
+
+        <span class="tg">&lt;/form&gt;</span>
+      <span class="tg">&lt;/div&gt;</span>
+    <span class="tg">&lt;/div&gt;</span>
+  <span class="tg">&lt;/main&gt;</span>
+
+  <span class="cm">&lt;!-- Footer identique --&gt;</span>
+<span class="tg">&lt;/body&gt;</span>
+<span class="lt">HTML</span></code></pre>
+      </div>
+    </div>
+    <div class="commit">git add ajouter-projet.html &amp;&amp; git commit -m "refactor: formulaire ajout → Tailwind CSS"</div>
+  </div>
+
+  <!-- ── RECAP COMMITS ── -->
+  <div style="margin-top:50px">
+    <h3>Récapitulatif des commits Tailwind</h3>
+    <ol class="steps">
+      <li><strong>chore: installation Tailwind CSS (npm ou CDN)</strong><br>
+        <small style="color:var(--muted)">package.json, tailwind.config.js, src/input.css</small></li>
+      <li><strong>refactor: liste projets → Tailwind CSS</strong><br>
+        <small style="color:var(--muted)">lister-projets.html — template + grille de cartes refactorisés</small></li>
+      <li><strong>refactor: détail projet → Tailwind CSS</strong><br>
+        <small style="color:var(--muted)">detailler-projet.html — layout flex, liste technologies</small></li>
+      <li><strong>refactor: formulaire ajout → Tailwind CSS</strong><br>
+        <small style="color:var(--muted)">ajouter-projet.html — inputs, checkboxes, boutons</small></li>
+      <li><strong>chore: suppression style.css (remplacé par Tailwind)</strong><br>
+        <small style="color:var(--muted)">git rm style.css — plus nécessaire</small></li>
+    </ol>
+  </div>
+
+</section>
+
+</main>
+
+<!-- ════════ FOOTER ════════ -->
+<footer>
+  COURS TAILWIND CSS · Module 03 · Développement Web Full Stack · &copy; 2025
+</footer>
+
+</body>
+</html>

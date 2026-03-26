@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours HTML — Développement Web</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0f0f;
+    --paper: #f8f5ef;
+    --accent: #e63946;
+    --accent2: #457b9d;
+    --accent3: #2a9d8f;
+    --muted: #6b6b6b;
+    --code-bg: #1a1a2e;
+    --code-fg: #e2e8f0;
+    --highlight: #ffd166;
+    --border: #d4cfc5;
+    --section-w: 820px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.75;
+    font-size: 16px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 70px 40px 50px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '</>';
+    position: absolute;
+    right: -10px;
+    top: -20px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 180px;
+    color: rgba(255,255,255,0.04);
+    letter-spacing: -10px;
+  }
+  .header-inner { max-width: var(--section-w); margin: 0 auto; position: relative; z-index: 1; }
+  .tag-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(52px, 8vw, 90px);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+  }
+  h1 span { color: var(--accent); }
+  .header-meta {
+    display: flex; gap: 32px; flex-wrap: wrap;
+    font-size: 13px; color: rgba(255,255,255,0.5);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .header-meta strong { color: rgba(255,255,255,0.85); }
+
+  /* ── NAV / TOC ── */
+  nav {
+    background: var(--accent);
+    padding: 0 40px;
+    position: sticky; top: 0; z-index: 100;
+    border-bottom: 3px solid #b52d38;
+  }
+  .nav-inner {
+    max-width: var(--section-w); margin: 0 auto;
+    display: flex; gap: 0; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  nav a {
+    display: block;
+    padding: 14px 20px;
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    opacity: 0.8;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+    transition: all .2s;
+  }
+  nav a:hover { opacity: 1; border-bottom-color: white; }
+
+  /* ── MAIN ── */
+  main { max-width: var(--section-w); margin: 0 auto; padding: 60px 40px 100px; }
+
+  /* ── SECTIONS ── */
+  section { margin-bottom: 80px; scroll-margin-top: 60px; }
+
+  .section-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 28px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--ink);
+    position: relative;
+  }
+  h2::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0;
+    width: 60px; height: 2px;
+    background: var(--accent);
+  }
+
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    margin: 40px 0 16px;
+    color: var(--ink);
+  }
+  h3::before {
+    content: '§';
+    color: var(--accent);
+    margin-right: 8px;
+    font-size: 18px;
+  }
+
+  p { margin-bottom: 16px; color: #2a2a2a; }
+
+  /* ── DEFINITION BOX ── */
+  .def-box {
+    border-left: 4px solid var(--accent2);
+    background: rgba(69,123,157,0.07);
+    padding: 18px 22px;
+    margin: 24px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .def-box strong { color: var(--accent2); font-family: 'IBM Plex Mono', monospace; font-size: 13px; }
+
+  .tip-box {
+    border-left: 4px solid var(--accent3);
+    background: rgba(42,157,143,0.07);
+    padding: 18px 22px;
+    margin: 24px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .tip-box::before { content: '💡 '; }
+
+  .warn-box {
+    border-left: 4px solid var(--highlight);
+    background: rgba(255,209,102,0.12);
+    padding: 18px 22px;
+    margin: 24px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .warn-box::before { content: '⚠️ '; }
+
+  /* ── CODE ── */
+  pre {
+    background: var(--code-bg);
+    color: var(--code-fg);
+    padding: 24px 26px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 20px 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    line-height: 1.65;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  pre .lang-tag {
+    position: absolute;
+    top: 10px; right: 14px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+  }
+  code { font-family: 'IBM Plex Mono', monospace; font-size: 0.88em; }
+  p code, li code {
+    background: rgba(0,0,0,0.07);
+    padding: 2px 7px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  /* ── SYNTAX HIGHLIGHT ── */
+  .kw  { color: #c792ea; }
+  .tag { color: #80cbc4; }
+  .att { color: #ffcb6b; }
+  .val { color: #c3e88d; }
+  .cmt { color: #546e7a; font-style: italic; }
+  .str { color: #f07178; }
+  .txt { color: var(--code-fg); }
+
+  /* ── TABLE ── */
+  table {
+    width: 100%; border-collapse: collapse;
+    margin: 24px 0; font-size: 15px;
+  }
+  th {
+    background: var(--ink); color: var(--paper);
+    padding: 12px 16px; text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px; letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  td { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  tr:nth-child(even) td { background: rgba(0,0,0,0.03); }
+
+  /* ── ATTRIBUTES TABLE ── */
+  .attr-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px; margin: 24px 0;
+  }
+  .attr-card {
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent2);
+    padding: 14px 16px;
+    border-radius: 0 0 6px 6px;
+  }
+  .attr-card code { display: block; font-size: 15px; margin-bottom: 6px; color: var(--accent2); }
+  .attr-card p { font-size: 13px; margin: 0; color: var(--muted); }
+
+  /* ── STRUCTURE DIAGRAM ── */
+  .struct-diagram {
+    background: var(--code-bg);
+    padding: 30px;
+    border-radius: 8px;
+    margin: 24px 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    color: var(--code-fg);
+    line-height: 2;
+  }
+  .struct-diagram .indent1 { margin-left: 20px; }
+  .struct-diagram .indent2 { margin-left: 40px; }
+  .struct-diagram .indent3 { margin-left: 60px; }
+  .struct-diagram .node { display: flex; align-items: center; gap: 10px; }
+  .struct-diagram .arrow { color: #546e7a; }
+
+  /* ── LISTS ── */
+  ul, ol { margin: 16px 0 16px 24px; }
+  li { margin-bottom: 8px; }
+
+  /* ── DEMO SECTION ── */
+  .demo-section { background: var(--ink); color: var(--paper); padding: 50px; border-radius: 12px; margin-top: 24px; }
+  .demo-section h3::before { color: var(--highlight); }
+  .demo-section h3 { color: var(--paper); }
+  .demo-section p { color: rgba(255,255,255,0.75); }
+  .demo-section .def-box { border-left-color: var(--highlight); background: rgba(255,209,102,0.08); }
+  .demo-section .def-box strong { color: var(--highlight); }
+  .demo-section pre { border-color: rgba(255,255,255,0.12); }
+
+  /* ── FILE BADGE ── */
+  .file-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin: 6px 4px;
+    font-weight: 600;
+  }
+  .file-badge.blue { background: var(--accent2); }
+  .file-badge.green { background: var(--accent3); }
+
+  /* ── REFS ── */
+  .ref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+  .ref-card {
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    padding: 16px 18px;
+    border-radius: 0 6px 6px 0;
+    text-decoration: none;
+    color: inherit;
+    transition: all .2s;
+    display: block;
+  }
+  .ref-card:hover { background: rgba(230,57,70,0.05); transform: translateX(3px); }
+  .ref-card .ref-url { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .ref-card strong { color: var(--ink); font-size: 15px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink); color: rgba(255,255,255,0.4);
+    text-align: center; padding: 30px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px; letter-spacing: 1px;
+  }
+
+  /* ── GITHUB STEPS ── */
+  .steps { counter-reset: step; list-style: none; margin-left: 0; }
+  .steps li {
+    counter-increment: step;
+    padding: 14px 18px 14px 60px;
+    position: relative;
+    border-left: 2px solid var(--border);
+    margin-bottom: 0;
+  }
+  .steps li::before {
+    content: counter(step);
+    position: absolute; left: 14px; top: 14px;
+    width: 28px; height: 28px;
+    background: var(--accent); color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px; font-weight: 600;
+  }
+
+  @media (max-width: 640px) {
+    main { padding: 40px 20px 80px; }
+    header { padding: 50px 20px 40px; }
+    .ref-grid { grid-template-columns: 1fr; }
+    .demo-section { padding: 30px 20px; }
+    h2 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ HEADER ═══════════════════ -->
+<header>
+  <div class="header-inner">
+    <div class="tag-label">Module 01 — Développement Web Front-End</div>
+    <h1>Cours <span>HTML</span></h1>
+    <div class="header-meta">
+      <span><strong>Niveau :</strong> Débutant</span>
+      <span><strong>Durée estimée :</strong> 6 heures</span>
+      <span><strong>Prérequis :</strong> Aucun</span>
+      <span><strong>Objectif :</strong> Maîtriser les bases du HTML</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════ NAV ═══════════════════ -->
+<nav>
+  <div class="nav-inner">
+    <a href="#presentation">1. Présentation</a>
+    <a href="#concepts">2. Concepts</a>
+    <a href="#references">3. Références</a>
+    <a href="#demo">4. Démo</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════ MAIN ═══════════════════ -->
+<main>
+
+<!-- ════════════════════════════════════════
+     SECTION 1 — PRÉSENTATION
+════════════════════════════════════════ -->
+<section id="presentation">
+  <div class="section-num">Section 01</div>
+  <h2>Présentation de HTML</h2>
+
+  <p>
+    <strong>HTML</strong> (<em>HyperText Markup Language</em>) est le langage standard utilisé pour créer et structurer
+    le contenu d'une page Web. Il ne s'agit pas d'un langage de programmation, mais d'un
+    <strong>langage de balisage</strong> : il décrit la structure et le sens du contenu (titres, paragraphes, liens, images…).
+  </p>
+
+  <div class="def-box">
+    <strong>Définition officielle (W3C)</strong><br>
+    HTML est un langage de description de documents hypertexte conçu pour être affiché dans un navigateur Web.
+    La version actuelle est <strong>HTML5</strong>, standardisée en 2014 et continuellement enrichie.
+  </div>
+
+  <h3>Historique rapide</h3>
+  <table>
+    <tr><th>Version</th><th>Année</th><th>Nouveautés clés</th></tr>
+    <tr><td>HTML 1.0</td><td>1993</td><td>Première version — titres, paragraphes, liens</td></tr>
+    <tr><td>HTML 2.0</td><td>1995</td><td>Formulaires, tableaux</td></tr>
+    <tr><td>HTML 3.2</td><td>1997</td><td>Scripts, applets</td></tr>
+    <tr><td>HTML 4.01</td><td>1999</td><td>Feuilles de style (CSS), accessibilité</td></tr>
+    <tr><td>XHTML 1.0</td><td>2000</td><td>HTML reformulé en XML</td></tr>
+    <tr><td>HTML5</td><td>2014</td><td>Vidéo, audio, Canvas, APIs, sémantique</td></tr>
+  </table>
+
+  <h3>Rôle dans la trinité Web</h3>
+  <p>Une page Web moderne repose sur trois technologies complémentaires :</p>
+  <table>
+    <tr><th>Technologie</th><th>Rôle</th><th>Analogie</th></tr>
+    <tr><td><strong>HTML</strong></td><td>Structure &amp; contenu</td><td>Le squelette du corps</td></tr>
+    <tr><td><strong>CSS</strong></td><td>Présentation visuelle</td><td>L'apparence / les vêtements</td></tr>
+    <tr><td><strong>JavaScript</strong></td><td>Comportement interactif</td><td>Les muscles / les actions</td></tr>
+  </table>
+
+  <div class="tip-box">
+    Un fichier HTML est un simple fichier texte avec l'extension <code>.html</code> ou <code>.htm</code>.
+    Il peut être créé avec n'importe quel éditeur de texte (VS Code, Notepad++, Sublime Text…) et
+    ouvert directement dans un navigateur.
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     SECTION 2 — CONCEPTS
+════════════════════════════════════════ -->
+<section id="concepts">
+  <div class="section-num">Section 02</div>
+  <h2>Concepts fondamentaux</h2>
+
+  <!-- 2a) Élément HTML -->
+  <h3 id="element">a) Élément HTML</h3>
+
+  <p>
+    Un <strong>élément HTML</strong> est l'unité de base du HTML. Il représente une partie du contenu ou de la structure
+    d'une page. Un élément est généralement composé d'une <em>balise ouvrante</em>, d'un <em>contenu</em>
+    et d'une <em>balise fermante</em>.
+  </p>
+
+  <pre><code><span class="cmt">&lt;!-- Anatomie d'un élément HTML --&gt;</span>
+<span class="tag">&lt;p&gt;</span><span class="txt">Ceci est le contenu de l'élément.</span><span class="tag">&lt;/p&gt;</span>
+<span class="cmt">  ↑              ↑                      ↑</span>
+<span class="cmt">  Ouvrante    Contenu             Fermante</span>
+<span class="lang-tag">HTML</span></code></pre>
+
+  <p>Il existe également des <strong>éléments vides</strong> (void elements) qui n'ont pas de contenu ni de balise fermante :</p>
+  <pre><code><span class="tag">&lt;br&gt;</span>          <span class="cmt">&lt;!-- Saut de ligne --&gt;</span>
+<span class="tag">&lt;hr&gt;</span>          <span class="cmt">&lt;!-- Ligne horizontale --&gt;</span>
+<span class="tag">&lt;img</span> <span class="att">src=</span><span class="val">"photo.jpg"</span> <span class="att">alt=</span><span class="val">"Photo"</span><span class="tag">&gt;</span>   <span class="cmt">&lt;!-- Image --&gt;</span>
+<span class="tag">&lt;input</span> <span class="att">type=</span><span class="val">"text"</span><span class="tag">&gt;</span>  <span class="cmt">&lt;!-- Champ de saisie --&gt;</span>
+<span class="lang-tag">HTML</span></code></pre>
+
+  <p><strong>Éléments de bloc vs éléments en ligne :</strong></p>
+  <table>
+    <tr><th>Bloc (block)</th><th>En ligne (inline)</th></tr>
+    <tr><td>Prend toute la largeur disponible</td><td>Occupe seulement son contenu</td></tr>
+    <tr><td>Commence toujours sur une nouvelle ligne</td><td>S'insère dans le flux de texte</td></tr>
+    <tr><td><code>&lt;p&gt;</code>, <code>&lt;div&gt;</code>, <code>&lt;h1&gt;</code>, <code>&lt;ul&gt;</code>…</td><td><code>&lt;span&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;strong&gt;</code>, <code>&lt;img&gt;</code>…</td></tr>
+  </table>
+
+  <!-- 2b) Balise HTML -->
+  <h3 id="balise">b) Balise HTML</h3>
+
+  <p>
+    Une <strong>balise HTML</strong> (<em>tag</em>) est une instruction de balisage entourée de chevrons <code>&lt; &gt;</code>.
+    Les balises indiquent au navigateur comment interpréter et afficher le contenu.
+  </p>
+
+  <pre><code><span class="cmt">&lt;!-- Balise ouvrante --&gt;</span>
+<span class="tag">&lt;h1&gt;</span>
+
+<span class="cmt">&lt;!-- Balise fermante (avec le slash /) --&gt;</span>
+<span class="tag">&lt;/h1&gt;</span>
+
+<span class="cmt">&lt;!-- Exemples de balises courantes --&gt;</span>
+<span class="tag">&lt;h1&gt;</span><span class="txt">Titre principal</span><span class="tag">&lt;/h1&gt;</span>
+<span class="tag">&lt;h2&gt;</span><span class="txt">Titre secondaire</span><span class="tag">&lt;/h2&gt;</span>
+<span class="tag">&lt;p&gt;</span><span class="txt">Paragraphe de texte</span><span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;strong&gt;</span><span class="txt">Texte en gras</span><span class="tag">&lt;/strong&gt;</span>
+<span class="tag">&lt;em&gt;</span><span class="txt">Texte en italique</span><span class="tag">&lt;/em&gt;</span>
+<span class="tag">&lt;a</span> <span class="att">href=</span><span class="val">"#"</span><span class="tag">&gt;</span><span class="txt">Un lien</span><span class="tag">&lt;/a&gt;</span>
+<span class="lang-tag">HTML</span></code></pre>
+
+  <p><strong>Tableau des balises HTML5 les plus utilisées :</strong></p>
+  <table>
+    <tr><th>Balise</th><th>Signification</th><th>Description</th></tr>
+    <tr><td><code>&lt;html&gt;</code></td><td>Racine</td><td>Élément racine de la page</td></tr>
+    <tr><td><code>&lt;head&gt;</code></td><td>En-tête</td><td>Métadonnées (titre, CSS, scripts…)</td></tr>
+    <tr><td><code>&lt;body&gt;</code></td><td>Corps</td><td>Contenu visible de la page</td></tr>
+    <tr><td><code>&lt;header&gt;</code></td><td>En-tête sémantique</td><td>Logo, navigation principale</td></tr>
+    <tr><td><code>&lt;nav&gt;</code></td><td>Navigation</td><td>Liens de navigation</td></tr>
+    <tr><td><code>&lt;main&gt;</code></td><td>Contenu principal</td><td>Contenu central unique</td></tr>
+    <tr><td><code>&lt;section&gt;</code></td><td>Section</td><td>Groupement thématique</td></tr>
+    <tr><td><code>&lt;article&gt;</code></td><td>Article</td><td>Contenu autonome</td></tr>
+    <tr><td><code>&lt;aside&gt;</code></td><td>Aside</td><td>Contenu complémentaire (sidebar)</td></tr>
+    <tr><td><code>&lt;footer&gt;</code></td><td>Pied de page</td><td>Informations de bas de page</td></tr>
+    <tr><td><code>&lt;div&gt;</code></td><td>Division</td><td>Conteneur générique de bloc</td></tr>
+    <tr><td><code>&lt;span&gt;</code></td><td>Span</td><td>Conteneur générique en ligne</td></tr>
+    <tr><td><code>&lt;h1&gt;…&lt;h6&gt;</code></td><td>Titres</td><td>Hiérarchie des titres</td></tr>
+    <tr><td><code>&lt;p&gt;</code></td><td>Paragraphe</td><td>Bloc de texte</td></tr>
+    <tr><td><code>&lt;ul&gt;</code> / <code>&lt;ol&gt;</code></td><td>Listes</td><td>Non ordonnée / ordonnée</td></tr>
+    <tr><td><code>&lt;li&gt;</code></td><td>Item de liste</td><td>Élément d'une liste</td></tr>
+    <tr><td><code>&lt;a&gt;</code></td><td>Ancre</td><td>Lien hypertexte</td></tr>
+    <tr><td><code>&lt;img&gt;</code></td><td>Image</td><td>Intégration d'image</td></tr>
+    <tr><td><code>&lt;form&gt;</code></td><td>Formulaire</td><td>Collecte de données</td></tr>
+    <tr><td><code>&lt;input&gt;</code></td><td>Entrée</td><td>Champ de saisie</td></tr>
+    <tr><td><code>&lt;table&gt;</code></td><td>Tableau</td><td>Données tabulaires</td></tr>
+  </table>
+
+  <!-- 2c) Attribut HTML -->
+  <h3 id="attribut">c) Attribut HTML</h3>
+
+  <p>
+    Les <strong>attributs HTML</strong> fournissent des informations supplémentaires sur les éléments. Ils sont toujours
+    spécifiés dans la balise ouvrante, sous la forme <code>nom="valeur"</code>.
+  </p>
+
+  <pre><code><span class="cmt">&lt;!-- Syntaxe générale --&gt;</span>
+<span class="tag">&lt;balise</span> <span class="att">attribut1=</span><span class="val">"valeur1"</span> <span class="att">attribut2=</span><span class="val">"valeur2"</span><span class="tag">&gt;</span><span class="txt">contenu</span><span class="tag">&lt;/balise&gt;</span>
+
+<span class="cmt">&lt;!-- Exemples concrets --&gt;</span>
+<span class="tag">&lt;a</span> <span class="att">href=</span><span class="val">"https://example.com"</span> <span class="att">target=</span><span class="val">"_blank"</span> <span class="att">title=</span><span class="val">"Visiter le site"</span><span class="tag">&gt;</span>
+  <span class="txt">Cliquez ici</span>
+<span class="tag">&lt;/a&gt;</span>
+
+<span class="tag">&lt;img</span> <span class="att">src=</span><span class="val">"logo.png"</span> <span class="att">alt=</span><span class="val">"Logo de la société"</span> <span class="att">width=</span><span class="val">"200"</span> <span class="att">height=</span><span class="val">"80"</span><span class="tag">&gt;</span>
+
+<span class="tag">&lt;input</span> <span class="att">type=</span><span class="val">"email"</span> <span class="att">name=</span><span class="val">"email"</span> <span class="att">placeholder=</span><span class="val">"Votre adresse e-mail"</span> <span class="att">required</span><span class="tag">&gt;</span>
+<span class="lang-tag">HTML</span></code></pre>
+
+  <p><strong>Attributs universels</strong> (utilisables sur tous les éléments) :</p>
+  <div class="attr-grid">
+    <div class="attr-card">
+      <code>id="identifiant"</code>
+      <p>Identifiant unique dans la page. Utilisé par CSS et JS.</p>
+    </div>
+    <div class="attr-card">
+      <code>class="nom-classe"</code>
+      <p>Classe(s) CSS. Peut être partagée par plusieurs éléments.</p>
+    </div>
+    <div class="attr-card">
+      <code>style="propriété: valeur"</code>
+      <p>Styles CSS inline directement sur l'élément.</p>
+    </div>
+    <div class="attr-card">
+      <code>title="texte"</code>
+      <p>Info-bulle affichée au survol de l'élément.</p>
+    </div>
+    <div class="attr-card">
+      <code>lang="fr"</code>
+      <p>Langue du contenu de l'élément (accessibilité).</p>
+    </div>
+    <div class="attr-card">
+      <code>hidden</code>
+      <p>Cache l'élément visuellement et pour les lecteurs d'écran.</p>
+    </div>
+  </div>
+
+  <!-- 2d) Structure -->
+  <h3 id="structure">d) Structure d'une page HTML</h3>
+
+  <p>
+    Toute page HTML valide respecte une structure de base standardisée. Voici le squelette minimal d'un document HTML5 :
+  </p>
+
+  <pre><code><span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="att">lang=</span><span class="val">"fr"</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;head&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="att">charset=</span><span class="val">"UTF-8"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="att">name=</span><span class="val">"viewport"</span> <span class="att">content=</span><span class="val">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;title&gt;</span><span class="txt">Titre de la page</span><span class="tag">&lt;/title&gt;</span>
+    <span class="tag">&lt;link</span> <span class="att">rel=</span><span class="val">"stylesheet"</span> <span class="att">href=</span><span class="val">"style.css"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;/head&gt;</span>
+
+  <span class="tag">&lt;body&gt;</span>
+    <span class="tag">&lt;header&gt;</span>
+      <span class="tag">&lt;h1&gt;</span><span class="txt">Mon Site Web</span><span class="tag">&lt;/h1&gt;</span>
+      <span class="tag">&lt;nav&gt;</span><span class="txt">…</span><span class="tag">&lt;/nav&gt;</span>
+    <span class="tag">&lt;/header&gt;</span>
+
+    <span class="tag">&lt;main&gt;</span>
+      <span class="tag">&lt;section&gt;</span>
+        <span class="tag">&lt;h2&gt;</span><span class="txt">Section principale</span><span class="tag">&lt;/h2&gt;</span>
+        <span class="tag">&lt;p&gt;</span><span class="txt">Contenu de la page…</span><span class="tag">&lt;/p&gt;</span>
+      <span class="tag">&lt;/section&gt;</span>
+    <span class="tag">&lt;/main&gt;</span>
+
+    <span class="tag">&lt;footer&gt;</span>
+      <span class="tag">&lt;p&gt;</span><span class="txt">&amp;copy; 2025 Mon Site Web</span><span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;/footer&gt;</span>
+
+    <span class="tag">&lt;script</span> <span class="att">src=</span><span class="val">"script.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+  <span class="tag">&lt;/body&gt;</span>
+
+<span class="tag">&lt;/html&gt;</span>
+<span class="lang-tag">HTML</span></code></pre>
+
+  <div class="def-box">
+    <strong>Explication des éléments clés</strong><br><br>
+    <strong><code>&lt;!DOCTYPE html&gt;</code></strong> — Déclare que le document est en HTML5. Toujours en première ligne.<br><br>
+    <strong><code>&lt;html lang="fr"&gt;</code></strong> — Racine du document. L'attribut <code>lang</code> indique la langue pour les lecteurs d'écran et les moteurs de recherche.<br><br>
+    <strong><code>&lt;head&gt;</code></strong> — Contient les métadonnées (non affichées) : encodage, titre de l'onglet, liens CSS…<br><br>
+    <strong><code>&lt;meta charset="UTF-8"&gt;</code></strong> — Encodage des caractères. UTF-8 supporte tous les caractères (accents, symboles…).<br><br>
+    <strong><code>&lt;body&gt;</code></strong> — Tout ce qui est visible dans le navigateur se place ici.
+  </div>
+
+  <!-- 2e) Publier du texte -->
+  <h3 id="texte">e) Publier du texte</h3>
+
+  <p>HTML offre de nombreuses balises pour structurer et mettre en forme le texte d'une page.</p>
+
+  <pre><code><span class="cmt">&lt;!-- Les 6 niveaux de titres --&gt;</span>
+<span class="tag">&lt;h1&gt;</span><span class="txt">Titre de niveau 1 (un seul par page)</span><span class="tag">&lt;/h1&gt;</span>
+<span class="tag">&lt;h2&gt;</span><span class="txt">Titre de niveau 2</span><span class="tag">&lt;/h2&gt;</span>
+<span class="tag">&lt;h3&gt;</span><span class="txt">Titre de niveau 3</span><span class="tag">&lt;/h3&gt;</span>
+<span class="tag">&lt;h4&gt;</span><span class="txt">Titre de niveau 4</span><span class="tag">&lt;/h4&gt;</span>
+<span class="tag">&lt;h5&gt;</span><span class="txt">Titre de niveau 5</span><span class="tag">&lt;/h5&gt;</span>
+<span class="tag">&lt;h6&gt;</span><span class="txt">Titre de niveau 6</span><span class="tag">&lt;/h6&gt;</span>
+
+<span class="cmt">&lt;!-- Paragraphe --&gt;</span>
+<span class="tag">&lt;p&gt;</span><span class="txt">Un paragraphe est un bloc de texte. Le navigateur gère les
+retours à la ligne automatiquement selon la largeur disponible.</span><span class="tag">&lt;/p&gt;</span>
+
+<span class="cmt">&lt;!-- Mise en forme sémantique --&gt;</span>
+<span class="tag">&lt;p&gt;</span><span class="txt">Voici du texte </span><span class="tag">&lt;strong&gt;</span><span class="txt">en gras (important)</span><span class="tag">&lt;/strong&gt;</span><span class="txt">,
+du texte </span><span class="tag">&lt;em&gt;</span><span class="txt">en italique (emphase)</span><span class="tag">&lt;/em&gt;</span><span class="txt">,
+du texte </span><span class="tag">&lt;mark&gt;</span><span class="txt">surligné</span><span class="tag">&lt;/mark&gt;</span><span class="txt">,
+et du texte </span><span class="tag">&lt;del&gt;</span><span class="txt">barré</span><span class="tag">&lt;/del&gt;</span><span class="txt">.</span><span class="tag">&lt;/p&gt;</span>
+
+<span class="cmt">&lt;!-- Retour à la ligne et séparateur --&gt;</span>
+<span class="tag">&lt;p&gt;</span><span class="txt">Première ligne.</span><span class="tag">&lt;br&gt;</span><span class="txt">Deuxième ligne.</span><span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;hr&gt;</span> <span class="cmt">&lt;!-- Ligne séparatrice horizontale --&gt;</span>
+
+<span class="cmt">&lt;!-- Citation --&gt;</span>
+<span class="tag">&lt;blockquote&gt;</span>
+  <span class="txt">Le secret de la réussite, c'est de ne jamais décrocher.</span>
+<span class="tag">&lt;/blockquote&gt;</span>
+
+<span class="cmt">&lt;!-- Code informatique --&gt;</span>
+<span class="tag">&lt;p&gt;</span><span class="txt">Utilisez la balise </span><span class="tag">&lt;code&gt;</span><span class="txt">&amp;lt;code&amp;gt;</span><span class="tag">&lt;/code&gt;</span><span class="txt"> pour du code inline.</span><span class="tag">&lt;/p&gt;</span>
+<span class="lang-tag">HTML</span></code></pre>
+
+  <div class="warn-box">
+    <strong>Attention :</strong> N'utilisez pas les balises de mise en forme pour leurs effets visuels, mais pour leur sens sémantique. Par exemple, <code>&lt;strong&gt;</code> signifie "important" (pas juste "gras"). Le style visuel est du ressort du CSS.
+  </div>
+
+  <!-- 2f) Lister du contenu -->
+  <h3 id="listes">f) Lister du contenu</h3>
+
+  <p>HTML propose trois types de listes pour organiser des éléments de contenu.</p>
+
+  <pre><code><span class="cmt">&lt;!-- 1. Liste NON ordonnée (unordered list) : puces --&gt;</span>
+<span class="tag">&lt;ul&gt;</span>
+  <span class="tag">&lt;li&gt;</span><span class="txt">HTML</span><span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span><span class="txt">CSS</span><span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span><span class="txt">JavaScript</span><span class="tag">&lt;/li&gt;</span>
+<span class="tag">&lt;/ul&gt;</span>
+
+<span class="cmt">&lt;!-- 2. Liste ORDONNÉE (ordered list) : numérotée --&gt;</span>
+<span class="tag">&lt;ol&gt;</span>
+  <span class="tag">&lt;li&gt;</span><span class="txt">Apprendre HTML</span><span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span><span class="txt">Apprendre CSS</span><span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span><span class="txt">Apprendre JavaScript</span><span class="tag">&lt;/li&gt;</span>
+<span class="tag">&lt;/ol&gt;</span>
+
+<span class="cmt">&lt;!-- 3. Liste de DÉFINITIONS --&gt;</span>
+<span class="tag">&lt;dl&gt;</span>
+  <span class="tag">&lt;dt&gt;</span><span class="txt">HTML</span><span class="tag">&lt;/dt&gt;</span>
+  <span class="tag">&lt;dd&gt;</span><span class="txt">HyperText Markup Language — structure des pages Web.</span><span class="tag">&lt;/dd&gt;</span>
+  <span class="tag">&lt;dt&gt;</span><span class="txt">CSS</span><span class="tag">&lt;/dt&gt;</span>
+  <span class="tag">&lt;dd&gt;</span><span class="txt">Cascading Style Sheets — mise en forme des pages Web.</span><span class="tag">&lt;/dd&gt;</span>
+<span class="tag">&lt;/dl&gt;</span>
+
+<span class="cmt">&lt;!-- 4. SOUS-LISTES (listes imbriquées) --&gt;</span>
+<span class="tag">&lt;ul&gt;</span>
+  <span class="tag">&lt;li&gt;</span><span class="txt">Front-End
+    </span><span class="tag">&lt;ul&gt;</span>
+      <span class="tag">&lt;li&gt;</span><span class="txt">HTML</span><span class="tag">&lt;/li&gt;</span>
+      <span class="tag">&lt;li&gt;</span><span class="txt">CSS</span><span class="tag">&lt;/li&gt;</span>
+    <span class="tag">&lt;/ul&gt;</span>
+  <span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span><span class="txt">Back-End
+    </span><span class="tag">&lt;ol&gt;</span>
+      <span class="tag">&lt;li&gt;</span><span class="txt">Node.js</span><span class="tag">&lt;/li&gt;</span>
+      <span class="tag">&lt;li&gt;</span><span class="txt">PHP</span><span class="tag">&lt;/li&gt;</span>
+    <span class="tag">&lt;/ol&gt;</span>
+  <span class="tag">&lt;/li&gt;</span>
+<span class="tag">&lt;/ul&gt;</span>
+<span class="lang-tag">HTML</span></code></pre>
+
+  <!-- 2g) Lier des contenus -->
+  <h3 id="liens">g) Lier des contenus</h3>
+
+  <p>
+    Les liens hypertextes sont au cœur du Web. La balise <code>&lt;a&gt;</code> (ancre) permet de créer
+    des liens vers d'autres pages, fichiers, sections, ou adresses e-mail.
+  </p>
+
+  <pre><code><span class="cmt">&lt;!-- Lien vers une page externe --&gt;</span>
+<span class="tag">&lt;a</span> <span class="att">href=</span><span class="val">"https://www.google.com"</span> <span class="att">target=</span><span class="val">"_blank"</span><span class="tag">&gt;</span>
+  <span class="txt">Aller sur Google</span>
+<span class="tag">&lt;/a&gt;</span>
+
+<span class="cmt">&lt;!-- Lien vers une page interne du même site --&gt;</span>
+<span class="tag">&lt;a</span> <span class="att">href=</span><span class="val">"contact.html"</span><span class="tag">&gt;</span><span class="txt">Page de contact</span><span class="tag">&lt;/a&gt;</span>
+
+<span class="cmt">&lt;!-- Lien vers une section de la même page (ancre) --&gt;</span>
+<span class="tag">&lt;a</span> <span class="att">href=</span><span class="val">"#section-about"</span><span class="tag">&gt;</span><span class="txt">À propos</span><span class="tag">&lt;/a&gt;</span>
+<span class="cmt">&lt;!-- ... plus bas dans la page --&gt;</span>
+<span class="tag">&lt;section</span> <span class="att">id=</span><span class="val">"section-about"</span><span class="tag">&gt;</span><span class="txt">...</span><span class="tag">&lt;/section&gt;</span>
+
+<span class="cmt">&lt;!-- Lien vers une adresse e-mail --&gt;</span>
+<span class="tag">&lt;a</span> <span class="att">href=</span><span class="val">"mailto:contact@example.com"</span><span class="tag">&gt;</span><span class="txt">Envoyer un mail</span><span class="tag">&lt;/a&gt;</span>
+
+<span class="cmt">&lt;!-- Lien vers un numéro de téléphone --&gt;</span>
+<span class="tag">&lt;a</span> <span class="att">href=</span><span class="val">"tel:+221771234567"</span><span class="tag">&gt;</span><span class="txt">+221 77 123 45 67</span><span class="tag">&lt;/a&gt;</span>
+
+<span class="cmt">&lt;!-- Lien de téléchargement --&gt;</span>
+<span class="tag">&lt;a</span> <span class="att">href=</span><span class="val">"cv.pdf"</span> <span class="att">download</span><span class="tag">&gt;</span><span class="txt">Télécharger mon CV</span><span class="tag">&lt;/a&gt;</span>
+
+<span class="cmt">&lt;!-- Image cliquable (lien contenant une image) --&gt;</span>
+<span class="tag">&lt;a</span> <span class="att">href=</span><span class="val">"https://example.com"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;img</span> <span class="att">src=</span><span class="val">"logo.png"</span> <span class="att">alt=</span><span class="val">"Logo"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/a&gt;</span>
+<span class="lang-tag">HTML</span></code></pre>
+
+  <table>
+    <tr><th>Valeur de <code>target</code></th><th>Comportement</th></tr>
+    <tr><td><code>_self</code></td><td>Ouvre dans l'onglet actuel (défaut)</td></tr>
+    <tr><td><code>_blank</code></td><td>Ouvre dans un nouvel onglet</td></tr>
+    <tr><td><code>_parent</code></td><td>Ouvre dans le cadre parent</td></tr>
+    <tr><td><code>_top</code></td><td>Ouvre dans la fenêtre principale</td></tr>
+  </table>
+
+  <!-- 2h) Image -->
+  <h3 id="images">h) Afficher une image</h3>
+
+  <p>
+    La balise <code>&lt;img&gt;</code> est un élément vide (pas de balise fermante) qui permet d'intégrer
+    une image dans la page. Elle nécessite deux attributs essentiels : <code>src</code> et <code>alt</code>.
+  </p>
+
+  <pre><code><span class="cmt">&lt;!-- Syntaxe de base --&gt;</span>
+<span class="tag">&lt;img</span> <span class="att">src=</span><span class="val">"images/photo.jpg"</span> <span class="att">alt=</span><span class="val">"Description de l'image"</span><span class="tag">&gt;</span>
+
+<span class="cmt">&lt;!-- Avec dimensions et titre --&gt;</span>
+<span class="tag">&lt;img</span>
+  <span class="att">src=</span><span class="val">"images/projet.png"</span>
+  <span class="att">alt=</span><span class="val">"Capture d'écran du projet portfolio"</span>
+  <span class="att">width=</span><span class="val">"800"</span>
+  <span class="att">height=</span><span class="val">"450"</span>
+  <span class="att">title=</span><span class="val">"Projet Portfolio — 2025"</span>
+<span class="tag">&gt;</span>
+
+<span class="cmt">&lt;!-- Image depuis une URL externe --&gt;</span>
+<span class="tag">&lt;img</span> <span class="att">src=</span><span class="val">"https://picsum.photos/400/300"</span> <span class="att">alt=</span><span class="val">"Image aléatoire"</span><span class="tag">&gt;</span>
+
+<span class="cmt">&lt;!-- Image responsive (CSS) --&gt;</span>
+<span class="tag">&lt;img</span>
+  <span class="att">src=</span><span class="val">"hero.jpg"</span>
+  <span class="att">alt=</span><span class="val">"Image héro"</span>
+  <span class="att">style=</span><span class="val">"max-width: 100%; height: auto;"</span>
+<span class="tag">&gt;</span>
+
+<span class="cmt">&lt;!-- Figure avec légende (bonne pratique HTML5) --&gt;</span>
+<span class="tag">&lt;figure&gt;</span>
+  <span class="tag">&lt;img</span> <span class="att">src=</span><span class="val">"projet.jpg"</span> <span class="att">alt=</span><span class="val">"Mon projet"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;figcaption&gt;</span><span class="txt">Fig.1 — Aperçu du projet réalisé en 2025</span><span class="tag">&lt;/figcaption&gt;</span>
+<span class="tag">&lt;/figure&gt;</span>
+<span class="lang-tag">HTML</span></code></pre>
+
+  <table>
+    <tr><th>Format</th><th>Extension</th><th>Usage recommandé</th></tr>
+    <tr><td>JPEG</td><td>.jpg / .jpeg</td><td>Photos, images complexes avec dégradés</td></tr>
+    <tr><td>PNG</td><td>.png</td><td>Images avec transparence, logos, screenshots</td></tr>
+    <tr><td>GIF</td><td>.gif</td><td>Animations simples</td></tr>
+    <tr><td>SVG</td><td>.svg</td><td>Illustrations vectorielles, icônes</td></tr>
+    <tr><td>WebP</td><td>.webp</td><td>Format moderne : qualité optimale + petite taille</td></tr>
+  </table>
+
+  <div class="tip-box">
+    L'attribut <code>alt</code> est <strong>obligatoire</strong>. Il décrit l'image pour les lecteurs d'écran
+    (accessibilité) et s'affiche si l'image ne peut pas être chargée. Pour les images purement décoratives,
+    utilisez <code>alt=""</code> (chaîne vide).
+  </div>
+
+  <!-- 2i) Formulaire -->
+  <h3 id="formulaire">i) Présenter un formulaire</h3>
+
+  <p>
+    Les formulaires HTML permettent de collecter des données saisies par l'utilisateur.
+    La balise <code>&lt;form&gt;</code> est le conteneur principal, et les différents
+    champs de saisie sont créés avec <code>&lt;input&gt;</code>, <code>&lt;textarea&gt;</code>,
+    <code>&lt;select&gt;</code>, etc.
+  </p>
+
+  <pre><code><span class="tag">&lt;form</span> <span class="att">action=</span><span class="val">"traitement.php"</span> <span class="att">method=</span><span class="val">"POST"</span><span class="tag">&gt;</span>
+
+  <span class="cmt">&lt;!-- Champ texte simple --&gt;</span>
+  <span class="tag">&lt;label</span> <span class="att">for=</span><span class="val">"nom"</span><span class="tag">&gt;</span><span class="txt">Nom du projet :</span><span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="att">type=</span><span class="val">"text"</span> <span class="att">id=</span><span class="val">"nom"</span> <span class="att">name=</span><span class="val">"nom"</span>
+         <span class="att">placeholder=</span><span class="val">"Ex : Portfolio Web"</span> <span class="att">required</span><span class="tag">&gt;</span>
+
+  <span class="cmt">&lt;!-- Zone de texte multilignes --&gt;</span>
+  <span class="tag">&lt;label</span> <span class="att">for=</span><span class="val">"description"</span><span class="tag">&gt;</span><span class="txt">Description :</span><span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;textarea</span> <span class="att">id=</span><span class="val">"description"</span> <span class="att">name=</span><span class="val">"description"</span>
+             <span class="att">rows=</span><span class="val">"5"</span> <span class="att">cols=</span><span class="val">"50"</span>
+             <span class="att">placeholder=</span><span class="val">"Décrivez votre projet..."</span><span class="tag">&gt;</span><span class="tag">&lt;/textarea&gt;</span>
+
+  <span class="cmt">&lt;!-- Téléchargement de fichier (image) --&gt;</span>
+  <span class="tag">&lt;label</span> <span class="att">for=</span><span class="val">"image"</span><span class="tag">&gt;</span><span class="txt">Image du projet :</span><span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="att">type=</span><span class="val">"file"</span> <span class="att">id=</span><span class="val">"image"</span> <span class="att">name=</span><span class="val">"image"</span>
+         <span class="att">accept=</span><span class="val">"image/*"</span><span class="tag">&gt;</span>
+
+  <span class="cmt">&lt;!-- Menu déroulant --&gt;</span>
+  <span class="tag">&lt;label</span> <span class="att">for=</span><span class="val">"categorie"</span><span class="tag">&gt;</span><span class="txt">Catégorie :</span><span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;select</span> <span class="att">id=</span><span class="val">"categorie"</span> <span class="att">name=</span><span class="val">"categorie"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;option</span> <span class="att">value=</span><span class="val">""</span><span class="tag">&gt;</span><span class="txt">-- Choisir --</span><span class="tag">&lt;/option&gt;</span>
+    <span class="tag">&lt;option</span> <span class="att">value=</span><span class="val">"web"</span><span class="tag">&gt;</span><span class="txt">Web</span><span class="tag">&lt;/option&gt;</span>
+    <span class="tag">&lt;option</span> <span class="att">value=</span><span class="val">"mobile"</span><span class="tag">&gt;</span><span class="txt">Mobile</span><span class="tag">&lt;/option&gt;</span>
+    <span class="tag">&lt;option</span> <span class="att">value=</span><span class="val">"desktop"</span><span class="tag">&gt;</span><span class="txt">Desktop</span><span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;/select&gt;</span>
+
+  <span class="cmt">&lt;!-- Cases à cocher --&gt;</span>
+  <span class="tag">&lt;fieldset&gt;</span>
+    <span class="tag">&lt;legend&gt;</span><span class="txt">Technologies utilisées :</span><span class="tag">&lt;/legend&gt;</span>
+    <span class="tag">&lt;label&gt;</span><span class="tag">&lt;input</span> <span class="att">type=</span><span class="val">"checkbox"</span> <span class="att">name=</span><span class="val">"tech"</span> <span class="att">value=</span><span class="val">"html"</span><span class="tag">&gt;</span><span class="txt"> HTML</span><span class="tag">&lt;/label&gt;</span>
+    <span class="tag">&lt;label&gt;</span><span class="tag">&lt;input</span> <span class="att">type=</span><span class="val">"checkbox"</span> <span class="att">name=</span><span class="val">"tech"</span> <span class="att">value=</span><span class="val">"css"</span><span class="tag">&gt;</span><span class="txt"> CSS</span><span class="tag">&lt;/label&gt;</span>
+    <span class="tag">&lt;label&gt;</span><span class="tag">&lt;input</span> <span class="att">type=</span><span class="val">"checkbox"</span> <span class="att">name=</span><span class="val">"tech"</span> <span class="att">value=</span><span class="val">"js"</span><span class="tag">&gt;</span><span class="txt"> JavaScript</span><span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;/fieldset&gt;</span>
+
+  <span class="cmt">&lt;!-- Boutons --&gt;</span>
+  <span class="tag">&lt;button</span> <span class="att">type=</span><span class="val">"submit"</span><span class="tag">&gt;</span><span class="txt">Ajouter le projet</span><span class="tag">&lt;/button&gt;</span>
+  <span class="tag">&lt;button</span> <span class="att">type=</span><span class="val">"reset"</span><span class="tag">&gt;</span><span class="txt">Réinitialiser</span><span class="tag">&lt;/button&gt;</span>
+
+<span class="tag">&lt;/form&gt;</span>
+<span class="lang-tag">HTML</span></code></pre>
+
+  <p><strong>Types d'<code>&lt;input&gt;</code> en HTML5 :</strong></p>
+  <table>
+    <tr><th>Type</th><th>Usage</th><th>Validation auto</th></tr>
+    <tr><td><code>text</code></td><td>Texte libre</td><td>Non</td></tr>
+    <tr><td><code>email</code></td><td>Adresse e-mail</td><td>Oui (format email)</td></tr>
+    <tr><td><code>password</code></td><td>Mot de passe masqué</td><td>Non</td></tr>
+    <tr><td><code>number</code></td><td>Nombre</td><td>Oui (numérique)</td></tr>
+    <tr><td><code>date</code></td><td>Date</td><td>Oui (calendrier)</td></tr>
+    <tr><td><code>url</code></td><td>URL</td><td>Oui (format URL)</td></tr>
+    <tr><td><code>tel</code></td><td>Téléphone</td><td>Non</td></tr>
+    <tr><td><code>file</code></td><td>Fichier à envoyer</td><td>Non</td></tr>
+    <tr><td><code>checkbox</code></td><td>Case à cocher</td><td>Non</td></tr>
+    <tr><td><code>radio</code></td><td>Bouton radio</td><td>Non</td></tr>
+    <tr><td><code>range</code></td><td>Curseur</td><td>Non</td></tr>
+    <tr><td><code>color</code></td><td>Sélecteur de couleur</td><td>Non</td></tr>
+    <tr><td><code>hidden</code></td><td>Champ caché</td><td>Non</td></tr>
+    <tr><td><code>submit</code></td><td>Bouton d'envoi</td><td>—</td></tr>
+  </table>
+</section>
+
+<!-- ════════════════════════════════════════
+     SECTION 3 — RÉFÉRENCES
+════════════════════════════════════════ -->
+<section id="references">
+  <div class="section-num">Section 03</div>
+  <h2>Références</h2>
+  <p>Voici les ressources officielles et de référence indispensables pour approfondir HTML :</p>
+
+  <div class="ref-grid">
+    <a class="ref-card" href="https://developer.mozilla.org/fr/docs/Web/HTML" target="_blank">
+      <strong>MDN Web Docs — HTML</strong>
+      <div class="ref-url">developer.mozilla.org/fr/docs/Web/HTML</div>
+      <p style="font-size:13px;margin-top:6px;color:#555">La référence la plus complète et fiable sur HTML. Documentation officielle de Mozilla, disponible en français.</p>
+    </a>
+    <a class="ref-card" href="https://www.w3schools.com/html/" target="_blank">
+      <strong>W3Schools HTML Tutorial</strong>
+      <div class="ref-url">w3schools.com/html</div>
+      <p style="font-size:13px;margin-top:6px;color:#555">Tutoriels interactifs avec éditeur en ligne pour tester le code directement dans le navigateur.</p>
+    </a>
+    <a class="ref-card" href="https://html.spec.whatwg.org/" target="_blank">
+      <strong>WHATWG HTML Living Standard</strong>
+      <div class="ref-url">html.spec.whatwg.org</div>
+      <p style="font-size:13px;margin-top:6px;color:#555">La spécification officielle du HTML maintenue par le WHATWG. Pour les lecteurs avancés.</p>
+    </a>
+    <a class="ref-card" href="https://www.w3.org/TR/html52/" target="_blank">
+      <strong>W3C HTML5 Specification</strong>
+      <div class="ref-url">w3.org/TR/html52</div>
+      <p style="font-size:13px;margin-top:6px;color:#555">Spécification HTML5 du World Wide Web Consortium — organisme de standardisation du Web.</p>
+    </a>
+    <a class="ref-card" href="https://validator.w3.org/" target="_blank">
+      <strong>W3C Markup Validation Service</strong>
+      <div class="ref-url">validator.w3.org</div>
+      <p style="font-size:13px;margin-top:6px;color:#555">Outil officiel pour valider la conformité de votre code HTML aux standards W3C.</p>
+    </a>
+    <a class="ref-card" href="https://openclassrooms.com/fr/courses/1603881-creez-votre-site-web-avec-html5-et-css3" target="_blank">
+      <strong>OpenClassrooms — HTML5 &amp; CSS3</strong>
+      <div class="ref-url">openclassrooms.com</div>
+      <p style="font-size:13px;margin-top:6px;color:#555">Cours complet en français pour débutants, avec exercices pratiques et certifications.</p>
+    </a>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     SECTION 4 — DÉMO
+════════════════════════════════════════ -->
+<section id="demo">
+  <div class="section-num">Section 04</div>
+  <h2>Démo — Application de Gestion de Portfolio</h2>
+
+  <p>
+    Dans cette démo, nous allons réaliser une <strong>application Web statique de gestion de portfolio</strong>.
+    Elle permettra de lister des projets, en afficher les détails et d'en ajouter de nouveaux.
+  </p>
+
+  <div class="def-box">
+    <strong>Modélisation d'un Projet</strong><br>
+    Un projet est caractérisé par : <strong>libellé</strong>, <strong>description</strong>,
+    <strong>technologies utilisées</strong> (liste), <strong>image</strong>, et optionnellement
+    une <em>date de réalisation</em> et un <em>lien de démo</em>.
+  </div>
+
+  <!-- ── SETUP GITHUB ── -->
+  <div class="demo-section" style="margin-top:30px;">
+    <h3 style="color:var(--highlight);font-family:'Playfair Display',serif;font-size:22px;margin-bottom:20px;">
+      🚀 Mise en place GitHub
+    </h3>
+    <p>Avant de commencer à coder, créez votre dépôt distant et initialisez Git localement :</p>
+
+    <pre><code><span class="cmt"># 1. Créer le dépôt sur GitHub : "fullStack_portfolio" (public)</span>
+<span class="cmt">#    → https://github.com/new</span>
+
+<span class="cmt"># 2. Initialiser le dépôt local</span>
+git init fullStack_portfolio
+cd fullStack_portfolio
+
+<span class="cmt"># 3. Configurer le dépôt distant</span>
+git remote add origin https://github.com/VOTRE-USERNAME/fullStack_portfolio.git
+
+<span class="cmt"># 4. Créer la structure de fichiers</span>
+mkdir images
+touch lister-projets.html detailler-projet.html ajouter-projet.html
+
+<span class="cmt"># 5. Premier commit</span>
+git add .
+git commit -m "init: structure de base du projet portfolio"
+git push -u origin main
+<span class="lang-tag">BASH</span></code></pre>
+
+    <p style="font-size:14px;color:rgba(255,255,255,0.6);margin-top:16px;">
+      💡 <strong>Règle des commits :</strong> faire un <code>git add . && git commit -m "..."</code> après chaque tâche (après chaque page créée ou modifiée).
+    </p>
+  </div>
+
+  <!-- ── STRUCTURE DU PROJET ── -->
+  <h3>Structure des fichiers</h3>
+  <pre><code><span class="txt">fullStack_portfolio/</span>
+<span class="txt">├── lister-projets.html</span>
+<span class="txt">├── detailler-projet.html</span>
+<span class="txt">├── ajouter-projet.html</span>
+<span class="txt">└── images/</span>
+<span class="txt">    ├── projet1.jpg</span>
+<span class="txt">    ├── projet2.jpg</span>
+<span class="txt">    └── projet3.jpg</span>
+<span class="lang-tag">FS</span></code></pre>
+
+  <!-- ── PAGE 1 ── -->
+  <div style="margin-top: 40px;">
+    <span class="file-badge">📄 lister-projets.html</span>
+    <h3>Page 1 — Liste des projets</h3>
+    <p>
+      Cette page affiche tous les projets sous forme de cartes. Chaque projet montre
+      son <strong>image</strong> et son <strong>libellé</strong> (en tant que lien/ancre vers la page de détail),
+      ainsi qu'un bouton « Supprimer ».
+    </p>
+
+    <pre><code><span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="att">lang=</span><span class="val">"fr"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="att">charset=</span><span class="val">"UTF-8"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="att">name=</span><span class="val">"viewport"</span> <span class="att">content=</span><span class="val">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;title&gt;</span><span class="txt">Portfolio — Liste des projets</span><span class="tag">&lt;/title&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+
+  <span class="tag">&lt;header&gt;</span>
+    <span class="tag">&lt;h1&gt;</span><span class="txt">Mon Portfolio</span><span class="tag">&lt;/h1&gt;</span>
+    <span class="tag">&lt;nav&gt;</span>
+      <span class="tag">&lt;a</span> <span class="att">href=</span><span class="val">"lister-projets.html"</span><span class="tag">&gt;</span><span class="txt">Projets</span><span class="tag">&lt;/a&gt;</span> |
+      <span class="tag">&lt;a</span> <span class="att">href=</span><span class="val">"ajouter-projet.html"</span><span class="tag">&gt;</span><span class="txt">Ajouter un projet</span><span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;/nav&gt;</span>
+  <span class="tag">&lt;/header&gt;</span>
+
+  <span class="tag">&lt;main&gt;</span>
+    <span class="tag">&lt;h2&gt;</span><span class="txt">Tous les projets</span><span class="tag">&lt;/h2&gt;</span>
+
+    <span class="cmt">&lt;!-- ─── Projet 1 ─── --&gt;</span>
+    <span class="tag">&lt;article&gt;</span>
+      <span class="tag">&lt;figure&gt;</span>
+        <span class="tag">&lt;img</span>
+          <span class="att">src=</span><span class="val">"images/projet1.jpg"</span>
+          <span class="att">alt=</span><span class="val">"Capture du projet Application E-commerce"</span>
+          <span class="att">width=</span><span class="val">"300"</span>
+          <span class="att">height=</span><span class="val">"200"</span>
+        <span class="tag">&gt;</span>
+      <span class="tag">&lt;/figure&gt;</span>
+      <span class="tag">&lt;h3&gt;</span>
+        <span class="cmt">&lt;!-- Ancre qui cible detailler-projet.html --&gt;</span>
+        <span class="tag">&lt;a</span> <span class="att">href=</span><span class="val">"detailler-projet.html?id=1"</span><span class="tag">&gt;</span>
+          <span class="txt">Application E-commerce</span>
+        <span class="tag">&lt;/a&gt;</span>
+      <span class="tag">&lt;/h3&gt;</span>
+      <span class="tag">&lt;button</span> <span class="att">type=</span><span class="val">"button"</span><span class="tag">&gt;</span><span class="txt">Supprimer</span><span class="tag">&lt;/button&gt;</span>
+    <span class="tag">&lt;/article&gt;</span>
+
+    <span class="cmt">&lt;!-- ─── Projet 2 ─── --&gt;</span>
+    <span class="tag">&lt;article&gt;</span>
+      <span class="tag">&lt;figure&gt;</span>
+        <span class="tag">&lt;img</span>
+          <span class="att">src=</span><span class="val">"images/projet2.jpg"</span>
+          <span class="att">alt=</span><span class="val">"Capture du projet Gestionnaire de tâches"</span>
+          <span class="att">width=</span><span class="val">"300"</span>
+          <span class="att">height=</span><span class="val">"200"</span>
+        <span class="tag">&gt;</span>
+      <span class="tag">&lt;/figure&gt;</span>
+      <span class="tag">&lt;h3&gt;</span>
+        <span class="tag">&lt;a</span> <span class="att">href=</span><span class="val">"detailler-projet.html?id=2"</span><span class="tag">&gt;</span>
+          <span class="txt">Gestionnaire de Tâches</span>
+        <span class="tag">&lt;/a&gt;</span>
+      <span class="tag">&lt;/h3&gt;</span>
+      <span class="tag">&lt;button</span> <span class="att">type=</span><span class="val">"button"</span><span class="tag">&gt;</span><span class="txt">Supprimer</span><span class="tag">&lt;/button&gt;</span>
+    <span class="tag">&lt;/article&gt;</span>
+
+    <span class="cmt">&lt;!-- ─── Projet 3 ─── --&gt;</span>
+    <span class="tag">&lt;article&gt;</span>
+      <span class="tag">&lt;figure&gt;</span>
+        <span class="tag">&lt;img</span>
+          <span class="att">src=</span><span class="val">"images/projet3.jpg"</span>
+          <span class="att">alt=</span><span class="val">"Capture du projet Blog Personnel"</span>
+          <span class="att">width=</span><span class="val">"300"</span>
+          <span class="att">height=</span><span class="val">"200"</span>
+        <span class="tag">&gt;</span>
+      <span class="tag">&lt;/figure&gt;</span>
+      <span class="tag">&lt;h3&gt;</span>
+        <span class="tag">&lt;a</span> <span class="att">href=</span><span class="val">"detailler-projet.html?id=3"</span><span class="tag">&gt;</span>
+          <span class="txt">Blog Personnel</span>
+        <span class="tag">&lt;/a&gt;</span>
+      <span class="tag">&lt;/h3&gt;</span>
+      <span class="tag">&lt;button</span> <span class="att">type=</span><span class="val">"button"</span><span class="tag">&gt;</span><span class="txt">Supprimer</span><span class="tag">&lt;/button&gt;</span>
+    <span class="tag">&lt;/article&gt;</span>
+
+  <span class="tag">&lt;/main&gt;</span>
+
+  <span class="tag">&lt;footer&gt;</span>
+    <span class="tag">&lt;p&gt;</span><span class="txt">&amp;copy; 2025 Mon Portfolio</span><span class="tag">&lt;/p&gt;</span>
+  <span class="tag">&lt;/footer&gt;</span>
+
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span>
+<span class="lang-tag">HTML — lister-projets.html</span></code></pre>
+
+    <div class="tip-box">
+      <strong>Commit à faire :</strong><br>
+      <code>git add lister-projets.html && git commit -m "feat: page liste des projets"</code>
+    </div>
+  </div>
+
+  <!-- ── PAGE 2 ── -->
+  <div style="margin-top: 50px;">
+    <span class="file-badge blue">📄 detailler-projet.html</span>
+    <h3>Page 2 — Détail d'un projet</h3>
+    <p>
+      Cette page affiche toutes les informations d'un projet : son image, son libellé,
+      sa description dans un <code>&lt;p&gt;</code>, et ses technologies sous forme d'une
+      <strong>liste ordonnée</strong>. Un lien de retour vers la liste est présent.
+    </p>
+
+    <pre><code><span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="att">lang=</span><span class="val">"fr"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="att">charset=</span><span class="val">"UTF-8"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="att">name=</span><span class="val">"viewport"</span> <span class="att">content=</span><span class="val">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;title&gt;</span><span class="txt">Portfolio — Détail du projet</span><span class="tag">&lt;/title&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+
+  <span class="tag">&lt;header&gt;</span>
+    <span class="tag">&lt;h1&gt;</span><span class="txt">Mon Portfolio</span><span class="tag">&lt;/h1&gt;</span>
+    <span class="tag">&lt;nav&gt;</span>
+      <span class="tag">&lt;a</span> <span class="att">href=</span><span class="val">"lister-projets.html"</span><span class="tag">&gt;</span><span class="txt">Projets</span><span class="tag">&lt;/a&gt;</span> |
+      <span class="tag">&lt;a</span> <span class="att">href=</span><span class="val">"ajouter-projet.html"</span><span class="tag">&gt;</span><span class="txt">Ajouter un projet</span><span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;/nav&gt;</span>
+  <span class="tag">&lt;/header&gt;</span>
+
+  <span class="tag">&lt;main&gt;</span>
+
+    <span class="cmt">&lt;!-- Image du projet --&gt;</span>
+    <span class="tag">&lt;figure&gt;</span>
+      <span class="tag">&lt;img</span>
+        <span class="att">src=</span><span class="val">"images/projet1.jpg"</span>
+        <span class="att">alt=</span><span class="val">"Aperçu de l'application E-commerce"</span>
+        <span class="att">width=</span><span class="val">"700"</span>
+        <span class="att">height=</span><span class="val">"400"</span>
+        <span class="att">style=</span><span class="val">"max-width:100%;height:auto;"</span>
+      <span class="tag">&gt;</span>
+      <span class="tag">&lt;figcaption&gt;</span><span class="txt">Aperçu du projet</span><span class="tag">&lt;/figcaption&gt;</span>
+    <span class="tag">&lt;/figure&gt;</span>
+
+    <span class="cmt">&lt;!-- Titre / Libellé du projet --&gt;</span>
+    <span class="tag">&lt;h2&gt;</span><span class="txt">Application E-commerce</span><span class="tag">&lt;/h2&gt;</span>
+
+    <span class="cmt">&lt;!-- Description dans un paragraphe --&gt;</span>
+    <span class="tag">&lt;section&gt;</span>
+      <span class="tag">&lt;h3&gt;</span><span class="txt">Description</span><span class="tag">&lt;/h3&gt;</span>
+      <span class="tag">&lt;p&gt;</span>
+        <span class="txt">Ce projet est une application de commerce électronique complète
+        permettant aux utilisateurs de parcourir un catalogue de produits,
+        d'ajouter des articles au panier et de passer des commandes en ligne.
+        Il intègre un système d'authentification et un tableau de bord admin.</span>
+      <span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;/section&gt;</span>
+
+    <span class="cmt">&lt;!-- Caractéristiques --&gt;</span>
+    <span class="tag">&lt;section&gt;</span>
+      <span class="tag">&lt;h3&gt;</span><span class="txt">Caractéristiques</span><span class="tag">&lt;/h3&gt;</span>
+      <span class="tag">&lt;dl&gt;</span>
+        <span class="tag">&lt;dt&gt;</span><span class="txt">Date de réalisation</span><span class="tag">&lt;/dt&gt;</span>
+        <span class="tag">&lt;dd&gt;</span><span class="txt">Janvier 2025</span><span class="tag">&lt;/dd&gt;</span>
+
+        <span class="tag">&lt;dt&gt;</span><span class="txt">Catégorie</span><span class="tag">&lt;/dt&gt;</span>
+        <span class="tag">&lt;dd&gt;</span><span class="txt">Application Web</span><span class="tag">&lt;/dd&gt;</span>
+
+        <span class="cmt">&lt;!-- Technologies : sous-liste ordonnée --&gt;</span>
+        <span class="tag">&lt;dt&gt;</span><span class="txt">Technologies utilisées</span><span class="tag">&lt;/dt&gt;</span>
+        <span class="tag">&lt;dd&gt;</span>
+          <span class="tag">&lt;ol&gt;</span>
+            <span class="tag">&lt;li&gt;</span><span class="txt">HTML5</span><span class="tag">&lt;/li&gt;</span>
+            <span class="tag">&lt;li&gt;</span><span class="txt">CSS3 / Flexbox / Grid</span><span class="tag">&lt;/li&gt;</span>
+            <span class="tag">&lt;li&gt;</span><span class="txt">JavaScript (ES6+)</span><span class="tag">&lt;/li&gt;</span>
+            <span class="tag">&lt;li&gt;</span><span class="txt">Node.js / Express</span><span class="tag">&lt;/li&gt;</span>
+            <span class="tag">&lt;li&gt;</span><span class="txt">MongoDB</span><span class="tag">&lt;/li&gt;</span>
+          <span class="tag">&lt;/ol&gt;</span>
+        <span class="tag">&lt;/dd&gt;</span>
+      <span class="tag">&lt;/dl&gt;</span>
+    <span class="tag">&lt;/section&gt;</span>
+
+    <span class="cmt">&lt;!-- Lien de retour --&gt;</span>
+    <span class="tag">&lt;p&gt;</span>
+      <span class="tag">&lt;a</span> <span class="att">href=</span><span class="val">"lister-projets.html"</span><span class="tag">&gt;</span>
+        <span class="txt">&amp;larr; Retour à la liste des projets</span>
+      <span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;/p&gt;</span>
+
+  <span class="tag">&lt;/main&gt;</span>
+
+  <span class="tag">&lt;footer&gt;</span>
+    <span class="tag">&lt;p&gt;</span><span class="txt">&amp;copy; 2025 Mon Portfolio</span><span class="tag">&lt;/p&gt;</span>
+  <span class="tag">&lt;/footer&gt;</span>
+
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span>
+<span class="lang-tag">HTML — detailler-projet.html</span></code></pre>
+
+    <div class="tip-box">
+      <strong>Commit à faire :</strong><br>
+      <code>git add detailler-projet.html && git commit -m "feat: page détail d'un projet"</code>
+    </div>
+  </div>
+
+  <!-- ── PAGE 3 ── -->
+  <div style="margin-top: 50px;">
+    <span class="file-badge green">📄 ajouter-projet.html</span>
+    <h3>Page 3 — Ajouter un projet (formulaire)</h3>
+    <p>
+      Cette page contient un formulaire HTML permettant de saisir toutes les caractéristiques
+      d'un nouveau projet : libellé, description, image, technologies utilisées, etc.
+    </p>
+
+    <pre><code><span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="att">lang=</span><span class="val">"fr"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="att">charset=</span><span class="val">"UTF-8"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="att">name=</span><span class="val">"viewport"</span> <span class="att">content=</span><span class="val">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;title&gt;</span><span class="txt">Portfolio — Ajouter un projet</span><span class="tag">&lt;/title&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+
+  <span class="tag">&lt;header&gt;</span>
+    <span class="tag">&lt;h1&gt;</span><span class="txt">Mon Portfolio</span><span class="tag">&lt;/h1&gt;</span>
+    <span class="tag">&lt;nav&gt;</span>
+      <span class="tag">&lt;a</span> <span class="att">href=</span><span class="val">"lister-projets.html"</span><span class="tag">&gt;</span><span class="txt">Projets</span><span class="tag">&lt;/a&gt;</span> |
+      <span class="tag">&lt;a</span> <span class="att">href=</span><span class="val">"ajouter-projet.html"</span><span class="tag">&gt;</span><span class="txt">Ajouter un projet</span><span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;/nav&gt;</span>
+  <span class="tag">&lt;/header&gt;</span>
+
+  <span class="tag">&lt;main&gt;</span>
+    <span class="tag">&lt;h2&gt;</span><span class="txt">Ajouter un nouveau projet</span><span class="tag">&lt;/h2&gt;</span>
+
+    <span class="tag">&lt;form</span> <span class="att">action=</span><span class="val">"#"</span> <span class="att">method=</span><span class="val">"POST"</span> <span class="att">enctype=</span><span class="val">"multipart/form-data"</span><span class="tag">&gt;</span>
+
+      <span class="cmt">&lt;!-- ── LIBELLÉ ── --&gt;</span>
+      <span class="tag">&lt;div&gt;</span>
+        <span class="tag">&lt;label</span> <span class="att">for=</span><span class="val">"libelle"</span><span class="tag">&gt;</span><span class="txt">Libellé du projet *</span><span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;input</span>
+          <span class="att">type=</span><span class="val">"text"</span>
+          <span class="att">id=</span><span class="val">"libelle"</span>
+          <span class="att">name=</span><span class="val">"libelle"</span>
+          <span class="att">placeholder=</span><span class="val">"Ex : Application E-commerce"</span>
+          <span class="att">required</span>
+          <span class="att">maxlength=</span><span class="val">"100"</span>
+        <span class="tag">&gt;</span>
+      <span class="tag">&lt;/div&gt;</span>
+
+      <span class="cmt">&lt;!-- ── DESCRIPTION ── --&gt;</span>
+      <span class="tag">&lt;div&gt;</span>
+        <span class="tag">&lt;label</span> <span class="att">for=</span><span class="val">"description"</span><span class="tag">&gt;</span><span class="txt">Description *</span><span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;textarea</span>
+          <span class="att">id=</span><span class="val">"description"</span>
+          <span class="att">name=</span><span class="val">"description"</span>
+          <span class="att">rows=</span><span class="val">"6"</span>
+          <span class="att">placeholder=</span><span class="val">"Décrivez votre projet, ses objectifs et ses fonctionnalités..."</span>
+          <span class="att">required</span>
+        <span class="tag">&gt;&lt;/textarea&gt;</span>
+      <span class="tag">&lt;/div&gt;</span>
+
+      <span class="cmt">&lt;!-- ── IMAGE ── --&gt;</span>
+      <span class="tag">&lt;div&gt;</span>
+        <span class="tag">&lt;label</span> <span class="att">for=</span><span class="val">"image"</span><span class="tag">&gt;</span><span class="txt">Image du projet</span><span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;input</span>
+          <span class="att">type=</span><span class="val">"file"</span>
+          <span class="att">id=</span><span class="val">"image"</span>
+          <span class="att">name=</span><span class="val">"image"</span>
+          <span class="att">accept=</span><span class="val">"image/png, image/jpeg, image/webp"</span>
+        <span class="tag">&gt;</span>
+      <span class="tag">&lt;/div&gt;</span>
+
+      <span class="cmt">&lt;!-- ── CATÉGORIE ── --&gt;</span>
+      <span class="tag">&lt;div&gt;</span>
+        <span class="tag">&lt;label</span> <span class="att">for=</span><span class="val">"categorie"</span><span class="tag">&gt;</span><span class="txt">Catégorie</span><span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;select</span> <span class="att">id=</span><span class="val">"categorie"</span> <span class="att">name=</span><span class="val">"categorie"</span><span class="tag">&gt;</span>
+          <span class="tag">&lt;option</span> <span class="att">value=</span><span class="val">""</span><span class="tag">&gt;</span><span class="txt">-- Sélectionner --</span><span class="tag">&lt;/option&gt;</span>
+          <span class="tag">&lt;option</span> <span class="att">value=</span><span class="val">"web"</span><span class="tag">&gt;</span><span class="txt">Application Web</span><span class="tag">&lt;/option&gt;</span>
+          <span class="tag">&lt;option</span> <span class="att">value=</span><span class="val">"mobile"</span><span class="tag">&gt;</span><span class="txt">Application Mobile</span><span class="tag">&lt;/option&gt;</span>
+          <span class="tag">&lt;option</span> <span class="att">value=</span><span class="val">"desktop"</span><span class="tag">&gt;</span><span class="txt">Application Desktop</span><span class="tag">&lt;/option&gt;</span>
+          <span class="tag">&lt;option</span> <span class="att">value=</span><span class="val">"api"</span><span class="tag">&gt;</span><span class="txt">API / Back-End</span><span class="tag">&lt;/option&gt;</span>
+          <span class="tag">&lt;option</span> <span class="att">value=</span><span class="val">"autre"</span><span class="tag">&gt;</span><span class="txt">Autre</span><span class="tag">&lt;/option&gt;</span>
+        <span class="tag">&lt;/select&gt;</span>
+      <span class="tag">&lt;/div&gt;</span>
+
+      <span class="cmt">&lt;!-- ── TECHNOLOGIES ── --&gt;</span>
+      <span class="tag">&lt;fieldset&gt;</span>
+        <span class="tag">&lt;legend&gt;</span><span class="txt">Technologies utilisées</span><span class="tag">&lt;/legend&gt;</span>
+
+        <span class="tag">&lt;label&gt;</span>
+          <span class="tag">&lt;input</span> <span class="att">type=</span><span class="val">"checkbox"</span> <span class="att">name=</span><span class="val">"technologies"</span> <span class="att">value=</span><span class="val">"HTML5"</span><span class="tag">&gt;</span>
+          <span class="txt">HTML5</span>
+        <span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;label&gt;</span>
+          <span class="tag">&lt;input</span> <span class="att">type=</span><span class="val">"checkbox"</span> <span class="att">name=</span><span class="val">"technologies"</span> <span class="att">value=</span><span class="val">"CSS3"</span><span class="tag">&gt;</span>
+          <span class="txt">CSS3</span>
+        <span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;label&gt;</span>
+          <span class="tag">&lt;input</span> <span class="att">type=</span><span class="val">"checkbox"</span> <span class="att">name=</span><span class="val">"technologies"</span> <span class="att">value=</span><span class="val">"JavaScript"</span><span class="tag">&gt;</span>
+          <span class="txt">JavaScript</span>
+        <span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;label&gt;</span>
+          <span class="tag">&lt;input</span> <span class="att">type=</span><span class="val">"checkbox"</span> <span class="att">name=</span><span class="val">"technologies"</span> <span class="att">value=</span><span class="val">"React"</span><span class="tag">&gt;</span>
+          <span class="txt">React</span>
+        <span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;label&gt;</span>
+          <span class="tag">&lt;input</span> <span class="att">type=</span><span class="val">"checkbox"</span> <span class="att">name=</span><span class="val">"technologies"</span> <span class="att">value=</span><span class="val">"Node.js"</span><span class="tag">&gt;</span>
+          <span class="txt">Node.js</span>
+        <span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;label&gt;</span>
+          <span class="tag">&lt;input</span> <span class="att">type=</span><span class="val">"checkbox"</span> <span class="att">name=</span><span class="val">"technologies"</span> <span class="att">value=</span><span class="val">"PHP"</span><span class="tag">&gt;</span>
+          <span class="txt">PHP</span>
+        <span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;label&gt;</span>
+          <span class="tag">&lt;input</span> <span class="att">type=</span><span class="val">"checkbox"</span> <span class="att">name=</span><span class="val">"technologies"</span> <span class="att">value=</span><span class="val">"MySQL"</span><span class="tag">&gt;</span>
+          <span class="txt">MySQL</span>
+        <span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;label&gt;</span>
+          <span class="tag">&lt;input</span> <span class="att">type=</span><span class="val">"checkbox"</span> <span class="att">name=</span><span class="val">"technologies"</span> <span class="att">value=</span><span class="val">"MongoDB"</span><span class="tag">&gt;</span>
+          <span class="txt">MongoDB</span>
+        <span class="tag">&lt;/label&gt;</span>
+
+        <span class="cmt">&lt;!-- Autre technologie saisie manuellement --&gt;</span>
+        <span class="tag">&lt;div&gt;</span>
+          <span class="tag">&lt;label</span> <span class="att">for=</span><span class="val">"autre-tech"</span><span class="tag">&gt;</span><span class="txt">Autre(s) :</span><span class="tag">&lt;/label&gt;</span>
+          <span class="tag">&lt;input</span> <span class="att">type=</span><span class="val">"text"</span> <span class="att">id=</span><span class="val">"autre-tech"</span> <span class="att">name=</span><span class="val">"autre-tech"</span>
+                 <span class="att">placeholder=</span><span class="val">"Ex : Vue.js, Django, Laravel..."</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+
+      <span class="tag">&lt;/fieldset&gt;</span>
+
+      <span class="cmt">&lt;!-- ── DATE ── --&gt;</span>
+      <span class="tag">&lt;div&gt;</span>
+        <span class="tag">&lt;label</span> <span class="att">for=</span><span class="val">"date"</span><span class="tag">&gt;</span><span class="txt">Date de réalisation</span><span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;input</span> <span class="att">type=</span><span class="val">"date"</span> <span class="att">id=</span><span class="val">"date"</span> <span class="att">name=</span><span class="val">"date"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;/div&gt;</span>
+
+      <span class="cmt">&lt;!-- ── LIEN DÉMO ── --&gt;</span>
+      <span class="tag">&lt;div&gt;</span>
+        <span class="tag">&lt;label</span> <span class="att">for=</span><span class="val">"lien"</span><span class="tag">&gt;</span><span class="txt">Lien de démo (URL)</span><span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;input</span>
+          <span class="att">type=</span><span class="val">"url"</span>
+          <span class="att">id=</span><span class="val">"lien"</span>
+          <span class="att">name=</span><span class="val">"lien"</span>
+          <span class="att">placeholder=</span><span class="val">"https://mon-projet.vercel.app"</span>
+        <span class="tag">&gt;</span>
+      <span class="tag">&lt;/div&gt;</span>
+
+      <span class="cmt">&lt;!-- ── BOUTONS ── --&gt;</span>
+      <span class="tag">&lt;div&gt;</span>
+        <span class="tag">&lt;button</span> <span class="att">type=</span><span class="val">"submit"</span><span class="tag">&gt;</span><span class="txt">Ajouter le projet</span><span class="tag">&lt;/button&gt;</span>
+        <span class="tag">&lt;button</span> <span class="att">type=</span><span class="val">"reset"</span><span class="tag">&gt;</span><span class="txt">Réinitialiser</span><span class="tag">&lt;/button&gt;</span>
+        <span class="tag">&lt;a</span> <span class="att">href=</span><span class="val">"lister-projets.html"</span><span class="tag">&gt;</span><span class="txt">Annuler</span><span class="tag">&lt;/a&gt;</span>
+      <span class="tag">&lt;/div&gt;</span>
+
+    <span class="tag">&lt;/form&gt;</span>
+  <span class="tag">&lt;/main&gt;</span>
+
+  <span class="tag">&lt;footer&gt;</span>
+    <span class="tag">&lt;p&gt;</span><span class="txt">&amp;copy; 2025 Mon Portfolio</span><span class="tag">&lt;/p&gt;</span>
+  <span class="tag">&lt;/footer&gt;</span>
+
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span>
+<span class="lang-tag">HTML — ajouter-projet.html</span></code></pre>
+
+    <div class="tip-box">
+      <strong>Commit à faire :</strong><br>
+      <code>git add ajouter-projet.html && git commit -m "feat: formulaire d'ajout de projet"</code>
+    </div>
+  </div>
+
+  <!-- ── RÉCAP COMMITS ── -->
+  <div style="margin-top: 50px;">
+    <h3>Récapitulatif des commits GitHub</h3>
+    <ol class="steps">
+      <li>
+        <strong>init: structure de base du projet portfolio</strong><br>
+        <small style="color:var(--muted);">Création du dépôt, des fichiers et du dossier images</small>
+      </li>
+      <li>
+        <strong>feat: page liste des projets</strong><br>
+        <small style="color:var(--muted);">Création de <code>lister-projets.html</code></small>
+      </li>
+      <li>
+        <strong>feat: page détail d'un projet</strong><br>
+        <small style="color:var(--muted);">Création de <code>detailler-projet.html</code></small>
+      </li>
+      <li>
+        <strong>feat: formulaire d'ajout de projet</strong><br>
+        <small style="color:var(--muted);">Création de <code>ajouter-projet.html</code></small>
+      </li>
+    </ol>
+  </div>
+
+</section>
+
+</main>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer>
+  <p>COURS HTML · Module 01 · Développement Web Full Stack · &copy; 2025</p>
+</footer>
+
+</body>
+</html>

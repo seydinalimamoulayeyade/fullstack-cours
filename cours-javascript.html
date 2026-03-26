@@ -1,0 +1,2070 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours JavaScript — Module 04 · Full Stack</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;900&family=Inconsolata:wght@400;600;700&family=Karla:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════
+   DESIGN TOKENS
+══════════════════════════════════════ */
+:root {
+  --bg:      #05080f;
+  --s1:      #090e1a;
+  --s2:      #0d1424;
+  --s3:      #111b2e;
+  --bd:      #1a2540;
+  --text:    #dce8ff;
+  --muted:   #5a7aaa;
+  --js:      #f7df1e;       /* JS jaune officiel */
+  --js-d:    #c9b800;
+  --blue:    #4d9fff;
+  --cyan:    #00e5ff;
+  --green:   #00ff87;
+  --pink:    #ff6b9d;
+  --orange:  #ff9d4d;
+  --red:     #ff5757;
+  --violet:  #b084ff;
+  --w: 900px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Karla',sans-serif;
+  background:var(--bg);color:var(--text);
+  line-height:1.75;font-size:16px;
+}
+
+/* ══════════════════════════════════════
+   HEADER
+══════════════════════════════════════ */
+header{
+  background:var(--s1);
+  border-bottom:1px solid var(--bd);
+  padding:68px 40px 52px;
+  position:relative;overflow:hidden;
+}
+/* JS logo watermark */
+header::before{
+  content:'JS';
+  position:absolute;right:-20px;top:-20px;
+  font-family:'Unbounded',sans-serif;
+  font-size:280px;font-weight:900;
+  color:rgba(247,223,30,.04);
+  line-height:1;pointer-events:none;
+  letter-spacing:-10px;
+}
+header::after{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 700px 400px at 100% 0%,rgba(247,223,30,.1) 0%,transparent 65%),
+    radial-gradient(ellipse 500px 350px at 0% 100%,rgba(77,159,255,.07) 0%,transparent 60%);
+  pointer-events:none;
+}
+.hdr{max-width:var(--w);margin:0 auto;position:relative;z-index:1}
+
+.mod-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(247,223,30,.1);
+  border:1px solid rgba(247,223,30,.3);
+  color:var(--js);
+  font-family:'Inconsolata',monospace;
+  font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  padding:5px 14px;border-radius:3px;margin-bottom:20px;
+}
+
+h1{
+  font-family:'Unbounded',sans-serif;
+  font-weight:900;
+  font-size:clamp(42px,8vw,88px);
+  line-height:.92;letter-spacing:-3px;
+  margin-bottom:18px;
+}
+.h1-js{
+  display:inline-block;
+  background:var(--js);color:#000;
+  padding:4px 16px;border-radius:4px;
+  transform:skew(-3deg);
+  margin-right:12px;
+}
+.h1-rest{
+  background:linear-gradient(135deg,var(--text),var(--blue));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+h1 .sub{
+  display:block;
+  font-family:'Karla',sans-serif;font-weight:300;
+  font-size:clamp(14px,2vw,19px);letter-spacing:.5px;
+  color:var(--muted);
+  -webkit-text-fill-color:var(--muted);
+  margin-top:14px;
+}
+.hdr-meta{
+  display:flex;gap:20px;flex-wrap:wrap;
+  margin-top:24px;
+  font-family:'Inconsolata',monospace;font-size:11px;color:var(--muted);
+}
+.hdr-meta strong{color:var(--js)}
+.sep{color:var(--bd);margin:0 2px}
+
+/* ══════════════════════════════════════
+   NAV
+══════════════════════════════════════ */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(5,8,15,.94);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--bd);
+}
+.nav-i{
+  max-width:var(--w);margin:0 auto;
+  display:flex;overflow-x:auto;scrollbar-width:none;padding:0 40px;
+}
+.nav-i::-webkit-scrollbar{display:none}
+nav a{
+  display:block;padding:12px 16px;
+  color:var(--muted);text-decoration:none;
+  font-family:'Inconsolata',monospace;
+  font-size:11px;letter-spacing:1px;text-transform:uppercase;
+  white-space:nowrap;
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:all .2s;
+}
+nav a:hover{color:var(--js);border-bottom-color:var(--js)}
+
+/* ══════════════════════════════════════
+   MAIN
+══════════════════════════════════════ */
+main{max-width:var(--w);margin:0 auto;padding:68px 40px 120px}
+section{margin-bottom:88px;scroll-margin-top:54px}
+
+.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.snum{font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--js)}
+.sline{flex:1;height:1px;background:var(--bd)}
+
+h2{
+  font-family:'Unbounded',sans-serif;
+  font-size:clamp(22px,4vw,32px);font-weight:700;
+  margin-bottom:26px;line-height:1.1;
+}
+h2 .hl{color:var(--js)}
+
+h3{
+  font-family:'Unbounded',sans-serif;
+  font-size:16px;font-weight:700;
+  margin:46px 0 14px;
+  display:flex;align-items:center;gap:10px;
+}
+.badge{
+  font-family:'Inconsolata',monospace;
+  font-size:10px;font-weight:700;
+  padding:3px 9px;border-radius:3px;
+  letter-spacing:.5px;flex-shrink:0;
+}
+.b-js {background:var(--js);color:#000}
+.b-bl {background:var(--blue);color:#000}
+.b-cy {background:var(--cyan);color:#000}
+.b-gr {background:var(--green);color:#000}
+.b-pk {background:var(--pink);color:#000}
+.b-or {background:var(--orange);color:#000}
+.b-vi {background:var(--violet);color:#000}
+.b-rd {background:var(--red);color:#000}
+
+p{margin-bottom:14px;color:#8fadd6}
+
+/* ══════════════════════════════════════
+   CALLOUTS
+══════════════════════════════════════ */
+.box{padding:17px 21px;margin:18px 0;border-radius:5px;border:1px solid;font-size:15px;line-height:1.65}
+.box-def{border-color:rgba(77,159,255,.3);background:rgba(77,159,255,.05)}
+.box-def strong{color:var(--blue);font-family:'Inconsolata',monospace;font-size:13px}
+.box-tip{border-color:rgba(0,255,135,.25);background:rgba(0,255,135,.04)}
+.box-tip::before{content:'💡 '}
+.box-warn{border-color:rgba(255,87,87,.3);background:rgba(255,87,87,.05)}
+.box-warn::before{content:'⚠️ '}
+.box-key{border-color:rgba(247,223,30,.3);background:rgba(247,223,30,.05)}
+.box-key::before{content:'🔑 '}
+.box-note{border-color:rgba(176,132,255,.3);background:rgba(176,132,255,.05)}
+.box-note::before{content:'📌 '}
+
+/* ══════════════════════════════════════
+   CODE BLOCKS
+══════════════════════════════════════ */
+pre{
+  background:var(--s2);
+  border:1px solid var(--bd);
+  padding:22px 24px;border-radius:6px;
+  overflow-x:auto;margin:16px 0;
+  font-family:'Inconsolata',monospace;
+  font-size:13.5px;line-height:1.75;
+  position:relative;
+}
+pre .lt{
+  position:absolute;top:10px;right:14px;
+  font-size:9px;letter-spacing:2px;
+  color:var(--muted);text-transform:uppercase;
+}
+code{font-family:'Inconsolata',monospace;font-size:.87em}
+p code,li code,td code{
+  background:var(--s3);
+  border:1px solid var(--bd);
+  padding:1px 7px;border-radius:3px;
+  color:var(--js);
+}
+
+/* Syntax colors */
+.kw {color:#ff79c6}
+.fn {color:#50fa7b}
+.st {color:#f1fa8c}
+.nm {color:#bd93f9}
+.cm {color:#2c4a2e;font-style:italic}
+.cl {color:#8be9fd}
+.op {color:#6272a4}
+.va {color:#f8f8f2}
+.pr {color:#ffb86c}
+.bo {color:#ff79c6}
+.nu {color:#6272a4}
+.tg {color:#50fa7b}
+.at {color:#ffb86c}
+.av {color:#f1fa8c}
+.ht {color:#6272a4}  /* http */
+.rx {color:#ff79c6}  /* regex */
+
+/* ══════════════════════════════════════
+   TABLES
+══════════════════════════════════════ */
+.tw{overflow-x:auto;margin:18px 0}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{
+  background:var(--s3);color:var(--js);
+  padding:10px 15px;text-align:left;
+  font-family:'Inconsolata',monospace;
+  font-size:10px;letter-spacing:1px;text-transform:uppercase;
+  border-bottom:2px solid var(--js-d);
+}
+td{padding:10px 15px;border-bottom:1px solid var(--bd);color:#8fadd6;vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--s1)}
+td strong{color:var(--text)}
+
+/* ══════════════════════════════════════
+   SCOPE CARDS (var/let/const)
+══════════════════════════════════════ */
+.scope3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:18px 0}
+.scard{border-radius:6px;overflow:hidden;border:1px solid var(--bd)}
+.scard-h{padding:8px 14px;font-family:'Inconsolata',monospace;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--bd)}
+.sh-v{background:rgba(255,87,87,.15);color:var(--red)}
+.sh-l{background:rgba(77,159,255,.15);color:var(--blue)}
+.sh-c{background:rgba(247,223,30,.15);color:var(--js)}
+.scard-b{background:var(--s1);padding:12px 14px}
+.scard-b li{font-size:13px;list-style:none;padding:3px 0;color:var(--muted)}
+.ok{color:var(--green)}
+.ko{color:var(--red)}
+
+/* ══════════════════════════════════════
+   IO DIAGRAM
+══════════════════════════════════════ */
+.io-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:16px 0}
+.io-box{
+  font-family:'Inconsolata',monospace;font-size:13px;
+  padding:10px 16px;border-radius:4px;white-space:nowrap;
+}
+.io-in{background:rgba(77,159,255,.12);border:1px solid rgba(77,159,255,.3);color:var(--blue)}
+.io-fn{background:rgba(247,223,30,.12);border:1px solid rgba(247,223,30,.3);color:var(--js)}
+.io-out{background:rgba(0,255,135,.12);border:1px solid rgba(0,255,135,.3);color:var(--green)}
+.io-arrow{color:var(--muted);font-size:18px}
+
+/* ══════════════════════════════════════
+   COMPARISON (2 cols)
+══════════════════════════════════════ */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
+.cmp-col{background:var(--s1);border:1px solid var(--bd);border-radius:6px;overflow:hidden}
+.cmp-h{padding:9px 18px;font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid var(--bd)}
+.ch-a{background:rgba(255,87,87,.1);color:var(--red)}
+.ch-b{background:rgba(0,255,135,.1);color:var(--green)}
+.cmp-col pre{margin:0;border:none;border-radius:0;background:transparent;padding:16px 18px;font-size:12.5px}
+
+/* ══════════════════════════════════════
+   EVENT VISUAL
+══════════════════════════════════════ */
+.evt-strip{
+  display:flex;align-items:stretch;
+  font-family:'Inconsolata',monospace;font-size:12px;
+  margin:14px 0;border-radius:5px;overflow:hidden;
+  border:1px solid var(--bd);
+}
+.evt-part{padding:12px 18px;display:flex;align-items:center;white-space:nowrap}
+.ep-el{background:rgba(0,255,135,.08);color:var(--green);border-right:1px solid var(--bd)}
+.ep-fn{background:rgba(247,223,30,.08);color:var(--js);border-right:1px solid var(--bd)}
+.ep-ev{background:rgba(255,107,157,.08);color:var(--pink);border-right:1px solid var(--bd)}
+.ep-cb{background:rgba(77,159,255,.08);color:var(--blue);flex:1}
+
+/* ══════════════════════════════════════
+   DOM TREE
+══════════════════════════════════════ */
+.dom-tree{
+  background:var(--s2);border:1px solid var(--bd);
+  padding:22px 26px;border-radius:6px;
+  font-family:'Inconsolata',monospace;font-size:13px;
+  line-height:2;margin:16px 0;
+}
+.dn-el{color:var(--green)}
+.dn-at{color:var(--orange)}
+.dn-vl{color:var(--js)}
+.dn-tx{color:var(--muted)}
+.dn-tr{color:var(--bd)}
+
+/* ══════════════════════════════════════
+   SPA WIREFRAME SECTIONS
+══════════════════════════════════════ */
+.spa-section-map{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:10px;margin:18px 0;
+}
+.spa-sec{
+  background:var(--s2);border:1px solid var(--bd);
+  border-top:3px solid var(--js);
+  padding:14px 16px;border-radius:0 0 6px 6px;
+  font-family:'Inconsolata',monospace;font-size:12px;
+}
+.spa-sec h4{color:var(--js);margin-bottom:8px;font-size:13px}
+.spa-sec ul{list-style:none;color:var(--muted)}
+.spa-sec li{padding:2px 0;font-size:12px}
+.spa-sec li::before{content:'▹ ';color:var(--blue)}
+
+/* ══════════════════════════════════════
+   STEPS
+══════════════════════════════════════ */
+.steps{list-style:none;counter-reset:st}
+.steps li{
+  counter-increment:st;
+  padding:14px 18px 14px 62px;
+  position:relative;
+  background:var(--s1);border-left:2px solid var(--bd);
+  border-radius:0 5px 5px 0;margin-bottom:4px;
+}
+.steps li::before{
+  content:counter(st);
+  position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  width:26px;height:26px;
+  background:var(--js);color:#000;
+  border-radius:3px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Inconsolata',monospace;font-size:13px;font-weight:700;
+}
+.steps li strong{color:var(--js)}
+
+/* ══════════════════════════════════════
+   DEMO
+══════════════════════════════════════ */
+.demo-wrap{background:var(--s1);border:1px solid var(--bd);border-radius:10px;overflow:hidden;margin-top:24px}
+.demo-hdr{background:var(--s2);padding:12px 22px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px}
+.dots span{width:11px;height:11px;border-radius:50%;display:inline-block}
+.dots .r{background:#ff5f57}.dots .y{background:#ffbd2e}.dots .g{background:#28ca42}
+.fname{font-family:'Inconsolata',monospace;font-size:12px;color:var(--muted);margin-left:8px}
+.demo-body{padding:24px}
+
+/* ══════════════════════════════════════
+   COMMIT / BADGES
+══════════════════════════════════════ */
+.commit{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,255,135,.07);border:1px solid rgba(0,255,135,.2);
+  color:var(--green);
+  font-family:'Inconsolata',monospace;font-size:11px;
+  padding:6px 14px;border-radius:4px;margin:10px 0;
+}
+.commit::before{content:'⬡ git commit '}
+.fb{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'Inconsolata',monospace;font-size:11px;
+  padding:4px 12px;border-radius:3px;margin:4px 2px;
+}
+.fb-js{background:rgba(247,223,30,.1);border:1px solid rgba(247,223,30,.3);color:var(--js)}
+.fb-bl{background:rgba(77,159,255,.1);border:1px solid rgba(77,159,255,.3);color:var(--blue)}
+.fb-gr{background:rgba(0,255,135,.1);border:1px solid rgba(0,255,135,.3);color:var(--green)}
+
+/* ══════════════════════════════════════
+   REFS
+══════════════════════════════════════ */
+.ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.ref-card{
+  display:block;text-decoration:none;
+  background:var(--s1);border:1px solid var(--bd);
+  border-left:3px solid var(--js);
+  padding:17px 19px;border-radius:0 5px 5px 0;transition:all .2s;
+}
+.ref-card:hover{transform:translateX(4px);background:var(--s2);border-left-color:var(--blue)}
+.ref-card strong{color:var(--text);font-size:14px;display:block;margin-bottom:4px}
+.ref-card .url{font-family:'Inconsolata',monospace;font-size:10px;color:var(--js)}
+.ref-card p{font-size:13px;color:var(--muted);margin:5px 0 0}
+
+/* ══════════════════════════════════════
+   FOOTER
+══════════════════════════════════════ */
+footer{
+  background:var(--s1);border-top:1px solid var(--bd);
+  text-align:center;padding:26px;
+  font-family:'Inconsolata',monospace;font-size:11px;
+  color:var(--muted);letter-spacing:1px;
+}
+
+@media(max-width:640px){
+  header,main{padding-left:20px;padding-right:20px}
+  .nav-i{padding:0 14px}
+  h1{font-size:44px;letter-spacing:-2px}
+  .scope3,.cmp,.ref-grid,.spa-section-map{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════ HEADER ════════ -->
+<header>
+  <div class="hdr">
+    <div class="mod-pill">Module 04 — Développement Web Full Stack</div>
+    <h1>
+      <span class="h1-js">JS</span>
+      <span class="h1-rest">JavaScript</span>
+      <span class="sub">Vanilla JS · DOM · AJAX · SPA · json-server — ECMAScript 2024</span>
+    </h1>
+    <div class="hdr-meta">
+      <span class="sep">▸</span><span><strong>Niveau :</strong> Débutant → Intermédiaire</span>
+      <span class="sep">▸</span><span><strong>Durée :</strong> 10 heures</span>
+      <span class="sep">▸</span><span><strong>Prérequis :</strong> HTML · CSS · Tailwind</span>
+      <span class="sep">▸</span><span><strong>Version :</strong> ES2024 (ES15)</span>
+    </div>
+  </div>
+</header>
+
+<!-- ════════ NAV ════════ -->
+<nav>
+  <div class="nav-i">
+    <a href="#presentation">1. Présentation</a>
+    <a href="#inclusion">2. Inclusion</a>
+    <a href="#concepts">3. Concepts</a>
+    <a href="#references">4. Références</a>
+    <a href="#demo">5. Démo SPA</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ═══════════════════════════════════
+     SECTION 1 — PRÉSENTATION
+═══════════════════════════════════ -->
+<section id="presentation">
+  <div class="eyebrow"><span class="snum">Section 01</span><div class="sline"></div></div>
+  <h2>Présentation de <span class="hl">JavaScript</span></h2>
+
+  <p>
+    <strong>JavaScript</strong> (JS) est le seul langage de programmation nativement exécuté par
+    tous les navigateurs Web. Créé en 1995 par <em>Brendan Eich</em> chez Netscape en seulement
+    10 jours, il est aujourd'hui le langage le plus utilisé au monde et s'étend bien au-delà
+    du navigateur grâce à <em>Node.js</em>.
+  </p>
+
+  <div class="box box-def">
+    <strong>Définition — ECMAScript</strong><br>
+    JavaScript est un langage de script <strong>interprété</strong>, <strong>dynamiquement typé</strong>,
+    à <strong>prototype</strong>, <strong>monothread</strong> et <strong>orienté événements</strong>.
+    Sa spécification officielle est <em>ECMAScript</em>, maintenue par le comité
+    <strong>TC39</strong> de l'ECMA International. ES6 (2015) représente la modernisation majeure du langage.
+  </div>
+
+  <h3><span class="badge b-js">—</span> Historique</h3>
+  <div class="tw"><table>
+    <tr><th>Année</th><th>Étape</th><th>Apport clé</th></tr>
+    <tr><td>1995</td><td>Création par Brendan Eich</td><td>Scripts côté navigateur, nommé Mocha puis LiveScript puis JavaScript</td></tr>
+    <tr><td>1997</td><td>ECMAScript 1</td><td>Première standardisation officielle</td></tr>
+    <tr><td>1999</td><td>ES3</td><td>Expressions régulières, try/catch, standard stable</td></tr>
+    <tr><td>2009</td><td>Node.js</td><td>JS côté serveur via le moteur V8 de Chrome</td></tr>
+    <tr><td><strong>2015</strong></td><td><strong>ES6 / ES2015</strong></td><td><code>let/const</code>, arrow functions, classes, modules, Promises, destructuring…</td></tr>
+    <tr><td>2017</td><td>ES2017</td><td><code>async/await</code> — programmation asynchrone lisible</td></tr>
+    <tr><td>2020</td><td>ES2020</td><td>Optional chaining <code>?.</code>, Nullish coalescing <code>??</code>, BigInt</td></tr>
+    <tr><td>2024</td><td>ES2024</td><td>Array groupBy, Object.groupBy, Promise.withResolvers…</td></tr>
+  </table></div>
+
+  <h3><span class="badge b-js">—</span> JS dans la trinité du Web</h3>
+  <div class="io-row">
+    <div class="io-box io-in">HTML<br><small style="opacity:.6">Structure</small></div>
+    <div class="io-arrow">+</div>
+    <div class="io-box io-fn">CSS<br><small style="opacity:.6">Présentation</small></div>
+    <div class="io-arrow">+</div>
+    <div class="io-box" style="background:rgba(247,223,30,.12);border:1px solid rgba(247,223,30,.3);color:var(--js)">JavaScript<br><small style="opacity:.6">Comportement</small></div>
+    <div class="io-arrow">=</div>
+    <div class="io-box" style="background:rgba(176,132,255,.1);border:1px solid rgba(176,132,255,.3);color:var(--violet)">Application Web<br><small style="opacity:.6">Interactive</small></div>
+  </div>
+
+  <h3><span class="badge b-js">—</span> Ce que Vanilla JS permet</h3>
+  <div class="tw"><table>
+    <tr><th>Domaine</th><th>Ce que JS fait</th><th>Exemple dans le portfolio</th></tr>
+    <tr><td><strong>DOM</strong></td><td>Lire et modifier le HTML/CSS dynamiquement</td><td>Générer les cartes projets</td></tr>
+    <tr><td><strong>Événements</strong></td><td>Réagir aux actions utilisateur</td><td>Clic sur « Supprimer »</td></tr>
+    <tr><td><strong>Formulaires</strong></td><td>Récupérer et valider les saisies</td><td>Ajouter un nouveau projet</td></tr>
+    <tr><td><strong>AJAX / Fetch</strong></td><td>Communiquer avec un serveur API</td><td>Persister les projets via json-server</td></tr>
+    <tr><td><strong>SPA</strong></td><td>Changer de vue sans rechargement</td><td>Passer de la liste au détail</td></tr>
+    <tr><td><strong>Mémoire</strong></td><td>Stocker des données en tableau JS</td><td>Tableau <code>projets[]</code></td></tr>
+  </table></div>
+</section>
+
+<!-- ═══════════════════════════════════
+     SECTION 2 — INCLUSION
+═══════════════════════════════════ -->
+<section id="inclusion">
+  <div class="eyebrow"><span class="snum">Section 02</span><div class="sline"></div></div>
+  <h2>Inclusion du <span class="hl">JavaScript</span></h2>
+
+  <p>
+    Il existe trois façons d'intégrer du JavaScript dans une page HTML.
+    Chacune a un usage précis.
+  </p>
+
+  <h3><span class="badge b-bl">01</span> Script externe (recommandé)</h3>
+  <p>Le script est dans un fichier <code>.js</code> séparé, lié via la balise <code>&lt;script src&gt;</code>.
+  C'est la méthode professionnelle : séparation des responsabilités, cache navigateur, maintenabilité.</p>
+
+  <pre><code><span class="cm">&lt;!-- Placé avant &lt;/body&gt; : le DOM est entièrement chargé --&gt;</span>
+<span class="tg">&lt;body&gt;</span>
+  <span class="cm">&lt;!-- Contenu HTML --&gt;</span>
+
+  <span class="tg">&lt;script</span> <span class="at">src</span>=<span class="av">"js/portfolio.js"</span><span class="tg">&gt;&lt;/script&gt;</span>
+<span class="tg">&lt;/body&gt;</span>
+
+<span class="cm">&lt;!-- OU dans &lt;head&gt; avec l'attribut defer --&gt;</span>
+<span class="tg">&lt;head&gt;</span>
+  <span class="cm">&lt;!-- defer : télécharge en parallèle, exécute après parsing HTML --&gt;</span>
+  <span class="tg">&lt;script</span> <span class="at">src</span>=<span class="av">"js/portfolio.js"</span> <span class="at">defer</span><span class="tg">&gt;&lt;/script&gt;</span>
+
+  <span class="cm">&lt;!-- async : télécharge en parallèle, exécute dès que prêt (ordre non garanti) --&gt;</span>
+  <span class="tg">&lt;script</span> <span class="at">src</span>=<span class="av">"js/analytics.js"</span> <span class="at">async</span><span class="tg">&gt;&lt;/script&gt;</span>
+<span class="tg">&lt;/head&gt;</span>
+<span class="lt">HTML</span></code></pre>
+
+  <div class="tw"><table>
+    <tr><th>Attribut</th><th>Téléchargement</th><th>Exécution</th><th>Usage</th></tr>
+    <tr><td>(aucun)</td><td>Bloquant</td><td>Immédiat (avant DOM)</td><td>⚠️ Éviter dans &lt;head&gt;</td></tr>
+    <tr><td><code>defer</code></td><td>Parallèle</td><td>Après DOM, dans l'ordre</td><td>✅ Scripts principaux</td></tr>
+    <tr><td><code>async</code></td><td>Parallèle</td><td>Dès que prêt (sans ordre)</td><td>Analytics, widgets tiers</td></tr>
+  </table></div>
+
+  <h3><span class="badge b-bl">02</span> Script interne</h3>
+  <pre><code><span class="tg">&lt;body&gt;</span>
+  <span class="cm">&lt;!-- Contenu HTML --&gt;</span>
+  <span class="tg">&lt;script&gt;</span>
+    <span class="cm">// Code JS directement dans la page HTML</span>
+    <span class="cm">// Utile pour un prototypage rapide ou un script court</span>
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="st">'Portfolio chargé !'</span>);
+  <span class="tg">&lt;/script&gt;</span>
+<span class="tg">&lt;/body&gt;</span>
+<span class="lt">HTML</span></code></pre>
+
+  <h3><span class="badge b-bl">03</span> Gestionnaire inline (à éviter)</h3>
+  <pre><code><span class="cm">&lt;!-- ❌ À éviter : mélange HTML et JS, impossible à maintenir --&gt;</span>
+<span class="tg">&lt;button</span> <span class="at">onclick</span>=<span class="av">"supprimerProjet(1)"</span><span class="tg">&gt;</span>Supprimer<span class="tg">&lt;/button&gt;</span>
+
+<span class="cm">&lt;!-- ✅ Préférer : addEventListener dans le fichier .js --&gt;</span>
+<span class="tg">&lt;button</span> <span class="at">id</span>=<span class="av">"btn-supprimer"</span> <span class="at">data-id</span>=<span class="av">"1"</span><span class="tg">&gt;</span>Supprimer<span class="tg">&lt;/button&gt;</span>
+<span class="lt">HTML</span></code></pre>
+
+  <h3><span class="badge b-bl">04</span> La Console — outil de débogage</h3>
+  <pre><code><span class="cm">// Ouvrir : F12 (ou Cmd+Option+I sur Mac) → onglet Console</span>
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="st">'Message normal'</span>);          <span class="cm">// trace standard</span>
+<span class="fn">console</span>.<span class="fn">warn</span>(<span class="st">'Attention !'</span>);            <span class="cm">// avertissement (fond jaune)</span>
+<span class="fn">console</span>.<span class="fn">error</span>(<span class="st">'Erreur critique'</span>);       <span class="cm">// erreur (fond rouge)</span>
+<span class="fn">console</span>.<span class="fn">info</span>(<span class="st">'Information'</span>);            <span class="cm">// information</span>
+
+<span class="cm">// Afficher des objets</span>
+<span class="kw">const</span> <span class="va">p</span> <span class="op">=</span> { <span class="pr">id</span>: <span class="nm">1</span>, <span class="pr">nom</span>: <span class="st">'Portfolio'</span> };
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="va">p</span>);          <span class="cm">// {id: 1, nom: 'Portfolio'}</span>
+<span class="fn">console</span>.<span class="fn">table</span>([<span class="va">p</span>]);      <span class="cm">// affichage tabulaire</span>
+<span class="fn">console</span>.<span class="fn">dir</span>(<span class="va">p</span>);          <span class="cm">// arborescence interactive</span>
+
+<span class="cm">// Mesurer des performances</span>
+<span class="fn">console</span>.<span class="fn">time</span>(<span class="st">'rendu'</span>);
+<span class="fn">afficherProjets</span>();
+<span class="fn">console</span>.<span class="fn">timeEnd</span>(<span class="st">'rendu'</span>); <span class="cm">// rendu: 12.345ms</span>
+<span class="lt">JS</span></code></pre>
+</section>
+
+<!-- ═══════════════════════════════════
+     SECTION 3 — CONCEPTS
+═══════════════════════════════════ -->
+<section id="concepts">
+  <div class="eyebrow"><span class="snum">Section 03</span><div class="sline"></div></div>
+  <h2>Concepts <span class="hl">fondamentaux</span></h2>
+
+  <!-- ─── 3a VARIABLE ─── -->
+  <h3 id="variable"><span class="badge b-js">a</span> Variable</h3>
+  <p>Une <strong>variable</strong> est un espace nommé en mémoire permettant de stocker et réutiliser une valeur.
+  JavaScript est <em>dynamiquement typé</em> : une variable peut changer de type à l'exécution.</p>
+
+  <div class="scope3">
+    <div class="scard">
+      <div class="scard-h sh-v">var</div>
+      <ul class="scard-b">
+        <li class="ko">Portée : fonction</li>
+        <li class="ko">Hissage (hoisting)</li>
+        <li class="ko">Redéclarable</li>
+        <li class="ko">Réassignable</li>
+        <li class="ko">À éviter en ES6+</li>
+      </ul>
+    </div>
+    <div class="scard">
+      <div class="scard-h sh-l">let</div>
+      <ul class="scard-b">
+        <li class="ok">Portée : bloc { }</li>
+        <li class="ok">Pas de hoisting</li>
+        <li class="ko">Non redéclarable</li>
+        <li class="ok">Réassignable</li>
+        <li class="ok">Pour valeurs qui changent</li>
+      </ul>
+    </div>
+    <div class="scard">
+      <div class="scard-h sh-c">const</div>
+      <ul class="scard-b">
+        <li class="ok">Portée : bloc { }</li>
+        <li class="ok">Pas de hoisting</li>
+        <li class="ko">Non redéclarable</li>
+        <li class="ko">Non réassignable</li>
+        <li class="ok">Par défaut — recommandé</li>
+      </ul>
+    </div>
+  </div>
+
+  <pre><code><span class="cm">// ── Déclaration & initialisation ──</span>
+<span class="kw">const</span> <span class="va">CLEE_API</span>      <span class="op">=</span> <span class="st">'http://localhost:3000/projets'</span>; <span class="cm">// constante</span>
+<span class="kw">let</span>   <span class="va">compteur</span>      <span class="op">=</span> <span class="nm">0</span>;                             <span class="cm">// nombre entier</span>
+<span class="kw">let</span>   <span class="va">estConnecte</span>   <span class="op">=</span> <span class="bo">false</span>;                         <span class="cm">// booléen</span>
+<span class="kw">const</span> <span class="va">nomProjet</span>    <span class="op">=</span> <span class="st">'Mon Portfolio'</span>;               <span class="cm">// chaîne</span>
+<span class="kw">let</span>   <span class="va">auteur</span>;                                        <span class="cm">// undefined (non init.)</span>
+<span class="kw">const</span> <span class="va">vide</span>         <span class="op">=</span> <span class="nu">null</span>;                          <span class="cm">// null</span>
+<span class="kw">const</span> <span class="va">prix</span>         <span class="op">=</span> <span class="nm">99.90</span>;                         <span class="cm">// nombre flottant</span>
+
+<span class="cm">// ── Les 7 types primitifs ──</span>
+<span class="cm">// String, Number, Boolean, Undefined, Null, Symbol, BigInt</span>
+
+<span class="kw">typeof</span> <span class="st">'texte'</span>   <span class="cm">// "string"</span>
+<span class="kw">typeof</span> <span class="nm">42</span>       <span class="cm">// "number"</span>
+<span class="kw">typeof</span> <span class="bo">true</span>     <span class="cm">// "boolean"</span>
+<span class="kw">typeof</span> <span class="nu">undefined</span><span class="cm">// "undefined"</span>
+<span class="kw">typeof</span> <span class="nu">null</span>     <span class="cm">// "object" ← BUG historique !</span>
+<span class="kw">typeof</span> {}        <span class="cm">// "object"</span>
+<span class="kw">typeof</span> []        <span class="cm">// "object" → utiliser Array.isArray([])</span>
+<span class="kw">typeof</span> <span class="fn">function</span>(){} <span class="cm">// "function"</span>
+
+<span class="cm">// ── Template Literals (ES6) ──</span>
+<span class="kw">const</span> <span class="va">id</span>  <span class="op">=</span> <span class="nm">1</span>;
+<span class="kw">const</span> <span class="va">msg</span> <span class="op">=</span> <span class="st">`Projet n°<span class="op">${</span><span class="va">id</span><span class="op">}</span> — <span class="op">${</span><span class="va">nomProjet</span>.<span class="fn">toUpperCase</span>()<span class="op">}</span>`</span>;
+<span class="cm">// "Projet n°1 — MON PORTFOLIO"</span>
+
+<span class="cm">// ── Portée de bloc (let / const) ──</span>
+{
+  <span class="kw">let</span> <span class="va">temp</span> <span class="op">=</span> <span class="st">'locale'</span>;
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="va">temp</span>);   <span class="cm">// ✅ 'locale'</span>
+}
+<span class="cm">// console.log(temp);   ← ❌ ReferenceError : temp n'existe pas</span>
+<span class="lt">JS</span></code></pre>
+
+  <!-- ─── 3b OPÉRATEURS ─── -->
+  <h3 id="operateurs"><span class="badge b-cy">b</span> Opérateurs</h3>
+  <pre><code><span class="cm">// ── Arithmétiques ──</span>
+<span class="nm">10</span> <span class="op">+</span> <span class="nm">3</span>   <span class="cm">// 13  — addition</span>
+<span class="nm">10</span> <span class="op">-</span> <span class="nm">3</span>   <span class="cm">// 7   — soustraction</span>
+<span class="nm">10</span> <span class="op">*</span> <span class="nm">3</span>   <span class="cm">// 30  — multiplication</span>
+<span class="nm">10</span> <span class="op">/</span> <span class="nm">4</span>   <span class="cm">// 2.5 — division</span>
+<span class="nm">10</span> <span class="op">%</span> <span class="nm">3</span>   <span class="cm">// 1   — modulo (reste)</span>
+<span class="nm">2</span>  <span class="op">**</span> <span class="nm">8</span>  <span class="cm">// 256 — puissance</span>
+<span class="nm">5</span><span class="op">++</span>       <span class="cm">// 6   — post-incrémentation</span>
+<span class="nm">5</span><span class="op">--</span>       <span class="cm">// 4   — post-décrémentation</span>
+
+<span class="cm">// ── Assignation ──</span>
+<span class="kw">let</span> <span class="va">x</span> <span class="op">=</span> <span class="nm">10</span>;
+<span class="va">x</span> <span class="op">+=</span> <span class="nm">5</span>;   <span class="cm">// x = 15</span>
+<span class="va">x</span> <span class="op">-=</span> <span class="nm">3</span>;   <span class="cm">// x = 12</span>
+<span class="va">x</span> <span class="op">*=</span> <span class="nm">2</span>;   <span class="cm">// x = 24</span>
+<span class="va">x</span> <span class="op">/=</span> <span class="nm">4</span>;   <span class="cm">// x = 6</span>
+<span class="va">x</span> <span class="op">%=</span> <span class="nm">4</span>;   <span class="cm">// x = 2</span>
+
+<span class="cm">// ── Comparaison ──</span>
+<span class="nm">5</span> <span class="op">==</span>  <span class="st">'5'</span>   <span class="cm">// true  ← égalité FAIBLE (type ignoré) ⚠️ éviter</span>
+<span class="nm">5</span> <span class="op">===</span> <span class="st">'5'</span>   <span class="cm">// false ← égalité STRICTE (type + valeur) ✅ toujours utiliser</span>
+<span class="nm">5</span> <span class="op">!==</span> <span class="nm">6</span>    <span class="cm">// true</span>
+<span class="nm">5</span> <span class="op">&gt;</span>   <span class="nm">3</span>    <span class="cm">// true</span>
+<span class="nm">5</span> <span class="op">&lt;</span>   <span class="nm">3</span>    <span class="cm">// false</span>
+<span class="nm">5</span> <span class="op">&gt;=</span>  <span class="nm">5</span>    <span class="cm">// true</span>
+<span class="nm">5</span> <span class="op">&lt;=</span>  <span class="nm">4</span>    <span class="cm">// false</span>
+
+<span class="cm">// ── Logiques ──</span>
+<span class="bo">true</span>  <span class="op">&amp;&amp;</span> <span class="bo">false</span>  <span class="cm">// false — ET (les deux doivent être vrais)</span>
+<span class="bo">false</span> <span class="op">||</span> <span class="bo">true</span>   <span class="cm">// true  — OU (au moins un doit être vrai)</span>
+<span class="op">!</span><span class="bo">true</span>           <span class="cm">// false — NON</span>
+
+<span class="cm">// ── Opérateurs modernes (ES2020) ──</span>
+<span class="kw">const</span> <span class="va">nom</span>  <span class="op">=</span> <span class="nu">null</span> <span class="op">??</span> <span class="st">'Sans nom'</span>;   <span class="cm">// 'Sans nom' (si null ou undefined)</span>
+<span class="kw">const</span> <span class="va">age</span>  <span class="op">=</span> <span class="va">user</span><span class="op">?.</span><span class="pr">age</span>;            <span class="cm">// undefined si user est null (pas d'erreur)</span>
+<span class="kw">const</span> <span class="va">tech</span> <span class="op">=</span> <span class="va">p</span><span class="op">?.</span><span class="pr">technologies</span><span class="op">?.</span>[<span class="nm">0</span>]; <span class="cm">// undefined si p ou technologies est null</span>
+
+<span class="cm">// ── Ternaire ──</span>
+<span class="kw">const</span> <span class="va">statut</span> <span class="op">=</span> <span class="va">projet</span>.<span class="pr">actif</span> <span class="op">?</span> <span class="st">'Actif'</span> <span class="op">:</span> <span class="st">'Archivé'</span>;
+
+<span class="cm">// ── Concaténation de chaînes ──</span>
+<span class="st">'Bonjour'</span> <span class="op">+</span> <span class="st">' '</span> <span class="op">+</span> <span class="st">'Moussa'</span>  <span class="cm">// 'Bonjour Moussa'</span>
+<span class="st">`Bonjour <span class="op">${</span><span class="va">prenom</span><span class="op">}</span>`</span>           <span class="cm">// avec template literal — recommandé</span>
+<span class="lt">JS</span></code></pre>
+
+  <!-- ─── 3c ENTRÉE/SORTIE ─── -->
+  <h3 id="io"><span class="badge b-gr">c</span> Entrée / Sortie de base</h3>
+  <p>En JavaScript navigateur, les entrées/sorties de base passent par des boîtes de dialogue
+  natives et la console. En production, on utilise le DOM (section i).</p>
+
+  <div class="io-row">
+    <div class="io-box io-in">Utilisateur<br><small style="opacity:.6">prompt()</small></div>
+    <div class="io-arrow">→</div>
+    <div class="io-box io-fn">JavaScript<br><small style="opacity:.6">traitement</small></div>
+    <div class="io-arrow">→</div>
+    <div class="io-box io-out">Sortie<br><small style="opacity:.6">alert() / console / DOM</small></div>
+  </div>
+
+  <pre><code><span class="cm">// ── SORTIES ──</span>
+<span class="fn">alert</span>(<span class="st">'Projet ajouté avec succès !'</span>);
+<span class="cm">// → Boîte de dialogue modale (bloquante)</span>
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="st">'Valeur :'</span>, <span class="va">maVariable</span>);
+<span class="cm">// → Affiche dans la console du navigateur (F12)</span>
+
+<span class="va">document</span>.<span class="fn">write</span>(<span class="st">'&lt;p&gt;Bonjour&lt;/p&gt;'</span>);
+<span class="cm">// → Écrit dans le document HTML (⚠️ efface la page si appelé après chargement)</span>
+
+<span class="cm">// ── ENTRÉES ──</span>
+<span class="kw">const</span> <span class="va">nom</span> <span class="op">=</span> <span class="fn">prompt</span>(<span class="st">'Quel est le libellé du projet ?'</span>);
+<span class="cm">// → Boîte de saisie — retourne une chaîne ou null si annulé</span>
+
+<span class="kw">const</span> <span class="va">nom2</span> <span class="op">=</span> <span class="fn">prompt</span>(<span class="st">'Libellé :'</span>, <span class="st">'Nouveau Projet'</span>);
+<span class="cm">// → Avec valeur par défaut pré-remplie</span>
+
+<span class="kw">const</span> <span class="va">confirme</span> <span class="op">=</span> <span class="fn">confirm</span>(<span class="st">'Supprimer ce projet ?'</span>);
+<span class="cm">// → Retourne true (OK) ou false (Annuler)</span>
+
+<span class="cm">// ── Validation de l'entrée ──</span>
+<span class="kw">const</span> <span class="va">saisi</span> <span class="op">=</span> <span class="fn">prompt</span>(<span class="st">'Entrez votre âge :'</span>);
+<span class="kw">const</span> <span class="va">age</span>   <span class="op">=</span> <span class="cl">parseInt</span>(<span class="va">saisi</span>, <span class="nm">10</span>);   <span class="cm">// convertir en entier</span>
+<span class="kw">const</span> <span class="va">prix</span>  <span class="op">=</span> <span class="cl">parseFloat</span>(<span class="va">saisi</span>);    <span class="cm">// convertir en flottant</span>
+<span class="kw">const</span> <span class="va">num</span>   <span class="op">=</span> <span class="cl">Number</span>(<span class="va">saisi</span>);         <span class="cm">// convertir en nombre</span>
+
+<span class="kw">if</span> (<span class="cl">isNaN</span>(<span class="va">age</span>)) {
+  <span class="fn">alert</span>(<span class="st">'Veuillez entrer un nombre valide.'</span>);
+}
+
+<span class="cm">// ── En pratique (portfolio SPA) : on utilise le DOM ──</span>
+<span class="kw">const</span> <span class="va">valeur</span> <span class="op">=</span> <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'inp-libelle'</span>).<span class="pr">value</span>.<span class="fn">trim</span>();
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="st">'Libellé saisi :'</span>, <span class="va">valeur</span>);
+<span class="lt">JS</span></code></pre>
+
+  <!-- ─── 3d STRUCTURES DE CONTRÔLE ─── -->
+  <h3 id="controle"><span class="badge b-pk">d</span> Structures de contrôle</h3>
+  <pre><code><span class="cm">// ═══════════════════════════════════
+// CONDITIONNELLES
+// ═══════════════════════════════════</span>
+
+<span class="cm">// if / else if / else</span>
+<span class="kw">const</span> <span class="va">note</span> <span class="op">=</span> <span class="nm">14</span>;
+<span class="kw">if</span> (<span class="va">note</span> <span class="op">&gt;=</span> <span class="nm">16</span>)      { <span class="fn">console</span>.<span class="fn">log</span>(<span class="st">'Très bien'</span>); }
+<span class="kw">else if</span> (<span class="va">note</span> <span class="op">&gt;=</span> <span class="nm">12</span>) { <span class="fn">console</span>.<span class="fn">log</span>(<span class="st">'Bien'</span>); }      <span class="cm">// ← affiché</span>
+<span class="kw">else if</span> (<span class="va">note</span> <span class="op">&gt;=</span> <span class="nm">10</span>) { <span class="fn">console</span>.<span class="fn">log</span>(<span class="st">'Passable'</span>); }
+<span class="kw">else</span>                 { <span class="fn">console</span>.<span class="fn">log</span>(<span class="st">'Insuffisant'</span>); }
+
+<span class="cm">// switch / case</span>
+<span class="kw">switch</span> (<span class="va">projet</span>.<span class="pr">categorie</span>) {
+  <span class="kw">case</span> <span class="st">'web'</span>:     <span class="fn">console</span>.<span class="fn">log</span>(<span class="st">'Web App'</span>);    <span class="kw">break</span>;
+  <span class="kw">case</span> <span class="st">'mobile'</span>:  <span class="fn">console</span>.<span class="fn">log</span>(<span class="st">'Mobile'</span>);     <span class="kw">break</span>;
+  <span class="kw">case</span> <span class="st">'api'</span>:     <span class="fn">console</span>.<span class="fn">log</span>(<span class="st">'API REST'</span>);   <span class="kw">break</span>;
+  <span class="kw">default</span>:         <span class="fn">console</span>.<span class="fn">log</span>(<span class="st">'Autre'</span>);
+}
+
+<span class="cm">// Valeurs "falsy" (traitées comme false dans un if)</span>
+<span class="cm">// false, 0, '', null, undefined, NaN</span>
+<span class="kw">if</span> (<span class="op">!</span><span class="va">libelle</span>) { <span class="fn">alert</span>(<span class="st">'Libellé requis'</span>); } <span class="cm">// '' est falsy</span>
+
+<span class="cm">// ═══════════════════════════════════
+// BOUCLES
+// ═══════════════════════════════════</span>
+
+<span class="cm">// for classique</span>
+<span class="kw">for</span> (<span class="kw">let</span> <span class="va">i</span> <span class="op">=</span> <span class="nm">0</span>; <span class="va">i</span> <span class="op">&lt;</span> <span class="va">projets</span>.<span class="pr">length</span>; <span class="va">i</span><span class="op">++</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="va">projets</span>[<span class="va">i</span>].<span class="pr">libelle</span>);
+}
+
+<span class="cm">// while</span>
+<span class="kw">let</span> <span class="va">tentative</span> <span class="op">=</span> <span class="nm">0</span>;
+<span class="kw">while</span> (<span class="va">tentative</span> <span class="op">&lt;</span> <span class="nm">3</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="st">`Tentative <span class="op">${</span><span class="op">++</span><span class="va">tentative</span><span class="op">}</span>`</span>);
+}
+
+<span class="cm">// for...of — tableau, NodeList, Map, Set…</span>
+<span class="kw">for</span> (<span class="kw">const</span> <span class="va">projet</span> <span class="kw">of</span> <span class="va">projets</span>) {
+  <span class="fn">afficherCarte</span>(<span class="va">projet</span>);
+}
+
+<span class="cm">// for...in — propriétés d'un objet</span>
+<span class="kw">for</span> (<span class="kw">const</span> <span class="va">cle</span> <span class="kw">in</span> <span class="va">projet</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="st">`<span class="op">${</span><span class="va">cle</span><span class="op">}</span> : <span class="op">${</span><span class="va">projet</span>[<span class="va">cle</span>]<span class="op">}</span>`</span>);
+}
+
+<span class="cm">// break / continue</span>
+<span class="kw">for</span> (<span class="kw">let</span> <span class="va">i</span> <span class="op">=</span> <span class="nm">0</span>; <span class="va">i</span> <span class="op">&lt;</span> <span class="nm">10</span>; <span class="va">i</span><span class="op">++</span>) {
+  <span class="kw">if</span> (<span class="va">i</span> <span class="op">===</span> <span class="nm">3</span>) <span class="kw">continue</span>;  <span class="cm">// saute l'itération 3</span>
+  <span class="kw">if</span> (<span class="va">i</span> <span class="op">===</span> <span class="nm">7</span>) <span class="kw">break</span>;     <span class="cm">// stoppe la boucle à 7</span>
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="va">i</span>);           <span class="cm">// 0,1,2,4,5,6</span>
+}
+<span class="lt">JS</span></code></pre>
+
+  <!-- ─── 3e FONCTIONS ─── -->
+  <h3 id="fonctions"><span class="badge b-or">e</span> Fonctions (arrow, callback…)</h3>
+  <p>En JavaScript, les fonctions sont des <strong>citoyens de première classe</strong> :
+  elles peuvent être stockées dans des variables, passées en argument et retournées par d'autres fonctions.</p>
+
+  <pre><code><span class="cm">// ── 1. Déclaration classique ──</span>
+<span class="cm">// Hissée (hoisting) : peut être appelée AVANT sa définition</span>
+<span class="kw">function</span> <span class="fn">direBonjour</span>(<span class="va">prenom</span>) {
+  <span class="kw">return</span> <span class="st">`Bonjour, <span class="op">${</span><span class="va">prenom</span><span class="op">}</span> !`</span>;
+}
+<span class="fn">direBonjour</span>(<span class="st">'Moussa'</span>);  <span class="cm">// "Bonjour, Moussa !"</span>
+
+<span class="cm">// ── 2. Expression de fonction ──</span>
+<span class="cm">// Non hissée : doit être définie avant l'appel</span>
+<span class="kw">const</span> <span class="va">additionner</span> <span class="op">=</span> <span class="kw">function</span>(<span class="va">a</span>, <span class="va">b</span>) {
+  <span class="kw">return</span> <span class="va">a</span> <span class="op">+</span> <span class="va">b</span>;
+};
+
+<span class="cm">// ── 3. Arrow function / Fléchée (ES6) ──</span>
+<span class="cm">// Syntaxe concise, hérite du this parent</span>
+<span class="kw">const</span> <span class="va">multiplier</span>  <span class="op">=</span> (<span class="va">a</span>, <span class="va">b</span>) <span class="op">=&gt;</span> <span class="va">a</span> <span class="op">*</span> <span class="va">b</span>;         <span class="cm">// retour implicite</span>
+<span class="kw">const</span> <span class="va">carre</span>       <span class="op">=</span> <span class="va">n</span>       <span class="op">=&gt;</span> <span class="va">n</span> <span class="op">**</span> <span class="nm">2</span>;        <span class="cm">// 1 paramètre → pas de ()</span>
+<span class="kw">const</span> <span class="va">coucou</span>      <span class="op">=</span> ()      <span class="op">=&gt;</span> <span class="st">'Coucou !'</span>;    <span class="cm">// 0 paramètre</span>
+
+<span class="kw">const</span> <span class="va">creerProjet</span> <span class="op">=</span> (<span class="va">id</span>, <span class="va">libelle</span>, <span class="va">image</span>) <span class="op">=&gt;</span> {  <span class="cm">// corps avec {}</span>
+  <span class="kw">return</span> { <span class="va">id</span>, <span class="va">libelle</span>, <span class="va">image</span>, <span class="pr">date</span>: <span class="kw">new</span> <span class="cl">Date</span>().<span class="fn">toISOString</span>() };
+};
+
+<span class="cm">// ── 4. Paramètres par défaut ──</span>
+<span class="kw">function</span> <span class="fn">creerBouton</span>(<span class="va">texte</span> <span class="op">=</span> <span class="st">'Cliquer'</span>, <span class="va">type</span> <span class="op">=</span> <span class="st">'button'</span>) {
+  <span class="kw">return</span> <span class="st">`&lt;button type="<span class="op">${</span><span class="va">type</span><span class="op">}</span>"&gt;<span class="op">${</span><span class="va">texte</span><span class="op">}</span>&lt;/button&gt;`</span>;
+}
+<span class="fn">creerBouton</span>();                 <span class="cm">// type="button">Cliquer</span>
+<span class="fn">creerBouton</span>(<span class="st">'Envoyer'</span>, <span class="st">'submit'</span>);
+
+<span class="cm">// ── 5. Callback ──</span>
+<span class="cm">// Une fonction passée en argument à une autre fonction</span>
+<span class="kw">function</span> <span class="fn">executerAvecDelai</span>(<span class="va">callback</span>, <span class="va">delai</span>) {
+  <span class="fn">setTimeout</span>(<span class="va">callback</span>, <span class="va">delai</span>);
+}
+
+<span class="fn">executerAvecDelai</span>(() <span class="op">=&gt;</span> {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="st">'Exécuté après 2 secondes'</span>);
+}, <span class="nm">2000</span>);
+
+<span class="cm">// Callback dans les méthodes de tableau (section h)</span>
+<span class="va">projets</span>.<span class="fn">forEach</span>(<span class="va">p</span> <span class="op">=&gt;</span> <span class="fn">afficherCarte</span>(<span class="va">p</span>));  <span class="cm">// forEach attend un callback</span>
+<span class="va">projets</span>.<span class="fn">filter</span>(<span class="va">p</span> <span class="op">=&gt;</span> <span class="va">p</span>.<span class="pr">annee</span> <span class="op">===</span> <span class="nm">2025</span>);    <span class="cm">// filtre avec callback</span>
+
+<span class="cm">// ── 6. Fonction auto-invoquée (IIFE) ──</span>
+<span class="cm">// Exécutée immédiatement, crée une portée isolée</span>
+(<span class="kw">function</span>() {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="st">'Initialisation du portfolio...'</span>);
+  <span class="fn">chargerProjets</span>();
+})();
+
+<span class="cm">// ── 7. Fermeture (Closure) ──</span>
+<span class="kw">function</span> <span class="fn">creerCompteur</span>() {
+  <span class="kw">let</span> <span class="va">total</span> <span class="op">=</span> <span class="nm">0</span>;                         <span class="cm">// variable privée</span>
+  <span class="kw">return</span> () <span class="op">=&gt;</span> <span class="op">++</span><span class="va">total</span>;                 <span class="cm">// closure : accès à total</span>
+}
+<span class="kw">const</span> <span class="va">compterProjets</span> <span class="op">=</span> <span class="fn">creerCompteur</span>();
+<span class="fn">compterProjets</span>(); <span class="cm">// 1</span>
+<span class="fn">compterProjets</span>(); <span class="cm">// 2</span>
+<span class="lt">JS</span></code></pre>
+
+  <!-- ─── 3f ÉVÉNEMENTS ─── -->
+  <h3 id="evenements"><span class="badge b-pk">f</span> Événements</h3>
+  <p>
+    Le modèle événementiel de JavaScript permet de réagir aux actions de l'utilisateur.
+    La méthode <code>addEventListener</code> est la façon recommandée d'attacher des écouteurs.
+  </p>
+
+  <div class="evt-strip">
+    <div class="evt-part ep-el">element</div>
+    <div class="evt-part ep-fn">.addEventListener(</div>
+    <div class="evt-part ep-ev">'événement'</div>
+    <div class="evt-part ep-cb">callback(event) { ... } )</div>
+  </div>
+
+  <pre><code><span class="cm">// ── Syntaxe de base ──</span>
+<span class="kw">const</span> <span class="va">btn</span> <span class="op">=</span> <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'btn-ajouter'</span>);
+
+<span class="va">btn</span>.<span class="fn">addEventListener</span>(<span class="st">'click'</span>, <span class="kw">function</span>(<span class="va">event</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="st">'Bouton cliqué !'</span>);
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="va">event</span>.<span class="pr">target</span>);    <span class="cm">// élément déclencheur</span>
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="va">event</span>.<span class="pr">type</span>);     <span class="cm">// 'click'</span>
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="va">event</span>.<span class="pr">clientX</span>);  <span class="cm">// position X du clic</span>
+});
+
+<span class="cm">// ── Événements courants ──</span>
+<span class="va">el</span>.<span class="fn">addEventListener</span>(<span class="st">'click'</span>,       <span class="va">cb</span>); <span class="cm">// clic</span>
+<span class="va">el</span>.<span class="fn">addEventListener</span>(<span class="st">'dblclick'</span>,    <span class="va">cb</span>); <span class="cm">// double clic</span>
+<span class="va">el</span>.<span class="fn">addEventListener</span>(<span class="st">'mouseover'</span>,   <span class="va">cb</span>); <span class="cm">// entrée survol</span>
+<span class="va">el</span>.<span class="fn">addEventListener</span>(<span class="st">'mouseout'</span>,    <span class="va">cb</span>); <span class="cm">// sortie survol</span>
+<span class="va">el</span>.<span class="fn">addEventListener</span>(<span class="st">'keydown'</span>,     <span class="va">cb</span>); <span class="cm">// touche enfoncée</span>
+<span class="va">el</span>.<span class="fn">addEventListener</span>(<span class="st">'keyup'</span>,       <span class="va">cb</span>); <span class="cm">// touche relâchée</span>
+<span class="va">el</span>.<span class="fn">addEventListener</span>(<span class="st">'input'</span>,       <span class="va">cb</span>); <span class="cm">// saisie en cours</span>
+<span class="va">el</span>.<span class="fn">addEventListener</span>(<span class="st">'change'</span>,      <span class="va">cb</span>); <span class="cm">// valeur validée</span>
+<span class="va">el</span>.<span class="fn">addEventListener</span>(<span class="st">'submit'</span>,      <span class="va">cb</span>); <span class="cm">// soumission form</span>
+<span class="va">el</span>.<span class="fn">addEventListener</span>(<span class="st">'focus'</span>,       <span class="va">cb</span>); <span class="cm">// prise de focus</span>
+<span class="va">el</span>.<span class="fn">addEventListener</span>(<span class="st">'blur'</span>,        <span class="va">cb</span>); <span class="cm">// perte de focus</span>
+<span class="va">window</span>.<span class="fn">addEventListener</span>(<span class="st">'load'</span>,    <span class="va">cb</span>); <span class="cm">// page entièrement chargée</span>
+<span class="va">window</span>.<span class="fn">addEventListener</span>(<span class="st">'scroll'</span>,  <span class="va">cb</span>); <span class="cm">// défilement</span>
+<span class="va">window</span>.<span class="fn">addEventListener</span>(<span class="st">'resize'</span>,  <span class="va">cb</span>); <span class="cm">// redimensionnement</span>
+
+<span class="cm">// ── Empêcher le comportement par défaut ──</span>
+<span class="va">form</span>.<span class="fn">addEventListener</span>(<span class="st">'submit'</span>, (<span class="va">e</span>) <span class="op">=&gt;</span> {
+  <span class="va">e</span>.<span class="fn">preventDefault</span>();   <span class="cm">// ← stoppe le rechargement de la page !</span>
+  <span class="fn">traiterFormulaire</span>();
+});
+
+<span class="va">lien</span>.<span class="fn">addEventListener</span>(<span class="st">'click'</span>, (<span class="va">e</span>) <span class="op">=&gt;</span> {
+  <span class="va">e</span>.<span class="fn">preventDefault</span>();   <span class="cm">// stoppe la navigation</span>
+  <span class="fn">afficherVue</span>(<span class="st">'detail'</span>);
+});
+
+<span class="cm">// ── Délégation d'événements ──</span>
+<span class="cm">// Écouter sur le parent pour gérer les ENFANTS DYNAMIQUES</span>
+<span class="kw">const</span> <span class="va">conteneur</span> <span class="op">=</span> <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'conteneur-projets'</span>);
+
+<span class="va">conteneur</span>.<span class="fn">addEventListener</span>(<span class="st">'click'</span>, (<span class="va">e</span>) <span class="op">=&gt;</span> {
+  <span class="cm">// Supprimer</span>
+  <span class="kw">const</span> <span class="va">btnSup</span> <span class="op">=</span> <span class="va">e</span>.<span class="pr">target</span>.<span class="fn">closest</span>(<span class="st">'.btn-supprimer'</span>);
+  <span class="kw">if</span> (<span class="va">btnSup</span>) {
+    <span class="kw">const</span> <span class="va">id</span> <span class="op">=</span> <span class="cl">Number</span>(<span class="va">btnSup</span>.<span class="pr">dataset</span>.<span class="pr">id</span>);
+    <span class="fn">supprimerProjet</span>(<span class="va">id</span>);
+    <span class="kw">return</span>;
+  }
+  <span class="cm">// Voir détail</span>
+  <span class="kw">const</span> <span class="va">btnDet</span> <span class="op">=</span> <span class="va">e</span>.<span class="pr">target</span>.<span class="fn">closest</span>(<span class="st">'.btn-detail'</span>);
+  <span class="kw">if</span> (<span class="va">btnDet</span>) {
+    <span class="fn">detaillerProjet</span>(<span class="cl">Number</span>(<span class="va">btnDet</span>.<span class="pr">dataset</span>.<span class="pr">id</span>));
+  }
+});
+
+<span class="cm">// ── Supprimer un écouteur ──</span>
+<span class="kw">const</span> <span class="va">handler</span> <span class="op">=</span> (<span class="va">e</span>) <span class="op">=&gt;</span> <span class="fn">console</span>.<span class="fn">log</span>(<span class="va">e</span>);
+<span class="va">btn</span>.<span class="fn">addEventListener</span>(<span class="st">'click'</span>, <span class="va">handler</span>);
+<span class="va">btn</span>.<span class="fn">removeEventListener</span>(<span class="st">'click'</span>, <span class="va">handler</span>);  <span class="cm">// même référence</span>
+<span class="lt">JS</span></code></pre>
+
+  <!-- ─── 3g OBJETS ─── -->
+  <h3 id="objets"><span class="badge b-vi">g</span> Objets</h3>
+  <p>Un <strong>objet</strong> est une collection de paires clé–valeur (propriétés).
+  C'est la structure de données centrale de JavaScript. Tout (tableau, fonction, DOM) est un objet.</p>
+
+  <pre><code><span class="cm">// ── Création littérale ──</span>
+<span class="kw">const</span> <span class="va">projet</span> <span class="op">=</span> {
+  <span class="pr">id</span>:           <span class="nm">1</span>,
+  <span class="pr">libelle</span>:      <span class="st">'Portfolio Web'</span>,
+  <span class="pr">description</span>:  <span class="st">'Application de gestion de projets'</span>,
+  <span class="pr">technologies</span>: [<span class="st">'HTML'</span>, <span class="st">'Tailwind'</span>, <span class="st">'JavaScript'</span>],
+  <span class="pr">image</span>:        <span class="st">'images/portfolio.jpg'</span>,
+  <span class="pr">actif</span>:        <span class="bo">true</span>,
+  <span class="pr">auteur</span>:       { <span class="pr">nom</span>: <span class="st">'Moussa'</span>, <span class="pr">email</span>: <span class="st">'m@ex.sn'</span> },
+
+  <span class="cm">// Méthode (fonction dans un objet)</span>
+  <span class="fn">afficher</span>() {
+    <span class="kw">return</span> <span class="st">`[<span class="op">${</span><span class="kw">this</span>.<span class="pr">id</span><span class="op">}</span>] <span class="op">${</span><span class="kw">this</span>.<span class="pr">libelle</span><span class="op">}</span>`</span>;
+  },
+  <span class="fn">estRecent</span>() {
+    <span class="kw">return</span> <span class="kw">new</span> <span class="cl">Date</span>(<span class="kw">this</span>.<span class="pr">dateCreation</span>).<span class="fn">getFullYear</span>() <span class="op">===</span> <span class="kw">new</span> <span class="cl">Date</span>().<span class="fn">getFullYear</span>();
+  }
+};
+
+<span class="cm">// ── Accès aux propriétés ──</span>
+<span class="va">projet</span>.<span class="pr">libelle</span>;           <span class="cm">// notation pointée</span>
+<span class="va">projet</span>[<span class="st">'libelle'</span>];        <span class="cm">// notation crochets (utile avec des clés dynamiques)</span>
+<span class="va">projet</span>.<span class="pr">auteur</span>.<span class="pr">email</span>;      <span class="cm">// accès imbriqué</span>
+<span class="va">projet</span>.<span class="fn">afficher</span>();        <span class="cm">// appel de méthode → '[1] Portfolio Web'</span>
+
+<span class="cm">// ── Modifier / Ajouter / Supprimer ──</span>
+<span class="va">projet</span>.<span class="pr">libelle</span>    <span class="op">=</span> <span class="st">'Nouveau libellé'</span>;  <span class="cm">// modifier</span>
+<span class="va">projet</span>.<span class="pr">annee</span>      <span class="op">=</span> <span class="nm">2025</span>;              <span class="cm">// ajouter</span>
+<span class="kw">delete</span> <span class="va">projet</span>.<span class="pr">actif</span>;                    <span class="cm">// supprimer</span>
+
+<span class="cm">// ── Destructuring (ES6) — extraire des propriétés ──</span>
+<span class="kw">const</span> { <span class="va">id</span>, <span class="va">libelle</span>, <span class="va">technologies</span>: <span class="va">techs</span> } <span class="op">=</span> <span class="va">projet</span>;
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="va">id</span>);      <span class="cm">// 1</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="va">libelle</span>); <span class="cm">// 'Portfolio Web'</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="va">techs</span>);   <span class="cm">// ['HTML', 'Tailwind', ...]</span>
+
+<span class="cm">// Avec valeur par défaut</span>
+<span class="kw">const</span> { <span class="va">note</span> <span class="op">=</span> <span class="nm">0</span>, <span class="va">libelle</span>: <span class="va">titre</span> } <span class="op">=</span> <span class="va">projet</span>;
+
+<span class="cm">// ── Spread operator — copier / fusionner ──</span>
+<span class="kw">const</span> <span class="va">copie</span>          <span class="op">=</span> { ...<span class="va">projet</span> };
+<span class="kw">const</span> <span class="va">projetModifie</span>  <span class="op">=</span> { ...<span class="va">projet</span>, <span class="pr">libelle</span>: <span class="st">'Modifié'</span>, <span class="pr">version</span>: <span class="nm">2</span> };
+
+<span class="cm">// ── Méthodes utiles ──</span>
+<span class="cl">Object</span>.<span class="fn">keys</span>(<span class="va">projet</span>);     <span class="cm">// ['id', 'libelle', 'description', ...]</span>
+<span class="cl">Object</span>.<span class="fn">values</span>(<span class="va">projet</span>);   <span class="cm">// [1, 'Portfolio Web', ...]</span>
+<span class="cl">Object</span>.<span class="fn">entries</span>(<span class="va">projet</span>);  <span class="cm">// [['id',1], ['libelle','Portfolio Web'], ...]</span>
+<span class="cl">Object</span>.<span class="fn">assign</span>({}, <span class="va">projet</span>, { <span class="pr">actif</span>: <span class="bo">false</span> }); <span class="cm">// fusion (mutation du 1er)</span>
+
+<span class="cm">// ── Raccourci de propriété (ES6) ──</span>
+<span class="kw">const</span> <span class="va">id2</span> <span class="op">=</span> <span class="nm">5</span>;
+<span class="kw">const</span> <span class="va">lib</span> <span class="op">=</span> <span class="st">'Blog'</span>;
+<span class="kw">const</span> <span class="va">obj</span> <span class="op">=</span> { <span class="va">id2</span>, <span class="va">lib</span> };  <span class="cm">// { id2: 5, lib: 'Blog' }</span>
+<span class="lt">JS</span></code></pre>
+
+  <!-- ─── 3h OBJET ARRAY ─── -->
+  <h3 id="array"><span class="badge b-gr">h</span> Objet Array</h3>
+  <p>
+    <code>Array</code> est le type tableau de JavaScript. Les tableaux sont des objets
+    dont les clés sont des indices numériques. Ils possèdent de nombreuses méthodes
+    pour parcourir, transformer et rechercher des données.
+  </p>
+
+  <pre><code><span class="cm">// ── Créer un tableau ──</span>
+<span class="kw">let</span> <span class="va">projets</span> <span class="op">=</span> [];                          <span class="cm">// tableau vide</span>
+<span class="kw">const</span> <span class="va">techs</span> <span class="op">=</span> [<span class="st">'HTML'</span>, <span class="st">'CSS'</span>, <span class="st">'JS'</span>];      <span class="cm">// tableau de chaînes</span>
+<span class="kw">const</span> <span class="va">liste</span> <span class="op">=</span> <span class="kw">new</span> <span class="cl">Array</span>(<span class="nm">5</span>).<span class="fn">fill</span>(<span class="nu">null</span>);   <span class="cm">// 5 éléments null</span>
+
+<span class="cm">// ── Accès ──</span>
+<span class="va">projets</span>[<span class="nm">0</span>];                <span class="cm">// premier élément</span>
+<span class="va">projets</span>.<span class="fn">at</span>(<span class="op">-</span><span class="nm">1</span>);             <span class="cm">// dernier (ES2022)</span>
+<span class="va">projets</span>.<span class="pr">length</span>;             <span class="cm">// nombre d'éléments</span>
+
+<span class="cm">// ── Mutation (modifient le tableau original) ──</span>
+<span class="va">projets</span>.<span class="fn">push</span>({ <span class="pr">id</span>: <span class="nm">1</span>, <span class="pr">libelle</span>: <span class="st">'Blog'</span> });    <span class="cm">// ajoute à la fin → retourne length</span>
+<span class="va">projets</span>.<span class="fn">pop</span>();                                  <span class="cm">// supprime le dernier → retourne élément</span>
+<span class="va">projets</span>.<span class="fn">unshift</span>({ <span class="pr">id</span>: <span class="nm">0</span>, <span class="pr">libelle</span>: <span class="st">'Intro'</span> });  <span class="cm">// ajoute au début</span>
+<span class="va">projets</span>.<span class="fn">shift</span>();                                 <span class="cm">// supprime le premier</span>
+<span class="va">projets</span>.<span class="fn">splice</span>(<span class="nm">1</span>, <span class="nm">1</span>);                            <span class="cm">// supprime 1 élément à l'index 1</span>
+<span class="va">projets</span>.<span class="fn">splice</span>(<span class="nm">2</span>, <span class="nm">0</span>, <span class="va">nouveauProjet</span>);           <span class="cm">// insère sans supprimer</span>
+<span class="va">projets</span>.<span class="fn">sort</span>((<span class="va">a</span>, <span class="va">b</span>) <span class="op">=&gt;</span> <span class="va">a</span>.<span class="pr">id</span> <span class="op">-</span> <span class="va">b</span>.<span class="pr">id</span>);          <span class="cm">// trier</span>
+<span class="va">projets</span>.<span class="fn">reverse</span>();                               <span class="cm">// inverser</span>
+
+<span class="cm">// ── Méthodes fonctionnelles (retournent un NOUVEAU tableau) ──</span>
+
+<span class="cm">// forEach — itérer sans retour</span>
+<span class="va">projets</span>.<span class="fn">forEach</span>((<span class="va">p</span>, <span class="va">index</span>) <span class="op">=&gt;</span> {
+  <span class="fn">afficherCarte</span>(<span class="va">p</span>, <span class="va">index</span>);
+});
+
+<span class="cm">// map — transformer chaque élément</span>
+<span class="kw">const</span> <span class="va">libelles</span> <span class="op">=</span> <span class="va">projets</span>.<span class="fn">map</span>(<span class="va">p</span> <span class="op">=&gt;</span> <span class="va">p</span>.<span class="pr">libelle</span>);
+<span class="cm">// ['Portfolio', 'Blog', 'E-commerce']</span>
+
+<span class="cm">// filter — conserver les éléments qui passent le test</span>
+<span class="kw">const</span> <span class="va">projetsWeb</span> <span class="op">=</span> <span class="va">projets</span>.<span class="fn">filter</span>(<span class="va">p</span> <span class="op">=&gt;</span> <span class="va">p</span>.<span class="pr">categorie</span> <span class="op">===</span> <span class="st">'web'</span>);
+
+<span class="cm">// find — premier élément correspondant</span>
+<span class="kw">const</span> <span class="va">monProjet</span> <span class="op">=</span> <span class="va">projets</span>.<span class="fn">find</span>(<span class="va">p</span> <span class="op">=&gt;</span> <span class="va">p</span>.<span class="pr">id</span> <span class="op">===</span> <span class="nm">3</span>);
+
+<span class="cm">// findIndex — index du premier correspondant</span>
+<span class="kw">const</span> <span class="va">idx</span> <span class="op">=</span> <span class="va">projets</span>.<span class="fn">findIndex</span>(<span class="va">p</span> <span class="op">=&gt;</span> <span class="va">p</span>.<span class="pr">id</span> <span class="op">===</span> <span class="nm">3</span>);
+
+<span class="cm">// reduce — accumuler en une valeur</span>
+<span class="kw">const</span> <span class="va">nbTechs</span> <span class="op">=</span> <span class="va">projets</span>.<span class="fn">reduce</span>((<span class="va">acc</span>, <span class="va">p</span>) <span class="op">=&gt;</span> <span class="va">acc</span> <span class="op">+</span> <span class="va">p</span>.<span class="pr">technologies</span>.<span class="pr">length</span>, <span class="nm">0</span>);
+
+<span class="cm">// some / every</span>
+<span class="va">projets</span>.<span class="fn">some</span>(<span class="va">p</span>  <span class="op">=&gt;</span> <span class="va">p</span>.<span class="pr">actif</span>);    <span class="cm">// au moins un actif ?</span>
+<span class="va">projets</span>.<span class="fn">every</span>(<span class="va">p</span> <span class="op">=&gt;</span> <span class="va">p</span>.<span class="pr">id</span> <span class="op">&gt;</span> <span class="nm">0</span>);  <span class="cm">// tous ont un id positif ?</span>
+
+<span class="cm">// includes</span>
+<span class="va">techs</span>.<span class="fn">includes</span>(<span class="st">'React'</span>);        <span class="cm">// true / false</span>
+
+<span class="cm">// flat / flatMap</span>
+<span class="kw">const</span> <span class="va">toutesLestech</span> <span class="op">=</span> <span class="va">projets</span>.<span class="fn">flatMap</span>(<span class="va">p</span> <span class="op">=&gt;</span> <span class="va">p</span>.<span class="pr">technologies</span>);
+<span class="cm">// ['HTML','CSS','JS','React','Node',...]</span>
+
+<span class="cm">// Spread + filter pour "supprimer" proprement</span>
+<span class="va">projets</span> <span class="op">=</span> <span class="va">projets</span>.<span class="fn">filter</span>(<span class="va">p</span> <span class="op">=&gt;</span> <span class="va">p</span>.<span class="pr">id</span> <span class="op">!==</span> <span class="va">idASupprimer</span>);
+
+<span class="cm">// Destructuring de tableau</span>
+<span class="kw">const</span> [<span class="va">premier</span>, <span class="va">deuxieme</span>, ...<span class="va">reste</span>] <span class="op">=</span> <span class="va">projets</span>;
+<span class="lt">JS</span></code></pre>
+
+  <!-- ─── 3i OBJET DOCUMENT ─── -->
+  <h3 id="document"><span class="badge b-bl">i</span> Objet Document (DOM)</h3>
+  <p>
+    Le <strong>DOM</strong> (Document Object Model) est la représentation en mémoire du document HTML
+    sous forme d'arbre d'objets. L'objet <code>document</code> est la racine de cet arbre.
+    JS peut lire et modifier le DOM pour changer dynamiquement ce que l'utilisateur voit.
+  </p>
+
+  <div class="dom-tree">
+    <div><span class="dn-el">window</span></div>
+    <div><span class="dn-tr">└─ </span><span class="dn-el">document</span></div>
+    <div><span class="dn-tr">   └─ </span><span class="dn-el">&lt;html&gt;</span></div>
+    <div><span class="dn-tr">      ├─ </span><span class="dn-el">&lt;head&gt;</span> <span class="dn-tx">→ titre, meta, scripts…</span></div>
+    <div><span class="dn-tr">      └─ </span><span class="dn-el">&lt;body&gt;</span></div>
+    <div><span class="dn-tr">         ├─ </span><span class="dn-el">&lt;header&gt;</span></div>
+    <div><span class="dn-tr">         ├─ </span><span class="dn-el">&lt;main id=</span><span class="dn-vl">"app"</span><span class="dn-el">&gt;</span></div>
+    <div><span class="dn-tr">         │  ├─ </span><span class="dn-el">&lt;section id=</span><span class="dn-vl">"vue-liste"</span><span class="dn-el">&gt;</span></div>
+    <div><span class="dn-tr">         │  └─ </span><span class="dn-el">&lt;section id=</span><span class="dn-vl">"vue-detail"</span><span class="dn-el">&gt;</span></div>
+    <div><span class="dn-tr">         └─ </span><span class="dn-el">&lt;footer&gt;</span></div>
+  </div>
+
+  <pre><code><span class="cm">// ════════════════════════════════
+// SÉLECTION d'éléments
+// ════════════════════════════════</span>
+
+<span class="cm">// Sélecteurs CSS — recommandés (ES5+)</span>
+<span class="va">document</span>.<span class="fn">querySelector</span>(<span class="st">'#app'</span>);                  <span class="cm">// 1 seul (premier)</span>
+<span class="va">document</span>.<span class="fn">querySelector</span>(<span class="st">'.carte-projet'</span>);          <span class="cm">// 1er de la classe</span>
+<span class="va">document</span>.<span class="fn">querySelector</span>(<span class="st">'form input[required]'</span>);   <span class="cm">// combiné</span>
+<span class="va">document</span>.<span class="fn">querySelectorAll</span>(<span class="st">'.carte-projet'</span>);       <span class="cm">// NodeList de TOUS</span>
+
+<span class="cm">// Sélecteurs classiques</span>
+<span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'conteneur-projets'</span>);     <span class="cm">// par ID (le plus rapide)</span>
+<span class="va">document</span>.<span class="fn">getElementsByClassName</span>(<span class="st">'carte'</span>);         <span class="cm">// HTMLCollection LIVE</span>
+<span class="va">document</span>.<span class="fn">getElementsByTagName</span>(<span class="st">'article'</span>);         <span class="cm">// HTMLCollection LIVE</span>
+
+<span class="cm">// ════════════════════════════════
+// LECTURE et MODIFICATION du contenu
+// ════════════════════════════════</span>
+
+<span class="kw">const</span> <span class="va">titre</span> <span class="op">=</span> <span class="va">document</span>.<span class="fn">querySelector</span>(<span class="st">'h1'</span>);
+
+<span class="va">titre</span>.<span class="pr">textContent</span>;                      <span class="cm">// texte pur (sans HTML)</span>
+<span class="va">titre</span>.<span class="pr">textContent</span> <span class="op">=</span> <span class="st">'Mon Portfolio'</span>;    <span class="cm">// modifier le texte</span>
+<span class="va">titre</span>.<span class="pr">innerHTML</span>;                         <span class="cm">// contenu HTML interne</span>
+<span class="va">titre</span>.<span class="pr">innerHTML</span>  <span class="op">=</span> <span class="st">'Mon &lt;em&gt;Portfolio&lt;/em&gt;'</span>; <span class="cm">// HTML — ⚠️ XSS</span>
+<span class="va">titre</span>.<span class="pr">outerHTML</span>;                         <span class="cm">// l'élément lui-même inclus</span>
+
+<span class="cm">// ════════════════════════════════
+// ATTRIBUTS
+// ════════════════════════════════</span>
+
+<span class="kw">const</span> <span class="va">img</span> <span class="op">=</span> <span class="va">document</span>.<span class="fn">querySelector</span>(<span class="st">'img'</span>);
+<span class="va">img</span>.<span class="fn">getAttribute</span>(<span class="st">'src'</span>);                   <span class="cm">// lire</span>
+<span class="va">img</span>.<span class="fn">setAttribute</span>(<span class="st">'alt'</span>, <span class="st">'Photo projet'</span>);   <span class="cm">// modifier</span>
+<span class="va">img</span>.<span class="fn">removeAttribute</span>(<span class="st">'title'</span>);             <span class="cm">// supprimer</span>
+<span class="va">img</span>.<span class="fn">hasAttribute</span>(<span class="st">'data-id'</span>);              <span class="cm">// vérifier → boolean</span>
+<span class="va">img</span>.<span class="pr">src</span>   <span class="op">=</span> <span class="st">'nouvelle.jpg'</span>;               <span class="cm">// propriété directe</span>
+<span class="va">img</span>.<span class="pr">dataset</span>.<span class="pr">id</span>;                            <span class="cm">// data-id="1" → '1'</span>
+
+<span class="cm">// ════════════════════════════════
+// CLASSES CSS
+// ════════════════════════════════</span>
+
+<span class="kw">const</span> <span class="va">el</span> <span class="op">=</span> <span class="va">document</span>.<span class="fn">querySelector</span>(<span class="st">'.carte'</span>);
+<span class="va">el</span>.<span class="pr">classList</span>.<span class="fn">add</span>(<span class="st">'actif'</span>);           <span class="cm">// ajouter</span>
+<span class="va">el</span>.<span class="pr">classList</span>.<span class="fn">remove</span>(<span class="st">'inactif'</span>);      <span class="cm">// supprimer</span>
+<span class="va">el</span>.<span class="pr">classList</span>.<span class="fn">toggle</span>(<span class="st">'selectionne'</span>); <span class="cm">// basculer</span>
+<span class="va">el</span>.<span class="pr">classList</span>.<span class="fn">contains</span>(<span class="st">'actif'</span>);    <span class="cm">// tester → boolean</span>
+<span class="va">el</span>.<span class="pr">classList</span>.<span class="fn">replace</span>(<span class="st">'old'</span>, <span class="st">'new'</span>);<span class="cm">// remplacer</span>
+<span class="va">el</span>.<span class="pr">className</span> <span class="op">=</span> <span class="st">'carte actif highlight'</span>; <span class="cm">// remplacer TOUT</span>
+
+<span class="cm">// ════════════════════════════════
+// STYLE
+// ════════════════════════════════</span>
+
+<span class="va">el</span>.<span class="pr">style</span>.<span class="pr">display</span>    <span class="op">=</span> <span class="st">'none'</span>;        <span class="cm">// cacher</span>
+<span class="va">el</span>.<span class="pr">style</span>.<span class="pr">display</span>    <span class="op">=</span> <span class="st">'block'</span>;       <span class="cm">// afficher</span>
+<span class="va">el</span>.<span class="pr">style</span>.<span class="pr">backgroundColor</span> <span class="op">=</span> <span class="st">'#111'</span>;  <span class="cm">// camelCase !</span>
+
+<span class="cm">// ════════════════════════════════
+// CRÉER, INSÉRER, SUPPRIMER des nœuds
+// ════════════════════════════════</span>
+
+<span class="cm">// Créer</span>
+<span class="kw">const</span> <span class="va">article</span> <span class="op">=</span> <span class="va">document</span>.<span class="fn">createElement</span>(<span class="st">'article'</span>);
+<span class="va">article</span>.<span class="pr">className</span>  <span class="op">=</span> <span class="st">'carte-projet'</span>;
+<span class="va">article</span>.<span class="pr">dataset</span>.<span class="pr">id</span> <span class="op">=</span> <span class="nm">5</span>;
+<span class="va">article</span>.<span class="pr">innerHTML</span>  <span class="op">=</span> <span class="st">`&lt;h3&gt;Nouveau projet&lt;/h3&gt;`</span>;
+
+<span class="cm">// Insérer</span>
+<span class="kw">const</span> <span class="va">conteneur</span> <span class="op">=</span> <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'conteneur-projets'</span>);
+<span class="va">conteneur</span>.<span class="fn">prepend</span>(<span class="va">article</span>);         <span class="cm">// ← au DÉBUT (1er enfant)</span>
+<span class="va">conteneur</span>.<span class="fn">append</span>(<span class="va">article</span>);          <span class="cm">// → à la FIN</span>
+<span class="va">conteneur</span>.<span class="fn">insertBefore</span>(<span class="va">article</span>, <span class="va">conteneur</span>.<span class="fn">firstChild</span>);
+
+<span class="cm">// insertAdjacentHTML — rapide, sans créer de nœud</span>
+<span class="va">conteneur</span>.<span class="fn">insertAdjacentHTML</span>(<span class="st">'afterbegin'</span>, <span class="st">`&lt;article&gt;...&lt;/article&gt;`</span>);
+<span class="cm">// positions : 'beforebegin' | 'afterbegin' | 'beforeend' | 'afterend'</span>
+
+<span class="cm">// Supprimer</span>
+<span class="va">article</span>.<span class="fn">remove</span>();                     <span class="cm">// méthode moderne (ES5+)</span>
+<span class="va">conteneur</span>.<span class="fn">removeChild</span>(<span class="va">article</span>);     <span class="cm">// méthode classique</span>
+<span class="va">conteneur</span>.<span class="pr">innerHTML</span> <span class="op">=</span> <span class="st">''</span>;            <span class="cm">// vider tout le conteneur</span>
+<span class="lt">JS</span></code></pre>
+
+  <!-- ─── 3j OBJET FORM ─── -->
+  <h3 id="form"><span class="badge b-or">j</span> Objet Form</h3>
+  <pre><code><span class="cm">// ── Accéder au formulaire ──</span>
+<span class="kw">const</span> <span class="va">form</span> <span class="op">=</span> <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'form-projet'</span>);
+<span class="cm">// ou : document.forms['form-projet']  /  document.forms[0]</span>
+
+<span class="cm">// ── Accéder aux champs ──</span>
+<span class="kw">const</span> <span class="va">champLibelle</span>    <span class="op">=</span> <span class="va">form</span>.<span class="fn">querySelector</span>(<span class="st">'#inp-libelle'</span>);
+<span class="kw">const</span> <span class="va">champDescription</span><span class="op">=</span> <span class="va">form</span>.<span class="fn">querySelector</span>(<span class="st">'#inp-description'</span>);
+
+<span class="cm">// ── Lire les valeurs ──</span>
+<span class="kw">const</span> <span class="va">libelle</span>     <span class="op">=</span> <span class="va">champLibelle</span>.<span class="pr">value</span>.<span class="fn">trim</span>();
+<span class="kw">const</span> <span class="va">description</span> <span class="op">=</span> <span class="va">champDescription</span>.<span class="pr">value</span>.<span class="fn">trim</span>();
+
+<span class="cm">// Checkbox / radio → checked</span>
+<span class="kw">const</span> <span class="va">chkHTML</span>  <span class="op">=</span> <span class="va">form</span>.<span class="fn">querySelector</span>(<span class="st">'#tech-html'</span>).<span class="pr">checked</span>;   <span class="cm">// true/false</span>
+<span class="kw">const</span> <span class="va">allChkTech</span> <span class="op">=</span> [...<span class="va">form</span>.<span class="fn">querySelectorAll</span>(<span class="st">'[name="tech"]:checked'</span>)]
+                    .<span class="fn">map</span>(<span class="va">el</span> <span class="op">=&gt;</span> <span class="va">el</span>.<span class="pr">value</span>);
+<span class="cm">// ['HTML', 'CSS', 'JavaScript']</span>
+
+<span class="cm">// Select → selectedIndex / value</span>
+<span class="kw">const</span> <span class="va">categorie</span>  <span class="op">=</span> <span class="va">form</span>.<span class="fn">querySelector</span>(<span class="st">'#sel-categorie'</span>).<span class="pr">value</span>;
+
+<span class="cm">// FormData — récupère tous les champs d'un coup</span>
+<span class="kw">const</span> <span class="va">fd</span> <span class="op">=</span> <span class="kw">new</span> <span class="cl">FormData</span>(<span class="va">form</span>);
+<span class="va">fd</span>.<span class="fn">get</span>(<span class="st">'libelle'</span>);           <span class="cm">// valeur d'un champ</span>
+<span class="va">fd</span>.<span class="fn">getAll</span>(<span class="st">'tech'</span>);           <span class="cm">// tableau pour multi-valeurs</span>
+[...<span class="va">fd</span>.<span class="fn">entries</span>()];            <span class="cm">// toutes les paires [key, value]</span>
+
+<span class="cm">// ── Intercepter la soumission ──</span>
+<span class="va">form</span>.<span class="fn">addEventListener</span>(<span class="st">'submit'</span>, (<span class="va">e</span>) <span class="op">=&gt;</span> {
+  <span class="va">e</span>.<span class="fn">preventDefault</span>();  <span class="cm">// ← STOP rechargement !</span>
+
+  <span class="kw">const</span> <span class="va">donnees</span> <span class="op">=</span> {
+    <span class="pr">libelle</span>:       <span class="va">form</span>.<span class="fn">querySelector</span>(<span class="st">'#inp-libelle'</span>).<span class="pr">value</span>.<span class="fn">trim</span>(),
+    <span class="pr">description</span>:   <span class="va">form</span>.<span class="fn">querySelector</span>(<span class="st">'#inp-description'</span>).<span class="pr">value</span>.<span class="fn">trim</span>(),
+    <span class="pr">image</span>:         <span class="va">form</span>.<span class="fn">querySelector</span>(<span class="st">'#inp-image'</span>).<span class="pr">value</span>.<span class="fn">trim</span>(),
+    <span class="pr">technologies</span>: [...<span class="va">form</span>.<span class="fn">querySelectorAll</span>(<span class="st">'[name="tech"]:checked'</span>)]
+                       .<span class="fn">map</span>(<span class="va">el</span> <span class="op">=&gt;</span> <span class="va">el</span>.<span class="pr">value</span>),
+  };
+
+  <span class="cm">// Validation</span>
+  <span class="kw">if</span> (<span class="op">!</span><span class="va">donnees</span>.<span class="pr">libelle</span>) {
+    <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'err-libelle'</span>).<span class="pr">textContent</span> <span class="op">=</span> <span class="st">'Champ requis'</span>;
+    <span class="kw">return</span>;
+  }
+
+  <span class="fn">ajouterProjet</span>(<span class="va">donnees</span>);
+  <span class="va">form</span>.<span class="fn">reset</span>();               <span class="cm">// vider le formulaire</span>
+});
+
+<span class="cm">// ── Validation en temps réel ──</span>
+<span class="va">champLibelle</span>.<span class="fn">addEventListener</span>(<span class="st">'input'</span>, (<span class="va">e</span>) <span class="op">=&gt;</span> {
+  <span class="kw">const</span> <span class="va">errEl</span> <span class="op">=</span> <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'err-libelle'</span>);
+  <span class="va">errEl</span>.<span class="pr">textContent</span> <span class="op">=</span> <span class="va">e</span>.<span class="pr">target</span>.<span class="pr">value</span>.<span class="fn">trim</span>().<span class="pr">length</span> <span class="op">&lt;</span> <span class="nm">3</span>
+    <span class="op">?</span> <span class="st">'Minimum 3 caractères'</span>
+    <span class="op">:</span> <span class="st">''</span>;
+});
+<span class="lt">JS</span></code></pre>
+
+  <!-- ─── 3k AJAX ─── -->
+  <h3 id="ajax"><span class="badge b-rd">k</span> Requêtes AJAX</h3>
+  <p>
+    <strong>AJAX</strong> (Asynchronous JavaScript And XML) permet d'envoyer/recevoir des données
+    depuis un serveur <strong>sans recharger la page</strong>. Aujourd'hui on utilise la
+    <strong>Fetch API</strong> (native ES6) avec <code>async/await</code>.
+  </p>
+
+  <pre><code><span class="cm">// ══════════════════════════════════════
+// 1. Fetch API + async/await — LIRE (GET)
+// ══════════════════════════════════════</span>
+<span class="kw">async function</span> <span class="fn">getTousProjets</span>() {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> <span class="va">response</span> <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="st">'http://localhost:3000/projets'</span>);
+    <span class="kw">if</span> (<span class="op">!</span><span class="va">response</span>.<span class="pr">ok</span>) <span class="kw">throw</span> <span class="kw">new</span> <span class="cl">Error</span>(<span class="st">`HTTP <span class="op">${</span><span class="va">response</span>.<span class="pr">status</span><span class="op">}</span>`</span>);
+    <span class="kw">const</span> <span class="va">projets</span> <span class="op">=</span> <span class="kw">await</span> <span class="va">response</span>.<span class="fn">json</span>();
+    <span class="kw">return</span> <span class="va">projets</span>;
+  } <span class="kw">catch</span> (<span class="va">err</span>) {
+    <span class="fn">console</span>.<span class="fn">error</span>(<span class="st">'GET /projets :'</span>, <span class="va">err</span>);
+    <span class="kw">return</span> [];
+  }
+}
+
+<span class="cm">// ══════════════════════════════════════
+// 2. GET par ID
+// ══════════════════════════════════════</span>
+<span class="kw">async function</span> <span class="fn">getProjetParId</span>(<span class="va">id</span>) {
+  <span class="kw">const</span> <span class="va">response</span> <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="st">`http://localhost:3000/projets/<span class="op">${</span><span class="va">id</span><span class="op">}</span>`</span>);
+  <span class="kw">if</span> (<span class="va">response</span>.<span class="pr">status</span> <span class="op">===</span> <span class="nm">404</span>) <span class="kw">return</span> <span class="nu">null</span>;
+  <span class="kw">return</span> <span class="va">response</span>.<span class="fn">json</span>();
+}
+
+<span class="cm">// ══════════════════════════════════════
+// 3. POST — Créer
+// ══════════════════════════════════════</span>
+<span class="kw">async function</span> <span class="fn">postProjet</span>(<span class="va">projet</span>) {
+  <span class="kw">const</span> <span class="va">response</span> <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="st">'http://localhost:3000/projets'</span>, {
+    <span class="pr">method</span>:  <span class="st">'POST'</span>,
+    <span class="pr">headers</span>: { <span class="st">'Content-Type'</span>: <span class="st">'application/json'</span> },
+    <span class="pr">body</span>:    <span class="cl">JSON</span>.<span class="fn">stringify</span>(<span class="va">projet</span>),
+  });
+  <span class="kw">return</span> <span class="va">response</span>.<span class="fn">json</span>(); <span class="cm">// retourne l'objet créé (avec id auto)</span>
+}
+
+<span class="cm">// ══════════════════════════════════════
+// 4. PUT — Remplacer entièrement
+// ══════════════════════════════════════</span>
+<span class="kw">async function</span> <span class="fn">putProjet</span>(<span class="va">id</span>, <span class="va">projet</span>) {
+  <span class="kw">const</span> <span class="va">response</span> <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="st">`http://localhost:3000/projets/<span class="op">${</span><span class="va">id</span><span class="op">}</span>`</span>, {
+    <span class="pr">method</span>:  <span class="st">'PUT'</span>,
+    <span class="pr">headers</span>: { <span class="st">'Content-Type'</span>: <span class="st">'application/json'</span> },
+    <span class="pr">body</span>:    <span class="cl">JSON</span>.<span class="fn">stringify</span>(<span class="va">projet</span>),
+  });
+  <span class="kw">return</span> <span class="va">response</span>.<span class="fn">json</span>();
+}
+
+<span class="cm">// ══════════════════════════════════════
+// 5. PATCH — Modifier partiellement
+// ══════════════════════════════════════</span>
+<span class="kw">async function</span> <span class="fn">patchProjet</span>(<span class="va">id</span>, <span class="va">modifications</span>) {
+  <span class="kw">const</span> <span class="va">response</span> <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="st">`http://localhost:3000/projets/<span class="op">${</span><span class="va">id</span><span class="op">}</span>`</span>, {
+    <span class="pr">method</span>:  <span class="st">'PATCH'</span>,
+    <span class="pr">headers</span>: { <span class="st">'Content-Type'</span>: <span class="st">'application/json'</span> },
+    <span class="pr">body</span>:    <span class="cl">JSON</span>.<span class="fn">stringify</span>(<span class="va">modifications</span>),
+  });
+  <span class="kw">return</span> <span class="va">response</span>.<span class="fn">json</span>();
+}
+
+<span class="cm">// ══════════════════════════════════════
+// 6. DELETE — Supprimer
+// ══════════════════════════════════════</span>
+<span class="kw">async function</span> <span class="fn">deleteProjet</span>(<span class="va">id</span>) {
+  <span class="kw">const</span> <span class="va">response</span> <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="st">`http://localhost:3000/projets/<span class="op">${</span><span class="va">id</span><span class="op">}</span>`</span>, {
+    <span class="pr">method</span>: <span class="st">'DELETE'</span>,
+  });
+  <span class="kw">return</span> <span class="va">response</span>.<span class="pr">ok</span>; <span class="cm">// true si 200/204</span>
+}
+<span class="lt">JS</span></code></pre>
+</section>
+
+<!-- ═══════════════════════════════════
+     SECTION 4 — RÉFÉRENCES
+═══════════════════════════════════ -->
+<section id="references">
+  <div class="eyebrow"><span class="snum">Section 04</span><div class="sline"></div></div>
+  <h2>Références</h2>
+  <p>Ressources officielles et outils pour maîtriser JavaScript &amp; json-server :</p>
+
+  <div class="ref-grid">
+    <a class="ref-card" href="https://developer.mozilla.org/fr/docs/Web/JavaScript" target="_blank">
+      <strong>MDN Web Docs — JavaScript</strong>
+      <div class="url">developer.mozilla.org/fr/docs/Web/JavaScript</div>
+      <p>Référence complète en français. Chaque méthode documentée avec exemples interactifs.</p>
+    </a>
+    <a class="ref-card" href="https://javascript.info" target="_blank">
+      <strong>The Modern JavaScript Tutorial</strong>
+      <div class="url">javascript.info</div>
+      <p>Tutoriel progressif ultra-complet couvrant ES6+ en détail. Gratuit, très bien structuré.</p>
+    </a>
+    <a class="ref-card" href="https://github.com/typicode/json-server" target="_blank">
+      <strong>json-server — GitHub</strong>
+      <div class="url">github.com/typicode/json-server</div>
+      <p>Serveur REST factice à partir d'un fichier JSON. Installation, routes, filtres, pagination.</p>
+    </a>
+    <a class="ref-card" href="https://developer.mozilla.org/fr/docs/Web/API/Fetch_API" target="_blank">
+      <strong>MDN — Fetch API</strong>
+      <div class="url">developer.mozilla.org/fr/docs/Web/API/Fetch_API</div>
+      <p>Documentation complète de la Fetch API, options, gestion des erreurs, CORS.</p>
+    </a>
+    <a class="ref-card" href="https://developer.mozilla.org/fr/docs/Web/API/Document_Object_Model" target="_blank">
+      <strong>MDN — DOM (Document Object Model)</strong>
+      <div class="url">developer.mozilla.org/fr/docs/Web/API/Document_Object_Model</div>
+      <p>Référence exhaustive sur le DOM, tous les événements, interfaces et méthodes.</p>
+    </a>
+    <a class="ref-card" href="https://eloquentjavascript.net" target="_blank">
+      <strong>Eloquent JavaScript — 3ème édition</strong>
+      <div class="url">eloquentjavascript.net</div>
+      <p>Livre de référence disponible gratuitement en ligne. Du débutant au niveau avancé.</p>
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     SECTION 5 — DÉMO SPA
+═══════════════════════════════════ -->
+<section id="demo">
+  <div class="eyebrow"><span class="snum">Section 05</span><div class="sline"></div></div>
+  <h2>Démo — <span class="hl">SPA Portfolio en Vanilla JS</span></h2>
+
+  <p>
+    Nous allons réaliser une <strong>Single Page Application (SPA)</strong> de gestion de portfolio :
+    une seule page HTML avec plusieurs <em>vues</em> affichées/cachées dynamiquement par JavaScript,
+    et des données persistées via un serveur factice <strong>json-server</strong>.
+  </p>
+
+  <div class="box box-key">
+    <strong>Plan de la démo</strong><br>
+    ① Mise en place de json-server (API REST factice)<br>
+    ② Prototyper la page HTML (toutes les vues en un seul fichier)<br>
+    ③ Référencer les éléments HTML en JS<br>
+    ④ Déclarer <code>projets[]</code> — tableau mémoire<br>
+    ⑤ Définir <code>creerProjet()</code> — créer un nœud DOM<br>
+    ⑥ Définir <code>ajouterProjet()</code> — ajouter en mémoire + DOM + serveur<br>
+    ⑦ Définir <code>detaillerProjet()</code> — afficher le détail<br>
+    ⑧ Définir <code>supprimerProjet()</code> — supprimer partout
+  </div>
+
+  <!-- ── ÉTAPE 0 : json-server ── -->
+  <h3>① Mise en place de json-server</h3>
+  <p>
+    <strong>json-server</strong> crée instantanément une API REST complète (GET, POST, PUT, PATCH, DELETE)
+    à partir d'un simple fichier <code>db.json</code>.
+  </p>
+
+  <pre><code><span class="cm"># Installation globale de json-server</span>
+npm install -g json-server
+
+<span class="cm"># Vérifier la version installée</span>
+json-server --version
+<span class="lt">BASH</span></code></pre>
+
+  <pre><code><span class="cm">// db.json — Base de données fictive</span>
+{
+  <span class="st">"projets"</span>: [
+    {
+      <span class="st">"id"</span>:           <span class="nm">1</span>,
+      <span class="st">"libelle"</span>:      <span class="st">"Application E-commerce"</span>,
+      <span class="st">"description"</span>:  <span class="st">"Plateforme de vente en ligne complète."</span>,
+      <span class="st">"technologies"</span>: [<span class="st">"HTML5"</span>, <span class="st">"CSS3"</span>, <span class="st">"JavaScript"</span>, <span class="st">"Node.js"</span>],
+      <span class="st">"image"</span>:        <span class="st">"images/ecommerce.jpg"</span>
+    },
+    {
+      <span class="st">"id"</span>:           <span class="nm">2</span>,
+      <span class="st">"libelle"</span>:      <span class="st">"Gestionnaire de Tâches"</span>,
+      <span class="st">"description"</span>:  <span class="st">"Application Kanban pour organiser les tâches."</span>,
+      <span class="st">"technologies"</span>: [<span class="st">"HTML5"</span>, <span class="st">"Tailwind CSS"</span>, <span class="st">"JavaScript"</span>],
+      <span class="st">"image"</span>:        <span class="st">"images/kanban.jpg"</span>
+    },
+    {
+      <span class="st">"id"</span>:           <span class="nm">3</span>,
+      <span class="st">"libelle"</span>:      <span class="st">"Blog Personnel"</span>,
+      <span class="st">"description"</span>:  <span class="st">"Blog avec articles et moteur de recherche."</span>,
+      <span class="st">"technologies"</span>: [<span class="st">"React"</span>, <span class="st">"Tailwind CSS"</span>, <span class="st">"Node.js"</span>],
+      <span class="st">"image"</span>:        <span class="st">"images/blog.jpg"</span>
+    }
+  ]
+}
+<span class="lt">JSON</span></code></pre>
+
+  <pre><code><span class="cm"># Lancer le serveur sur le port 3000</span>
+json-server --watch db.json --port 3000
+
+<span class="cm"># Endpoints générés automatiquement :</span>
+<span class="cm"># GET    http://localhost:3000/projets        → liste tous</span>
+<span class="cm"># GET    http://localhost:3000/projets/1      → projet id=1</span>
+<span class="cm"># POST   http://localhost:3000/projets        → créer</span>
+<span class="cm"># PUT    http://localhost:3000/projets/1      → remplacer</span>
+<span class="cm"># PATCH  http://localhost:3000/projets/1      → modifier partiellement</span>
+<span class="cm"># DELETE http://localhost:3000/projets/1      → supprimer</span>
+<span class="lt">BASH</span></code></pre>
+
+  <!-- ── ÉTAPE 1 : HTML PROTOTYPE ── -->
+  <h3>② Prototyper la page HTML (toutes les vues)</h3>
+  <div class="demo-wrap">
+    <div class="demo-hdr">
+      <div class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+      <span class="fname">index.html — SPA unique</span>
+    </div>
+    <div class="demo-body">
+<pre><code><span class="tg">&lt;!DOCTYPE html&gt;</span>
+<span class="tg">&lt;html</span> <span class="at">lang</span>=<span class="av">"fr"</span><span class="tg">&gt;</span>
+<span class="tg">&lt;head&gt;</span>
+  <span class="tg">&lt;meta</span> <span class="at">charset</span>=<span class="av">"UTF-8"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;meta</span> <span class="at">name</span>=<span class="av">"viewport"</span> <span class="at">content</span>=<span class="av">"width=device-width, initial-scale=1.0"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;title&gt;</span>Portfolio — SPA Vanilla JS<span class="tg">&lt;/title&gt;</span>
+  <span class="tg">&lt;script</span> <span class="at">src</span>=<span class="av">"https://cdn.tailwindcss.com"</span><span class="tg">&gt;&lt;/script&gt;</span>
+<span class="tg">&lt;/head&gt;</span>
+
+<span class="tg">&lt;body</span> <span class="at">class</span>=<span class="av">"bg-slate-950 text-slate-100 min-h-screen flex flex-col"</span><span class="tg">&gt;</span>
+
+  <span class="cm">&lt;!-- ══ TEMPLATE : EN-TÊTE ══ --&gt;</span>
+  <span class="tg">&lt;header</span> <span class="at">class</span>=<span class="av">"bg-slate-900 border-b border-slate-800"</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"max-w-5xl mx-auto px-6 py-6 flex items-center justify-between"</span><span class="tg">&gt;</span>
+      <span class="tg">&lt;h1</span> <span class="at">class</span>=<span class="av">"text-2xl font-bold"</span><span class="tg">&gt;</span>Mon <span class="tg">&lt;span</span> <span class="at">class</span>=<span class="av">"text-yellow-400"</span><span class="tg">&gt;</span>Portfolio<span class="tg">&lt;/span&gt;&lt;/h1&gt;</span>
+      <span class="tg">&lt;button</span> <span class="at">id</span>=<span class="av">"btn-afficher-form"</span>
+              <span class="at">class</span>=<span class="av">"bg-yellow-400 text-black px-5 py-2 rounded-lg font-bold
+                     hover:bg-yellow-300 transition-colors"</span><span class="tg">&gt;</span>
+        + Nouveau projet
+      <span class="tg">&lt;/button&gt;</span>
+    <span class="tg">&lt;/div&gt;</span>
+  <span class="tg">&lt;/header&gt;</span>
+
+  <span class="cm">&lt;!-- ══ NAVIGATION ══ --&gt;</span>
+  <span class="tg">&lt;nav</span> <span class="at">class</span>=<span class="av">"sticky top-0 z-50 bg-slate-950/90 backdrop-blur border-b border-slate-800"</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"max-w-5xl mx-auto px-6 flex gap-1"</span><span class="tg">&gt;</span>
+      <span class="tg">&lt;button</span> <span class="at">id</span>=<span class="av">"nav-liste"</span>
+              <span class="at">class</span>=<span class="av">"nav-btn px-4 py-3 text-sm font-bold border-b-2 border-yellow-400 text-white"</span><span class="tg">&gt;</span>
+        Tous les projets
+      <span class="tg">&lt;/button&gt;</span>
+    <span class="tg">&lt;/div&gt;</span>
+  <span class="tg">&lt;/nav&gt;</span>
+
+  <span class="tg">&lt;main</span> <span class="at">class</span>=<span class="av">"flex-1 py-12"</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"max-w-5xl mx-auto px-6"</span><span class="tg">&gt;</span>
+
+      <span class="cm">&lt;!-- ══ VUE 1 : LISTE DES PROJETS ══ --&gt;</span>
+      <span class="tg">&lt;section</span> <span class="at">id</span>=<span class="av">"vue-liste"</span><span class="tg">&gt;</span>
+        <span class="tg">&lt;h2</span> <span class="at">class</span>=<span class="av">"text-3xl font-bold mb-8 pb-4 border-b border-slate-800"</span><span class="tg">&gt;</span>
+          Tous les projets
+        <span class="tg">&lt;/h2&gt;</span>
+
+        <span class="cm">&lt;!-- Barre de recherche --&gt;</span>
+        <span class="tg">&lt;input</span> <span class="at">type</span>=<span class="av">"search"</span> <span class="at">id</span>=<span class="av">"inp-recherche"</span>
+               <span class="at">placeholder</span>=<span class="av">"Rechercher un projet..."</span>
+               <span class="at">class</span>=<span class="av">"w-full mb-8 bg-slate-900 border border-slate-700
+                      rounded-lg px-4 py-3 text-sm placeholder-slate-500
+                      focus:outline-none focus:ring-2 focus:ring-yellow-400"</span><span class="tg">&gt;</span>
+
+        <span class="cm">&lt;!-- Conteneur des cartes (Flex box) —&gt; JS y insère les cartes --&gt;</span>
+        <span class="tg">&lt;div</span> <span class="at">id</span>=<span class="av">"conteneur-projets"</span>
+             <span class="at">class</span>=<span class="av">"flex flex-wrap gap-6"</span><span class="tg">&gt;</span>
+          <span class="cm">&lt;!-- Les cartes projets seront insérées ici par JS --&gt;</span>
+        <span class="tg">&lt;/div&gt;</span>
+      <span class="tg">&lt;/section&gt;</span>
+
+      <span class="cm">&lt;!-- ══ VUE 2 : DÉTAIL D'UN PROJET (cachée par défaut) ══ --&gt;</span>
+      <span class="tg">&lt;section</span> <span class="at">id</span>=<span class="av">"vue-detail"</span> <span class="at">class</span>=<span class="av">"hidden"</span><span class="tg">&gt;</span>
+        <span class="tg">&lt;button</span> <span class="at">id</span>=<span class="av">"btn-retour-liste"</span>
+                <span class="at">class</span>=<span class="av">"text-sm text-slate-400 mb-8 hover:text-white flex items-center gap-2"</span><span class="tg">&gt;</span>
+          &amp;larr; Retour à la liste
+        <span class="tg">&lt;/button&gt;</span>
+        <span class="tg">&lt;div</span> <span class="at">id</span>=<span class="av">"contenu-detail"</span><span class="tg">&gt;</span>
+          <span class="cm">&lt;!-- Injecté dynamiquement par detaillerProjet() --&gt;</span>
+        <span class="tg">&lt;/div&gt;</span>
+      <span class="tg">&lt;/section&gt;</span>
+
+      <span class="cm">&lt;!-- ══ VUE 3 : FORMULAIRE D'AJOUT (caché par défaut) ══ --&gt;</span>
+      <span class="tg">&lt;section</span> <span class="at">id</span>=<span class="av">"vue-form"</span> <span class="at">class</span>=<span class="av">"hidden"</span><span class="tg">&gt;</span>
+        <span class="tg">&lt;h2</span> <span class="at">class</span>=<span class="av">"text-3xl font-bold mb-8 pb-4 border-b border-slate-800"</span><span class="tg">&gt;</span>
+          Ajouter un projet
+        <span class="tg">&lt;/h2&gt;</span>
+        <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"max-w-2xl bg-slate-900 border border-slate-700 rounded-xl p-8"</span><span class="tg">&gt;</span>
+          <span class="tg">&lt;form</span> <span class="at">id</span>=<span class="av">"form-projet"</span> <span class="at">class</span>=<span class="av">"space-y-5"</span> <span class="at">novalidate</span><span class="tg">&gt;</span>
+
+            <span class="tg">&lt;div&gt;</span>
+              <span class="tg">&lt;label</span> <span class="at">for</span>=<span class="av">"inp-libelle"</span> <span class="at">class</span>=<span class="av">"block text-sm font-semibold mb-2"</span><span class="tg">&gt;</span>
+                Libellé <span class="tg">&lt;span</span> <span class="at">class</span>=<span class="av">"text-red-400"</span><span class="tg">&gt;</span>*<span class="tg">&lt;/span&gt;</span>
+              <span class="tg">&lt;/label&gt;</span>
+              <span class="tg">&lt;input</span> <span class="at">type</span>=<span class="av">"text"</span> <span class="at">id</span>=<span class="av">"inp-libelle"</span> <span class="at">name</span>=<span class="av">"libelle"</span>
+                     <span class="at">placeholder</span>=<span class="av">"Ex : Application E-commerce"</span>
+                     <span class="at">class</span>=<span class="av">"champ-form w-full bg-slate-950 border border-slate-700
+                            rounded-lg px-4 py-3 text-sm
+                            focus:outline-none focus:ring-2 focus:ring-yellow-400"</span><span class="tg">&gt;</span>
+              <span class="tg">&lt;p</span> <span class="at">id</span>=<span class="av">"err-libelle"</span> <span class="at">class</span>=<span class="av">"text-red-400 text-xs mt-1"</span><span class="tg">&gt;&lt;/p&gt;</span>
+            <span class="tg">&lt;/div&gt;</span>
+
+            <span class="tg">&lt;div&gt;</span>
+              <span class="tg">&lt;label</span> <span class="at">for</span>=<span class="av">"inp-image"</span> <span class="at">class</span>=<span class="av">"block text-sm font-semibold mb-2"</span><span class="tg">&gt;</span>
+                Source de l'image (URL ou chemin) <span class="tg">&lt;span</span> <span class="at">class</span>=<span class="av">"text-red-400"</span><span class="tg">&gt;</span>*<span class="tg">&lt;/span&gt;</span>
+              <span class="tg">&lt;/label&gt;</span>
+              <span class="tg">&lt;input</span> <span class="at">type</span>=<span class="av">"text"</span> <span class="at">id</span>=<span class="av">"inp-image"</span> <span class="at">name</span>=<span class="av">"image"</span>
+                     <span class="at">placeholder</span>=<span class="av">"images/projet.jpg ou https://..."</span>
+                     <span class="at">class</span>=<span class="av">"champ-form w-full bg-slate-950 border border-slate-700
+                            rounded-lg px-4 py-3 text-sm
+                            focus:outline-none focus:ring-2 focus:ring-yellow-400"</span><span class="tg">&gt;</span>
+              <span class="tg">&lt;p</span> <span class="at">id</span>=<span class="av">"err-image"</span> <span class="at">class</span>=<span class="av">"text-red-400 text-xs mt-1"</span><span class="tg">&gt;&lt;/p&gt;</span>
+            <span class="tg">&lt;/div&gt;</span>
+
+            <span class="tg">&lt;div&gt;</span>
+              <span class="tg">&lt;label</span> <span class="at">for</span>=<span class="av">"inp-description"</span> <span class="at">class</span>=<span class="av">"block text-sm font-semibold mb-2"</span><span class="tg">&gt;</span>
+                Description
+              <span class="tg">&lt;/label&gt;</span>
+              <span class="tg">&lt;textarea</span> <span class="at">id</span>=<span class="av">"inp-description"</span> <span class="at">name</span>=<span class="av">"description"</span> <span class="at">rows</span>=<span class="av">"4"</span>
+                        <span class="at">placeholder</span>=<span class="av">"Décrivez le projet..."</span>
+                        <span class="at">class</span>=<span class="av">"champ-form w-full bg-slate-950 border border-slate-700
+                               rounded-lg px-4 py-3 text-sm resize-none
+                               focus:outline-none focus:ring-2 focus:ring-yellow-400"</span><span class="tg">&gt;</span>
+              <span class="tg">&lt;/textarea&gt;</span>
+            <span class="tg">&lt;/div&gt;</span>
+
+            <span class="tg">&lt;fieldset</span> <span class="at">class</span>=<span class="av">"border border-slate-700 rounded-lg p-4"</span><span class="tg">&gt;</span>
+              <span class="tg">&lt;legend</span> <span class="at">class</span>=<span class="av">"px-2 text-sm font-semibold"</span><span class="tg">&gt;</span>Technologies<span class="tg">&lt;/legend&gt;</span>
+              <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"flex flex-wrap gap-3 mt-2"</span><span class="tg">&gt;</span>
+                <span class="tg">&lt;label</span> <span class="at">class</span>=<span class="av">"flex items-center gap-2 px-3 py-2 bg-slate-800
+                               rounded-lg text-sm cursor-pointer hover:bg-slate-700"</span><span class="tg">&gt;</span>
+                  <span class="tg">&lt;input</span> <span class="at">type</span>=<span class="av">"checkbox"</span> <span class="at">name</span>=<span class="av">"tech"</span> <span class="at">value</span>=<span class="av">"HTML5"</span><span class="tg">&gt;</span> HTML5
+                <span class="tg">&lt;/label&gt;</span>
+                <span class="tg">&lt;label</span> <span class="at">class</span>=<span class="av">"flex items-center gap-2 px-3 py-2 bg-slate-800
+                               rounded-lg text-sm cursor-pointer hover:bg-slate-700"</span><span class="tg">&gt;</span>
+                  <span class="tg">&lt;input</span> <span class="at">type</span>=<span class="av">"checkbox"</span> <span class="at">name</span>=<span class="av">"tech"</span> <span class="at">value</span>=<span class="av">"CSS3"</span><span class="tg">&gt;</span> CSS3
+                <span class="tg">&lt;/label&gt;</span>
+                <span class="tg">&lt;label</span> <span class="at">class</span>=<span class="av">"flex items-center gap-2 px-3 py-2 bg-slate-800
+                               rounded-lg text-sm cursor-pointer hover:bg-slate-700"</span><span class="tg">&gt;</span>
+                  <span class="tg">&lt;input</span> <span class="at">type</span>=<span class="av">"checkbox"</span> <span class="at">name</span>=<span class="av">"tech"</span> <span class="at">value</span>=<span class="av">"JavaScript"</span><span class="tg">&gt;</span> JavaScript
+                <span class="tg">&lt;/label&gt;</span>
+                <span class="tg">&lt;label</span> <span class="at">class</span>=<span class="av">"flex items-center gap-2 px-3 py-2 bg-slate-800
+                               rounded-lg text-sm cursor-pointer hover:bg-slate-700"</span><span class="tg">&gt;</span>
+                  <span class="tg">&lt;input</span> <span class="at">type</span>=<span class="av">"checkbox"</span> <span class="at">name</span>=<span class="av">"tech"</span> <span class="at">value</span>=<span class="av">"Tailwind CSS"</span><span class="tg">&gt;</span> Tailwind
+                <span class="tg">&lt;/label&gt;</span>
+                <span class="tg">&lt;label</span> <span class="at">class</span>=<span class="av">"flex items-center gap-2 px-3 py-2 bg-slate-800
+                               rounded-lg text-sm cursor-pointer hover:bg-slate-700"</span><span class="tg">&gt;</span>
+                  <span class="tg">&lt;input</span> <span class="at">type</span>=<span class="av">"checkbox"</span> <span class="at">name</span>=<span class="av">"tech"</span> <span class="at">value</span>=<span class="av">"React"</span><span class="tg">&gt;</span> React
+                <span class="tg">&lt;/label&gt;</span>
+                <span class="tg">&lt;label</span> <span class="at">class</span>=<span class="av">"flex items-center gap-2 px-3 py-2 bg-slate-800
+                               rounded-lg text-sm cursor-pointer hover:bg-slate-700"</span><span class="tg">&gt;</span>
+                  <span class="tg">&lt;input</span> <span class="at">type</span>=<span class="av">"checkbox"</span> <span class="at">name</span>=<span class="av">"tech"</span> <span class="at">value</span>=<span class="av">"Node.js"</span><span class="tg">&gt;</span> Node.js
+                <span class="tg">&lt;/label&gt;</span>
+              <span class="tg">&lt;/div&gt;</span>
+            <span class="tg">&lt;/fieldset&gt;</span>
+
+            <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"flex gap-4 pt-2"</span><span class="tg">&gt;</span>
+              <span class="tg">&lt;button</span> <span class="at">type</span>=<span class="av">"submit"</span>
+                      <span class="at">class</span>=<span class="av">"flex-1 bg-yellow-400 text-black py-3 rounded-lg
+                             font-bold hover:bg-yellow-300 transition-colors"</span><span class="tg">&gt;</span>
+                Ajouter le projet
+              <span class="tg">&lt;/button&gt;</span>
+              <span class="tg">&lt;button</span> <span class="at">type</span>=<span class="av">"button"</span> <span class="at">id</span>=<span class="av">"btn-annuler"</span>
+                      <span class="at">class</span>=<span class="av">"px-6 border border-slate-600 text-slate-400
+                             rounded-lg hover:border-slate-400 transition-colors"</span><span class="tg">&gt;</span>
+                Annuler
+              <span class="tg">&lt;/button&gt;</span>
+            <span class="tg">&lt;/div&gt;</span>
+
+          <span class="tg">&lt;/form&gt;</span>
+        <span class="tg">&lt;/div&gt;</span>
+      <span class="tg">&lt;/section&gt;</span>
+
+    <span class="tg">&lt;/div&gt;</span>
+  <span class="tg">&lt;/main&gt;</span>
+
+  <span class="cm">&lt;!-- Zone de notifications toast --&gt;</span>
+  <span class="tg">&lt;div</span> <span class="at">id</span>=<span class="av">"zone-notif"</span> <span class="at">class</span>=<span class="av">"fixed bottom-6 right-6 z-50 flex flex-col gap-2"</span><span class="tg">&gt;&lt;/div&gt;</span>
+
+  <span class="tg">&lt;footer</span> <span class="at">class</span>=<span class="av">"bg-slate-900 border-t border-slate-800 mt-auto"</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;div</span> <span class="at">class</span>=<span class="av">"max-w-5xl mx-auto px-6 py-6 flex justify-between text-sm text-slate-500"</span><span class="tg">&gt;</span>
+      <span class="tg">&lt;p&gt;</span>&amp;copy; 2025 Mon Portfolio<span class="tg">&lt;/p&gt;</span>
+      <span class="tg">&lt;p&gt;</span>Vanilla JS · json-server<span class="tg">&lt;/p&gt;</span>
+    <span class="tg">&lt;/div&gt;</span>
+  <span class="tg">&lt;/footer&gt;</span>
+
+  <span class="cm">&lt;!-- Script principal en fin de body --&gt;</span>
+  <span class="tg">&lt;script</span> <span class="at">src</span>=<span class="av">"js/portfolio.js"</span><span class="tg">&gt;&lt;/script&gt;</span>
+<span class="tg">&lt;/body&gt;</span>
+<span class="tg">&lt;/html&gt;</span>
+<span class="lt">HTML</span></code></pre>
+    </div>
+  </div>
+  <div class="commit">-m "feat: prototype HTML SPA portfolio (index.html)"</div>
+
+  <!-- ── portfolio.js ── -->
+  <div style="margin-top:44px">
+    <span class="fb fb-js">📄 js/portfolio.js — Application complète</span>
+    <div class="demo-wrap">
+      <div class="demo-hdr">
+        <div class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+        <span class="fname">js/portfolio.js</span>
+      </div>
+      <div class="demo-body">
+<pre><code><span class="cm">/**
+ * portfolio.js — SPA Vanilla JS de gestion de portfolio
+ * API REST : json-server → http://localhost:3000/projets
+ */</span>
+
+<span class="cm">/* ══════════════════════════════════════════════════
+   ③ RÉFÉRENCES HTML — Éléments avec lesquels JS interagit
+   ══════════════════════════════════════════════════ */</span>
+<span class="kw">const</span> <span class="va">API_URL</span>          <span class="op">=</span> <span class="st">'http://localhost:3000/projets'</span>;
+
+<span class="cm">// Vues (sections)</span>
+<span class="kw">const</span> <span class="va">vueListe</span>         <span class="op">=</span> <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'vue-liste'</span>);
+<span class="kw">const</span> <span class="va">vueDetail</span>        <span class="op">=</span> <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'vue-detail'</span>);
+<span class="kw">const</span> <span class="va">vueForm</span>          <span class="op">=</span> <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'vue-form'</span>);
+
+<span class="cm">// Conteneurs</span>
+<span class="kw">const</span> <span class="va">conteneurProjets</span> <span class="op">=</span> <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'conteneur-projets'</span>);
+<span class="kw">const</span> <span class="va">contenuDetail</span>   <span class="op">=</span> <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'contenu-detail'</span>);
+<span class="kw">const</span> <span class="va">zoneNotif</span>        <span class="op">=</span> <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'zone-notif'</span>);
+
+<span class="cm">// Formulaire</span>
+<span class="kw">const</span> <span class="va">formProjet</span>       <span class="op">=</span> <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'form-projet'</span>);
+<span class="kw">const</span> <span class="va">inpLibelle</span>       <span class="op">=</span> <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'inp-libelle'</span>);
+<span class="kw">const</span> <span class="va">inpImage</span>         <span class="op">=</span> <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'inp-image'</span>);
+<span class="kw">const</span> <span class="va">inpDescription</span>   <span class="op">=</span> <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'inp-description'</span>);
+<span class="kw">const</span> <span class="va">inpRecherche</span>     <span class="op">=</span> <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'inp-recherche'</span>);
+
+<span class="cm">// Boutons</span>
+<span class="kw">const</span> <span class="va">btnAfficherForm</span>  <span class="op">=</span> <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'btn-afficher-form'</span>);
+<span class="kw">const</span> <span class="va">btnRetourListe</span>   <span class="op">=</span> <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'btn-retour-liste'</span>);
+<span class="kw">const</span> <span class="va">btnAnnuler</span>       <span class="op">=</span> <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="st">'btn-annuler'</span>);
+
+<span class="cm">/* ══════════════════════════════════════════════════
+   ④ DÉCLARATION DE projets[] — Tableau mémoire
+   ══════════════════════════════════════════════════ */</span>
+<span class="kw">let</span> <span class="va">projets</span> <span class="op">=</span> [];   <span class="cm">// Tableau de stockage en mémoire de tous les projets</span>
+                     <span class="cm">// Synchronisé avec le serveur json-server</span>
+
+<span class="cm">/* ══════════════════════════════════════════════════
+   UTILITAIRES
+   ══════════════════════════════════════════════════ */</span>
+
+<span class="cm">/** Afficher une notification toast temporaire */</span>
+<span class="kw">function</span> <span class="fn">notifier</span>(<span class="va">message</span>, <span class="va">type</span> <span class="op">=</span> <span class="st">'success'</span>) {
+  <span class="kw">const</span> <span class="va">couleurs</span> <span class="op">=</span> {
+    <span class="pr">success</span>: <span class="st">'bg-green-600'</span>,
+    <span class="pr">error</span>:   <span class="st">'bg-red-600'</span>,
+    <span class="pr">info</span>:    <span class="st">'bg-blue-600'</span>,
+  };
+  <span class="kw">const</span> <span class="va">toast</span> <span class="op">=</span> <span class="va">document</span>.<span class="fn">createElement</span>(<span class="st">'div'</span>);
+  <span class="va">toast</span>.<span class="pr">className</span> <span class="op">=</span>
+    <span class="st">`<span class="op">${</span><span class="va">couleurs</span>[<span class="va">type</span>]<span class="op">}</span> text-white px-5 py-3 rounded-lg shadow-xl
+     text-sm font-semibold animate-pulse`</span>;
+  <span class="va">toast</span>.<span class="pr">textContent</span> <span class="op">=</span> <span class="va">message</span>;
+  <span class="va">zoneNotif</span>.<span class="fn">appendChild</span>(<span class="va">toast</span>);
+  <span class="fn">setTimeout</span>(() <span class="op">=&gt;</span> <span class="va">toast</span>.<span class="fn">remove</span>(), <span class="nm">3500</span>);
+}
+
+<span class="cm">/** Afficher une vue, masquer les autres */</span>
+<span class="kw">function</span> <span class="fn">afficherVue</span>(<span class="va">vue</span>) {
+  [<span class="va">vueListe</span>, <span class="va">vueDetail</span>, <span class="va">vueForm</span>].<span class="fn">forEach</span>(<span class="va">v</span> <span class="op">=&gt;</span> <span class="va">v</span>.<span class="pr">classList</span>.<span class="fn">add</span>(<span class="st">'hidden'</span>));
+  <span class="va">vue</span>.<span class="pr">classList</span>.<span class="fn">remove</span>(<span class="st">'hidden'</span>);
+}
+
+<span class="cm">/** Afficher / masquer un message d'erreur sur un champ */</span>
+<span class="kw">function</span> <span class="fn">setErreur</span>(<span class="va">idErreur</span>, <span class="va">message</span>) {
+  <span class="va">document</span>.<span class="fn">getElementById</span>(<span class="va">idErreur</span>).<span class="pr">textContent</span> <span class="op">=</span> <span class="va">message</span>;
+}
+
+<span class="cm">/* ══════════════════════════════════════════════════
+   FONCTIONS AJAX — Communication avec json-server
+   ══════════════════════════════════════════════════ */</span>
+
+<span class="kw">async function</span> <span class="fn">fetchTousProjets</span>() {
+  <span class="kw">const</span> <span class="va">res</span> <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="va">API_URL</span>);
+  <span class="kw">return</span> <span class="va">res</span>.<span class="fn">json</span>();
+}
+
+<span class="kw">async function</span> <span class="fn">fetchPostProjet</span>(<span class="va">donnees</span>) {
+  <span class="kw">const</span> <span class="va">res</span> <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="va">API_URL</span>, {
+    <span class="pr">method</span>:  <span class="st">'POST'</span>,
+    <span class="pr">headers</span>: { <span class="st">'Content-Type'</span>: <span class="st">'application/json'</span> },
+    <span class="pr">body</span>:    <span class="cl">JSON</span>.<span class="fn">stringify</span>(<span class="va">donnees</span>),
+  });
+  <span class="kw">return</span> <span class="va">res</span>.<span class="fn">json</span>();
+}
+
+<span class="kw">async function</span> <span class="fn">fetchDeleteProjet</span>(<span class="va">id</span>) {
+  <span class="kw">const</span> <span class="va">res</span> <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="st">`<span class="op">${</span><span class="va">API_URL</span><span class="op">}</span>/<span class="op">${</span><span class="va">id</span><span class="op">}</span>`</span>, { <span class="pr">method</span>: <span class="st">'DELETE'</span> });
+  <span class="kw">return</span> <span class="va">res</span>.<span class="pr">ok</span>;
+}
+
+<span class="cm">/* ══════════════════════════════════════════════════
+   ⑤ creerProjet(id, libelle, image)
+      Crée un nœud DOM (article) et l'insère en PREMIER
+      dans le conteneur de boîtes flexibles
+   ══════════════════════════════════════════════════ */</span>
+<span class="kw">function</span> <span class="fn">creerProjet</span>(<span class="va">id</span>, <span class="va">libelle</span>, <span class="va">image</span>) {
+  <span class="cm">// Créer l'élément article</span>
+  <span class="kw">const</span> <span class="va">article</span> <span class="op">=</span> <span class="va">document</span>.<span class="fn">createElement</span>(<span class="st">'article'</span>);
+  <span class="va">article</span>.<span class="pr">dataset</span>.<span class="pr">id</span> <span class="op">=</span> <span class="va">id</span>;
+  <span class="va">article</span>.<span class="pr">className</span>  <span class="op">=</span> <span class="st">`
+    w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.33%-16px)]
+    bg-slate-900 border border-slate-800 border-t-2 border-t-yellow-400
+    rounded-xl overflow-hidden flex flex-col
+    transition-transform duration-200 hover:-translate-y-1 hover:shadow-2xl
+  `</span>;
+
+  <span class="va">article</span>.<span class="pr">innerHTML</span> <span class="op">=</span> <span class="st">`
+    &lt;img
+      src="<span class="op">${</span><span class="va">image</span><span class="op">}</span>"
+      alt="<span class="op">${</span><span class="va">libelle</span><span class="op">}</span>"
+      class="w-full h-48 object-cover object-top"
+      onerror="this.src='https://placehold.co/400x200/1e293b/94a3b8?text=Image'"
+    &gt;
+    &lt;div class="flex-1 p-5"&gt;
+      &lt;h3 class="text-base font-bold text-white"&gt;<span class="op">${</span><span class="va">libelle</span><span class="op">}</span>&lt;/h3&gt;
+    &lt;/div&gt;
+    &lt;div class="flex justify-between items-center p-4 border-t border-slate-800 gap-3"&gt;
+      &lt;button class="btn-detail flex-1 text-sm py-2 rounded-lg
+                     border border-yellow-400/50 text-yellow-400
+                     hover:bg-yellow-400 hover:text-black transition-all"
+              data-id="<span class="op">${</span><span class="va">id</span><span class="op">}</span>"&gt;
+        Voir le détail
+      &lt;/button&gt;
+      &lt;button class="btn-supprimer text-sm px-4 py-2 rounded-lg
+                     border border-red-500/50 text-red-400
+                     hover:bg-red-500 hover:text-white transition-all"
+              data-id="<span class="op">${</span><span class="va">id</span><span class="op">}</span>"&gt;
+        Supprimer
+      &lt;/button&gt;
+    &lt;/div&gt;
+  `</span>;
+
+  <span class="cm">// Insérer en PREMIER élément du conteneur flex</span>
+  <span class="va">conteneurProjets</span>.<span class="fn">prepend</span>(<span class="va">article</span>);
+
+  <span class="kw">return</span> <span class="va">article</span>;
+}
+
+<span class="cm">/* ══════════════════════════════════════════════════
+   RENDU COMPLET de la liste
+   ══════════════════════════════════════════════════ */</span>
+<span class="kw">function</span> <span class="fn">rendreListeProjets</span>(<span class="va">liste</span>) {
+  <span class="va">conteneurProjets</span>.<span class="pr">innerHTML</span> <span class="op">=</span> <span class="st">''</span>; <span class="cm">// vider</span>
+
+  <span class="kw">if</span> (<span class="va">liste</span>.<span class="pr">length</span> <span class="op">===</span> <span class="nm">0</span>) {
+    <span class="va">conteneurProjets</span>.<span class="pr">innerHTML</span> <span class="op">=</span> <span class="st">`
+      &lt;div class="w-full text-center py-20 text-slate-500"&gt;
+        &lt;div class="text-5xl mb-4"&gt;📂&lt;/div&gt;
+        &lt;p class="text-lg"&gt;Aucun projet trouvé.&lt;/p&gt;
+      &lt;/div&gt;
+    `</span>;
+    <span class="kw">return</span>;
+  }
+
+  <span class="cm">// Insérer du dernier vers le premier pour que prepend maintienne l'ordre</span>
+  [...<span class="va">liste</span>].<span class="fn">reverse</span>().<span class="fn">forEach</span>(<span class="va">p</span> <span class="op">=&gt;</span> <span class="fn">creerProjet</span>(<span class="va">p</span>.<span class="pr">id</span>, <span class="va">p</span>.<span class="pr">libelle</span>, <span class="va">p</span>.<span class="pr">image</span>));
+}
+
+<span class="cm">/* ══════════════════════════════════════════════════
+   ⑥ ajouterProjet(donnees)
+      Ajoute un projet en mémoire + DOM + serveur
+   ══════════════════════════════════════════════════ */</span>
+<span class="kw">async function</span> <span class="fn">ajouterProjet</span>(<span class="va">donnees</span>) {
+  <span class="kw">try</span> {
+    <span class="cm">// 1. Persister côté serveur (json-server génère l'id)</span>
+    <span class="kw">const</span> <span class="va">projetCree</span> <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetchPostProjet</span>(<span class="va">donnees</span>);
+
+    <span class="cm">// 2. Ajouter en mémoire (tableau projets)</span>
+    <span class="va">projets</span>.<span class="fn">push</span>(<span class="va">projetCree</span>);
+
+    <span class="cm">// 3. Ajouter sur l'interface (insérer le nœud en 1er)</span>
+    <span class="fn">creerProjet</span>(<span class="va">projetCree</span>.<span class="pr">id</span>, <span class="va">projetCree</span>.<span class="pr">libelle</span>, <span class="va">projetCree</span>.<span class="pr">image</span>);
+
+    <span class="cm">// 4. Feedback utilisateur</span>
+    <span class="fn">notifier</span>(<span class="st">`✅ "${<span class="op">${</span><span class="va">projetCree</span>.<span class="pr">libelle</span><span class="op">}</span>}" ajouté avec succès !`</span>);
+
+    <span class="cm">// 5. Retourner à la liste</span>
+    <span class="va">formProjet</span>.<span class="fn">reset</span>();
+    <span class="fn">afficherVue</span>(<span class="va">vueListe</span>);
+
+  } <span class="kw">catch</span> (<span class="va">err</span>) {
+    <span class="fn">console</span>.<span class="fn">error</span>(<span class="st">'ajouterProjet :'</span>, <span class="va">err</span>);
+    <span class="fn">notifier</span>(<span class="st">'❌ Erreur lors de l\'ajout. json-server est-il démarré ?'</span>, <span class="st">'error'</span>);
+  }
+}
+
+<span class="cm">/* ══════════════════════════════════════════════════
+   ⑦ detaillerProjet(id)
+      Affiche les caractéristiques complètes d'un projet
+   ══════════════════════════════════════════════════ */</span>
+<span class="kw">function</span> <span class="fn">detaillerProjet</span>(<span class="va">id</span>) {
+  <span class="cm">// Trouver dans le tableau mémoire</span>
+  <span class="kw">const</span> <span class="va">projet</span> <span class="op">=</span> <span class="va">projets</span>.<span class="fn">find</span>(<span class="va">p</span> <span class="op">=&gt;</span> <span class="va">p</span>.<span class="pr">id</span> <span class="op">===</span> <span class="cl">Number</span>(<span class="va">id</span>));
+
+  <span class="kw">if</span> (<span class="op">!</span><span class="va">projet</span>) {
+    <span class="fn">notifier</span>(<span class="st">'Projet introuvable'</span>, <span class="st">'error'</span>);
+    <span class="kw">return</span>;
+  }
+
+  <span class="cm">// Construire la liste ordonnée des technologies</span>
+  <span class="kw">const</span> <span class="va">listeTechs</span> <span class="op">=</span> (projet.<span class="pr">technologies</span> <span class="op">||</span> [])
+    .<span class="fn">map</span>((<span class="va">t</span>, <span class="va">i</span>) <span class="op">=&gt;</span> <span class="st">`
+      &lt;li class="flex items-center gap-3 px-4 py-2.5 bg-slate-800
+                 border-l-4 border-yellow-400 rounded-r-lg text-sm"&gt;
+        &lt;span class="w-6 h-6 rounded bg-yellow-400 text-black
+                     flex items-center justify-center text-xs font-bold flex-shrink-0"&gt;
+          <span class="op">${</span><span class="va">i</span> <span class="op">+</span> <span class="nm">1</span><span class="op">}</span>
+        &lt;/span&gt;
+        <span class="op">${</span><span class="va">t</span><span class="op">}</span>
+      &lt;/li&gt;
+    `</span>)
+    .<span class="fn">join</span>(<span class="st">''</span>);
+
+  <span class="cm">// Injecter dans le conteneur de la vue détail</span>
+  <span class="va">contenuDetail</span>.<span class="pr">innerHTML</span> <span class="op">=</span> <span class="st">`
+    &lt;div class="flex flex-col lg:flex-row gap-10 items-start"&gt;
+      &lt;div class="w-full lg:w-96 flex-shrink-0 rounded-xl overflow-hidden
+                  border border-slate-700"&gt;
+        &lt;img src="<span class="op">${</span><span class="va">projet</span>.<span class="pr">image</span><span class="op">}</span>"
+             alt="<span class="op">${</span><span class="va">projet</span>.<span class="pr">libelle</span><span class="op">}</span>"
+             class="w-full h-64 object-cover"
+             onerror="this.src='https://placehold.co/400x256/1e293b/94a3b8?text=Image'"&gt;
+      &lt;/div&gt;
+      &lt;div class="flex-1 space-y-6"&gt;
+        &lt;h2 class="text-3xl font-bold text-white"&gt;<span class="op">${</span><span class="va">projet</span>.<span class="pr">libelle</span><span class="op">}</span>&lt;/h2&gt;
+        &lt;div&gt;
+          &lt;h3 class="text-lg font-semibold text-yellow-400 mb-2"&gt;Description&lt;/h3&gt;
+          &lt;p class="text-slate-400 leading-relaxed"&gt;
+            <span class="op">${</span><span class="va">projet</span>.<span class="pr">description</span> <span class="op">||</span> <span class="st">'Aucune description.'</span><span class="op">}</span>
+          &lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+          &lt;h3 class="text-lg font-semibold text-yellow-400 mb-3"&gt;
+            Technologies utilisées
+          &lt;/h3&gt;
+          &lt;ol class="space-y-2"&gt;<span class="op">${</span><span class="va">listeTechs</span> <span class="op">||</span> <span class="st">'&lt;li class="text-slate-500"&gt;Aucune&lt;/li&gt;'</span><span class="op">}</span>&lt;/ol&gt;
+        &lt;/div&gt;
+        &lt;div class="flex gap-4 pt-4 border-t border-slate-800"&gt;
+          &lt;button onclick="afficherVue(vueListe)"
+                  class="px-6 py-2 border border-slate-600 text-slate-300
+                         rounded-lg hover:border-slate-400 transition-colors"&gt;
+            ← Retour à la liste
+          &lt;/button&gt;
+          &lt;button onclick="supprimerProjet(<span class="op">${</span><span class="va">projet</span>.<span class="pr">id</span><span class="op">}</span>)"
+                  class="px-6 py-2 border border-red-500/50 text-red-400
+                         rounded-lg hover:bg-red-500 hover:text-white transition-all"&gt;
+            Supprimer ce projet
+          &lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  `</span>;
+
+  <span class="cm">// Afficher la vue détail</span>
+  <span class="fn">afficherVue</span>(<span class="va">vueDetail</span>);
+}
+
+<span class="cm">/* ══════════════════════════════════════════════════
+   ⑧ supprimerProjet(id)
+      Supprime un projet de la mémoire, de l'interface et du serveur
+   ══════════════════════════════════════════════════ */</span>
+<span class="kw">async function</span> <span class="fn">supprimerProjet</span>(<span class="va">id</span>) {
+  <span class="kw">const</span> <span class="va">idNum</span>   <span class="op">=</span> <span class="cl">Number</span>(<span class="va">id</span>);
+  <span class="kw">const</span> <span class="va">projet</span>  <span class="op">=</span> <span class="va">projets</span>.<span class="fn">find</span>(<span class="va">p</span> <span class="op">=&gt;</span> <span class="va">p</span>.<span class="pr">id</span> <span class="op">===</span> <span class="va">idNum</span>);
+
+  <span class="kw">if</span> (<span class="op">!</span><span class="va">projet</span>) <span class="kw">return</span>;
+
+  <span class="kw">if</span> (<span class="op">!</span><span class="fn">confirm</span>(<span class="st">`Supprimer "<span class="op">${</span><span class="va">projet</span>.<span class="pr">libelle</span><span class="op">}</span>" définitivement ?`</span>)) <span class="kw">return</span>;
+
+  <span class="kw">try</span> {
+    <span class="cm">// 1. Supprimer côté serveur</span>
+    <span class="kw">const</span> <span class="va">ok</span> <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetchDeleteProjet</span>(<span class="va">idNum</span>);
+    <span class="kw">if</span> (<span class="op">!</span><span class="va">ok</span>) <span class="kw">throw</span> <span class="kw">new</span> <span class="cl">Error</span>(<span class="st">'Suppression serveur échouée'</span>);
+
+    <span class="cm">// 2. Supprimer du tableau mémoire</span>
+    <span class="va">projets</span> <span class="op">=</span> <span class="va">projets</span>.<span class="fn">filter</span>(<span class="va">p</span> <span class="op">=&gt;</span> <span class="va">p</span>.<span class="pr">id</span> <span class="op">!==</span> <span class="va">idNum</span>);
+
+    <span class="cm">// 3. Supprimer de l'interface</span>
+    <span class="kw">const</span> <span class="va">carteDOM</span> <span class="op">=</span> <span class="va">conteneurProjets</span>.<span class="fn">querySelector</span>(<span class="st">`[data-id="<span class="op">${</span><span class="va">idNum</span><span class="op">}</span>"]`</span>);
+    <span class="va">carteDOM</span><span class="op">?.</span><span class="fn">remove</span>();
+
+    <span class="cm">// 4. Si on était sur la vue détail → retourner à la liste</span>
+    <span class="kw">if</span> (<span class="op">!</span><span class="va">vueDetail</span>.<span class="pr">classList</span>.<span class="fn">contains</span>(<span class="st">'hidden'</span>)) {
+      <span class="fn">afficherVue</span>(<span class="va">vueListe</span>);
+    }
+
+    <span class="cm">// 5. Vérifier si la liste est vide</span>
+    <span class="kw">if</span> (<span class="va">projets</span>.<span class="pr">length</span> <span class="op">===</span> <span class="nm">0</span>) <span class="fn">rendreListeProjets</span>([]);
+
+    <span class="fn">notifier</span>(<span class="st">`🗑️ "<span class="op">${</span><span class="va">projet</span>.<span class="pr">libelle</span><span class="op">}</span>" supprimé.`</span>);
+
+  } <span class="kw">catch</span> (<span class="va">err</span>) {
+    <span class="fn">console</span>.<span class="fn">error</span>(<span class="st">'supprimerProjet :'</span>, <span class="va">err</span>);
+    <span class="fn">notifier</span>(<span class="st">'❌ Erreur lors de la suppression.'</span>, <span class="st">'error'</span>);
+  }
+}
+
+<span class="cm">/* ══════════════════════════════════════════════════
+   ÉCOUTEURS D'ÉVÉNEMENTS
+   ══════════════════════════════════════════════════ */</span>
+
+<span class="cm">// Afficher le formulaire</span>
+<span class="va">btnAfficherForm</span>.<span class="fn">addEventListener</span>(<span class="st">'click'</span>, () <span class="op">=&gt;</span> <span class="fn">afficherVue</span>(<span class="va">vueForm</span>));
+<span class="va">btnAnnuler</span>.<span class="fn">addEventListener</span>(<span class="st">'click'</span>,       () <span class="op">=&gt;</span> <span class="fn">afficherVue</span>(<span class="va">vueListe</span>));
+<span class="va">btnRetourListe</span>.<span class="fn">addEventListener</span>(<span class="st">'click'</span>,   () <span class="op">=&gt;</span> <span class="fn">afficherVue</span>(<span class="va">vueListe</span>));
+
+<span class="cm">// Recherche en temps réel</span>
+<span class="va">inpRecherche</span>.<span class="fn">addEventListener</span>(<span class="st">'input'</span>, (<span class="va">e</span>) <span class="op">=&gt;</span> {
+  <span class="kw">const</span> <span class="va">terme</span>    <span class="op">=</span> <span class="va">e</span>.<span class="pr">target</span>.<span class="pr">value</span>.<span class="fn">toLowerCase</span>().<span class="fn">trim</span>();
+  <span class="kw">const</span> <span class="va">filtres</span>  <span class="op">=</span> <span class="va">projets</span>.<span class="fn">filter</span>(<span class="va">p</span> <span class="op">=&gt;</span>
+    <span class="va">p</span>.<span class="pr">libelle</span>.<span class="fn">toLowerCase</span>().<span class="fn">includes</span>(<span class="va">terme</span>) <span class="op">||</span>
+    <span class="va">p</span>.<span class="pr">technologies</span><span class="op">?.</span><span class="fn">some</span>(<span class="va">t</span> <span class="op">=&gt;</span> <span class="va">t</span>.<span class="fn">toLowerCase</span>().<span class="fn">includes</span>(<span class="va">terme</span>))
+  );
+  <span class="fn">rendreListeProjets</span>(<span class="va">filtres</span>);
+});
+
+<span class="cm">// Délégation sur le conteneur : clic sur detail ou supprimer</span>
+<span class="va">conteneurProjets</span>.<span class="fn">addEventListener</span>(<span class="st">'click'</span>, (<span class="va">e</span>) <span class="op">=&gt;</span> {
+  <span class="kw">const</span> <span class="va">btnDet</span> <span class="op">=</span> <span class="va">e</span>.<span class="pr">target</span>.<span class="fn">closest</span>(<span class="st">'.btn-detail'</span>);
+  <span class="kw">if</span> (<span class="va">btnDet</span>) { <span class="fn">detaillerProjet</span>(<span class="va">btnDet</span>.<span class="pr">dataset</span>.<span class="pr">id</span>); <span class="kw">return</span>; }
+
+  <span class="kw">const</span> <span class="va">btnSup</span> <span class="op">=</span> <span class="va">e</span>.<span class="pr">target</span>.<span class="fn">closest</span>(<span class="st">'.btn-supprimer'</span>);
+  <span class="kw">if</span> (<span class="va">btnSup</span>) <span class="fn">supprimerProjet</span>(<span class="va">btnSup</span>.<span class="pr">dataset</span>.<span class="pr">id</span>);
+});
+
+<span class="cm">// Soumission du formulaire</span>
+<span class="va">formProjet</span>.<span class="fn">addEventListener</span>(<span class="st">'submit'</span>, <span class="kw">async</span> (<span class="va">e</span>) <span class="op">=&gt;</span> {
+  <span class="va">e</span>.<span class="fn">preventDefault</span>();
+
+  <span class="cm">// Récupérer les valeurs</span>
+  <span class="kw">const</span> <span class="va">libelle</span>      <span class="op">=</span> <span class="va">inpLibelle</span>.<span class="pr">value</span>.<span class="fn">trim</span>();
+  <span class="kw">const</span> <span class="va">image</span>        <span class="op">=</span> <span class="va">inpImage</span>.<span class="pr">value</span>.<span class="fn">trim</span>();
+  <span class="kw">const</span> <span class="va">description</span>  <span class="op">=</span> <span class="va">inpDescription</span>.<span class="pr">value</span>.<span class="fn">trim</span>();
+  <span class="kw">const</span> <span class="va">technologies</span> <span class="op">=</span> [...<span class="va">formProjet</span>.<span class="fn">querySelectorAll</span>(<span class="st">'[name="tech"]:checked'</span>)]
+                          .<span class="fn">map</span>(<span class="va">el</span> <span class="op">=&gt;</span> <span class="va">el</span>.<span class="pr">value</span>);
+
+  <span class="cm">// Réinitialiser les erreurs</span>
+  <span class="fn">setErreur</span>(<span class="st">'err-libelle'</span>, <span class="st">''</span>);
+  <span class="fn">setErreur</span>(<span class="st">'err-image'</span>, <span class="st">''</span>);
+
+  <span class="cm">// Validation</span>
+  <span class="kw">let</span> <span class="va">valide</span> <span class="op">=</span> <span class="bo">true</span>;
+  <span class="kw">if</span> (<span class="va">libelle</span>.<span class="pr">length</span> <span class="op">&lt;</span> <span class="nm">3</span>) {
+    <span class="fn">setErreur</span>(<span class="st">'err-libelle'</span>, <span class="st">'Le libellé doit comporter au moins 3 caractères.'</span>);
+    <span class="va">valide</span> <span class="op">=</span> <span class="bo">false</span>;
+  }
+  <span class="kw">if</span> (<span class="op">!</span><span class="va">image</span>) {
+    <span class="fn">setErreur</span>(<span class="st">'err-image'</span>, <span class="st">'La source de l\'image est requise.'</span>);
+    <span class="va">valide</span> <span class="op">=</span> <span class="bo">false</span>;
+  }
+  <span class="kw">if</span> (<span class="op">!</span><span class="va">valide</span>) <span class="kw">return</span>;
+
+  <span class="kw">await</span> <span class="fn">ajouterProjet</span>({ <span class="va">libelle</span>, <span class="va">image</span>, <span class="va">description</span>, <span class="va">technologies</span> });
+});
+
+<span class="cm">/* ══════════════════════════════════════════════════
+   INITIALISATION — Chargement au démarrage
+   ══════════════════════════════════════════════════ */</span>
+<span class="kw">async function</span> <span class="fn">init</span>() {
+  <span class="kw">try</span> {
+    <span class="cm">// Charger depuis json-server</span>
+    <span class="va">projets</span> <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetchTousProjets</span>();
+    <span class="fn">rendreListeProjets</span>(<span class="va">projets</span>);
+  } <span class="kw">catch</span> (<span class="va">err</span>) {
+    <span class="fn">console</span>.<span class="fn">error</span>(<span class="st">'Initialisation :'</span>, <span class="va">err</span>);
+    <span class="fn">notifier</span>(<span class="st">'⚠️ Impossible de joindre json-server. Démarrez-le avec : json-server --watch db.json'</span>, <span class="st">'error'</span>);
+  }
+}
+
+<span class="cm">// Lancer l'application</span>
+<span class="fn">init</span>();
+<span class="lt">JS</span></code></pre>
+      </div>
+    </div>
+    <div class="commit">-m "feat(js): SPA portfolio complète — CRUD + Fetch + DOM + Événements"</div>
+  </div>
+
+  <!-- ── RÉCAP COMMITS ── -->
+  <div style="margin-top:50px">
+    <h3>Récapitulatif des commits</h3>
+    <ol class="steps">
+      <li><strong>chore: initialisation projet + db.json</strong><br>
+        <small style="color:var(--muted)">Structure du projet, <code>db.json</code> avec données initiales, lancement json-server</small></li>
+      <li><strong>feat: prototype HTML SPA portfolio (index.html)</strong><br>
+        <small style="color:var(--muted)">Toutes les vues (liste, détail, formulaire) dans une page unique avec Tailwind</small></li>
+      <li><strong>feat(js): module portfolio — références + tableau projets</strong><br>
+        <small style="color:var(--muted)">Toutes les références DOM, déclaration de <code>projets[]</code>, utilitaires</small></li>
+      <li><strong>feat(js): creerProjet() + rendreListeProjets()</strong><br>
+        <small style="color:var(--muted)">Génération des nœuds DOM, insertion comme 1er élément du conteneur flex</small></li>
+      <li><strong>feat(js): ajouterProjet() — mémoire + DOM + POST json-server</strong><br>
+        <small style="color:var(--muted)">Fetch POST, mise à jour du tableau <code>projets[]</code>, re-render, notification</small></li>
+      <li><strong>feat(js): detaillerProjet() — affichage vue détail</strong><br>
+        <small style="color:var(--muted)">Lookup dans <code>projets[]</code>, injection HTML, liste technos ordonnée</small></li>
+      <li><strong>feat(js): supprimerProjet() — mémoire + DOM + DELETE json-server</strong><br>
+        <small style="color:var(--muted)">Fetch DELETE, <code>filter()</code> sur <code>projets[]</code>, <code>remove()</code> DOM, notification</small></li>
+      <li><strong>feat(js): recherche temps réel + délégation événements</strong><br>
+        <small style="color:var(--muted)">Filtre dynamique sur libellé et technologies, délégation click conteneur</small></li>
+    </ol>
+  </div>
+
+</section>
+</main>
+
+<footer>
+  COURS JAVASCRIPT · Module 04 · Développement Web Full Stack · &copy; 2025
+</footer>
+
+</body>
+</html>

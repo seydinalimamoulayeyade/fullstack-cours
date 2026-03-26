@@ -1,0 +1,1975 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours CSS — Développement Web</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,400&family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   VARIABLES & RESET
+═══════════════════════════════════════════ */
+:root {
+  --bg:        #0d1117;
+  --surface:   #161b22;
+  --surface2:  #21262d;
+  --border:    #30363d;
+  --text:      #e6edf3;
+  --muted:     #8b949e;
+  --accent:    #00d4aa;       /* teal */
+  --accent2:   #f0883e;       /* orange */
+  --accent3:   #79c0ff;       /* blue */
+  --danger:    #ff7b72;       /* red */
+  --highlight: #ffd700;
+  --code-bg:   #0d1117;
+  --w: 860px;
+
+  /* Syntax */
+  --s-selector: #79c0ff;
+  --s-prop:     #f0883e;
+  --s-val:      #a5d6ff;
+  --s-unit:     #56d364;
+  --s-cmt:      #484f58;
+  --s-str:      #a5d6ff;
+  --s-kw:       #ff7b72;
+  --s-tag:      #7ee787;
+  --s-attr:     #f0883e;
+  --s-attrval:  #a5d6ff;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  font-size: 16px;
+}
+
+/* ═══════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════ */
+header {
+  position: relative;
+  padding: 80px 40px 60px;
+  overflow: hidden;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 700px 400px at 80% 50%, rgba(0,212,170,.12) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 20% 80%, rgba(121,192,255,.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* grid lines decoration */
+header::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,212,170,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,170,.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+.header-inner {
+  max-width: var(--w);
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.module-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,212,170,.1);
+  border: 1px solid rgba(0,212,170,.3);
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 24px;
+}
+.module-badge::before { content: '◈'; font-size: 10px; }
+
+h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(58px, 10vw, 100px);
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: -3px;
+  margin-bottom: 20px;
+}
+h1 .accent { color: var(--accent); }
+h1 .sub {
+  display: block;
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--muted);
+  letter-spacing: 0;
+  margin-top: 8px;
+}
+
+.header-meta {
+  display: flex; gap: 28px; flex-wrap: wrap;
+  margin-top: 28px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+}
+.header-meta span { display: flex; align-items: center; gap: 6px; }
+.header-meta strong { color: var(--text); }
+.dot { color: var(--accent); }
+
+/* ═══════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════ */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(13,17,23,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: var(--w); margin: 0 auto;
+  display: flex; overflow-x: auto;
+  scrollbar-width: none;
+  padding: 0 40px;
+}
+.nav-inner::-webkit-scrollbar { display: none; }
+nav a {
+  display: block;
+  padding: 14px 18px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all .2s;
+}
+nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ═══════════════════════════════════════════
+   MAIN
+═══════════════════════════════════════════ */
+main {
+  max-width: var(--w);
+  margin: 0 auto;
+  padding: 70px 40px 120px;
+}
+
+section { margin-bottom: 90px; scroll-margin-top: 58px; }
+
+.section-eyebrow {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 10px;
+}
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.section-line { flex: 1; height: 1px; background: var(--border); }
+
+h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 38px;
+  font-weight: 700;
+  margin-bottom: 32px;
+  line-height: 1.1;
+}
+h2 .hl { color: var(--accent); }
+
+h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 48px 0 16px;
+  color: var(--text);
+  display: flex; align-items: center; gap: 10px;
+}
+h3::before {
+  content: '';
+  display: inline-block;
+  width: 8px; height: 8px;
+  background: var(--accent);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+p { margin-bottom: 16px; color: #c9d1d9; }
+
+/* ═══════════════════════════════════════════
+   CALLOUT BOXES
+═══════════════════════════════════════════ */
+.box {
+  padding: 18px 22px;
+  margin: 24px 0;
+  border-radius: 6px;
+  border: 1px solid;
+  font-size: 15px;
+}
+.box-def {
+  border-color: rgba(121,192,255,.3);
+  background: rgba(121,192,255,.06);
+  color: var(--text);
+}
+.box-def strong { color: var(--accent3); font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+.box-tip {
+  border-color: rgba(0,212,170,.3);
+  background: rgba(0,212,170,.06);
+}
+.box-tip::before { content: '💡 '; }
+.box-warn {
+  border-color: rgba(240,136,62,.3);
+  background: rgba(240,136,62,.06);
+}
+.box-warn::before { content: '⚠️ '; }
+.box-important {
+  border-color: rgba(255,123,114,.3);
+  background: rgba(255,123,114,.06);
+}
+.box-important::before { content: '🔑 '; }
+
+/* ═══════════════════════════════════════════
+   CODE BLOCKS
+═══════════════════════════════════════════ */
+pre {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 24px 26px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 20px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13.5px;
+  line-height: 1.7;
+  position: relative;
+}
+pre .lang-tag {
+  position: absolute;
+  top: 10px; right: 14px;
+  font-size: 10px; letter-spacing: 2px;
+  color: var(--muted); text-transform: uppercase;
+}
+code { font-family: 'JetBrains Mono', monospace; font-size: 0.87em; }
+p code, li code {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 2px 7px; border-radius: 4px;
+  color: var(--accent2);
+}
+
+/* Syntax colors */
+.sel  { color: var(--s-selector); }
+.prop { color: var(--s-prop); }
+.val  { color: var(--s-val); }
+.unit { color: var(--s-unit); }
+.cmt  { color: var(--s-cmt); font-style: italic; }
+.kw   { color: var(--s-kw); }
+.tag  { color: var(--s-tag); }
+.att  { color: var(--s-attr); }
+.atv  { color: var(--s-attrval); }
+.str  { color: var(--s-str); }
+.num  { color: #56d364; }
+
+/* ═══════════════════════════════════════════
+   TABLES
+═══════════════════════════════════════════ */
+.table-wrap { overflow-x: auto; margin: 24px 0; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th {
+  background: var(--surface2);
+  color: var(--accent);
+  padding: 11px 16px; text-align: left;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+  border-bottom: 2px solid var(--accent);
+}
+td {
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+  color: #c9d1d9;
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--surface); }
+
+/* ═══════════════════════════════════════════
+   SPECIFICITY VISUAL
+═══════════════════════════════════════════ */
+.spec-bar {
+  display: flex; align-items: stretch; gap: 6px;
+  margin: 16px 0; flex-wrap: wrap;
+}
+.spec-seg {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  text-align: center;
+  min-width: 80px;
+}
+.spec-inline { background: rgba(255,123,114,.2); border: 1px solid var(--danger); color: var(--danger); }
+.spec-id     { background: rgba(240,136,62,.2); border: 1px solid var(--accent2); color: var(--accent2); }
+.spec-class  { background: rgba(0,212,170,.2); border: 1px solid var(--accent); color: var(--accent); }
+.spec-type   { background: rgba(121,192,255,.2); border: 1px solid var(--accent3); color: var(--accent3); }
+.spec-label  { font-size: 10px; display: block; margin-top: 4px; opacity: .7; }
+.spec-arrow  { display: flex; align-items: center; color: var(--muted); font-size: 18px; }
+
+/* ═══════════════════════════════════════════
+   BOX MODEL DIAGRAM
+═══════════════════════════════════════════ */
+.box-model {
+  display: flex; align-items: center; justify-content: center;
+  margin: 30px 0;
+}
+.bm-margin {
+  background: rgba(255,209,102,.1);
+  border: 2px dashed rgba(255,209,102,.4);
+  padding: 20px;
+  border-radius: 4px;
+  position: relative;
+}
+.bm-border {
+  background: rgba(240,136,62,.15);
+  border: 8px solid rgba(240,136,62,.6);
+  padding: 16px;
+  border-radius: 2px;
+}
+.bm-padding {
+  background: rgba(86,211,100,.1);
+  border: 2px dashed rgba(86,211,100,.4);
+  padding: 16px;
+}
+.bm-content {
+  background: rgba(0,212,170,.2);
+  border: 2px solid rgba(0,212,170,.5);
+  padding: 20px 30px;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--accent);
+  white-space: nowrap;
+  border-radius: 2px;
+}
+.bm-label {
+  position: absolute; top: 4px; left: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: rgba(255,209,102,.7);
+  text-transform: uppercase; letter-spacing: 1px;
+}
+.bm-border-label {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: rgba(240,136,62,.8);
+  text-align: center; margin-bottom: 4px;
+  text-transform: uppercase; letter-spacing: 1px;
+}
+.bm-padding-label {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: rgba(86,211,100,.8);
+  text-align: center; margin-bottom: 4px;
+  text-transform: uppercase; letter-spacing: 1px;
+}
+
+/* ═══════════════════════════════════════════
+   FLEXBOX DEMO DIAGRAMS (inline illustrative)
+═══════════════════════════════════════════ */
+.flex-demo {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+}
+.flex-demo-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: var(--muted);
+  letter-spacing: 1px; text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.flex-row, .flex-col, .flex-wrap-demo {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(0,212,170,.04);
+  border: 1px dashed rgba(0,212,170,.2);
+  border-radius: 4px;
+}
+.flex-col { flex-direction: column; }
+.flex-wrap-demo { flex-wrap: wrap; }
+.flex-item {
+  background: rgba(0,212,170,.2);
+  border: 1px solid rgba(0,212,170,.4);
+  color: var(--accent);
+  padding: 10px 18px;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; text-align: center;
+}
+.flex-item.grow { flex-grow: 1; }
+.flex-item.large { padding: 18px 24px; }
+
+/* ═══════════════════════════════════════════
+   SELECTOR DEMO CARDS
+═══════════════════════════════════════════ */
+.sel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px; margin: 24px 0;
+}
+.sel-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  padding: 16px 18px;
+  border-radius: 0 0 8px 8px;
+}
+.sel-card.orange { border-top-color: var(--accent2); }
+.sel-card.blue   { border-top-color: var(--accent3); }
+.sel-card.red    { border-top-color: var(--danger); }
+.sel-card code   { display: block; font-size: 16px; color: var(--accent); margin-bottom: 6px; }
+.sel-card.orange code { color: var(--accent2); }
+.sel-card.blue code   { color: var(--accent3); }
+.sel-card.red code    { color: var(--danger); }
+.sel-card p { font-size: 13px; margin: 0; color: var(--muted); }
+
+/* ═══════════════════════════════════════════
+   CASCADE STEPS (numbered)
+═══════════════════════════════════════════ */
+.steps { list-style: none; counter-reset: step; margin: 0; }
+.steps li {
+  counter-increment: step;
+  padding: 16px 18px 16px 66px;
+  position: relative;
+  border-left: 2px solid var(--border);
+  margin-bottom: 4px;
+  background: var(--surface);
+  border-radius: 0 6px 6px 0;
+}
+.steps li::before {
+  content: counter(step);
+  position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+  width: 28px; height: 28px;
+  background: var(--accent); color: var(--bg);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; font-weight: 700;
+}
+.steps li strong { color: var(--accent); }
+
+/* ═══════════════════════════════════════════
+   DEMO SECTION
+═══════════════════════════════════════════ */
+.demo-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 30px;
+}
+.demo-header {
+  background: var(--surface2);
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.demo-header .dot-row { display: flex; gap: 7px; }
+.demo-header .dot-row span {
+  width: 12px; height: 12px;
+  border-radius: 50%; display: block;
+}
+.demo-header .dot-row .r { background: #ff5f57; }
+.demo-header .dot-row .y { background: #ffbd2e; }
+.demo-header .dot-row .g { background: #28ca42; }
+.demo-header .file-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; color: var(--muted);
+  margin-left: 8px;
+}
+.demo-body { padding: 28px; }
+
+.commit-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(86,211,100,.1);
+  border: 1px solid rgba(86,211,100,.3);
+  color: #56d364;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; padding: 6px 14px;
+  border-radius: 6px; margin: 10px 0;
+}
+.commit-badge::before { content: '⬡'; }
+
+.file-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; padding: 4px 12px;
+  border-radius: 20px; margin: 4px 2px;
+}
+.fb-teal   { background: rgba(0,212,170,.15); border: 1px solid rgba(0,212,170,.3); color: var(--accent); }
+.fb-orange { background: rgba(240,136,62,.15); border: 1px solid rgba(240,136,62,.3); color: var(--accent2); }
+.fb-blue   { background: rgba(121,192,255,.15); border: 1px solid rgba(121,192,255,.3); color: var(--accent3); }
+
+/* ═══════════════════════════════════════════
+   REFS
+═══════════════════════════════════════════ */
+.ref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 24px; }
+.ref-card {
+  display: block; text-decoration: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  padding: 18px 20px; border-radius: 0 8px 8px 0;
+  transition: all .2s;
+}
+.ref-card:hover { border-left-color: var(--accent2); transform: translateX(4px); background: var(--surface2); }
+.ref-card strong { color: var(--text); font-size: 15px; display: block; margin-bottom: 4px; }
+.ref-card .url { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); }
+.ref-card p { font-size: 13px; color: var(--muted); margin: 6px 0 0; }
+
+/* ═══════════════════════════════════════════
+   COLOR SWATCHES
+═══════════════════════════════════════════ */
+.swatch-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+.swatch {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px;
+}
+.swatch-color {
+  width: 56px; height: 40px; border-radius: 6px;
+  border: 1px solid var(--border);
+}
+.swatch span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: var(--muted);
+}
+
+/* ═══════════════════════════════════════════
+   PROPERTY CARDS GRID
+═══════════════════════════════════════════ */
+.prop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px; margin: 20px 0;
+}
+.prop-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+  border-radius: 6px;
+}
+.prop-card code {
+  display: block;
+  font-size: 14px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+  border: none; background: none; padding: 0;
+}
+.prop-card p { font-size: 12px; margin: 0; color: var(--muted); }
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  text-align: center;
+  padding: 30px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media (max-width: 640px) {
+  header, main { padding-left: 20px; padding-right: 20px; }
+  .nav-inner { padding: 0 16px; }
+  .ref-grid { grid-template-columns: 1fr; }
+  h2 { font-size: 28px; }
+  h1 { font-size: 52px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════ -->
+<header>
+  <div class="header-inner">
+    <div class="module-badge">Module 02 — Développement Web Front-End</div>
+    <h1>
+      <span class="accent">CSS</span>
+      <span class="sub">Cascading Style Sheets</span>
+    </h1>
+    <div class="header-meta">
+      <span class="dot">◆</span>
+      <span><strong>Niveau :</strong> Débutant–Intermédiaire</span>
+      <span class="dot">◆</span>
+      <span><strong>Durée :</strong> 8 heures</span>
+      <span class="dot">◆</span>
+      <span><strong>Prérequis :</strong> Module 01 — HTML</span>
+      <span class="dot">◆</span>
+      <span><strong>Objectif :</strong> Mettre en forme des pages Web</span>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════
+     NAV
+══════════════════════════════════════════ -->
+<nav>
+  <div class="nav-inner">
+    <a href="#presentation">1. Présentation</a>
+    <a href="#concepts">2. Concepts</a>
+    <a href="#references">3. Références</a>
+    <a href="#demo">4. Démo</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     MAIN
+══════════════════════════════════════════ -->
+<main>
+
+<!-- ══════════════════════════════════════════
+     SECTION 1 — PRÉSENTATION
+══════════════════════════════════════════ -->
+<section id="presentation">
+  <div class="section-eyebrow">
+    <span class="section-num">Section 01</span>
+    <div class="section-line"></div>
+  </div>
+  <h2>Présentation du <span class="hl">CSS</span></h2>
+
+  <p>
+    <strong>CSS</strong> (<em>Cascading Style Sheets</em> — Feuilles de style en cascade) est le langage
+    utilisé pour décrire la <strong>présentation visuelle</strong> d'un document HTML.
+    Là où HTML structure le contenu, CSS s'occupe de son apparence : couleurs, polices, mises en page, animations…
+  </p>
+
+  <div class="box box-def">
+    <strong>Définition W3C</strong><br>
+    CSS est un mécanisme de feuilles de style permettant aux auteurs et aux utilisateurs de définir l'apparence
+    des documents. CSS sépare la présentation du contenu, améliorant la maintenabilité, l'accessibilité
+    et la performance des sites Web.
+  </div>
+
+  <h3>Historique</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Version</th><th>Année</th><th>Apports majeurs</th></tr>
+      <tr><td>CSS 1</td><td>1996</td><td>Couleurs, polices, marges, alignement de base</td></tr>
+      <tr><td>CSS 2.1</td><td>1998–2011</td><td>Positionnement, z-index, pseudo-éléments, media types</td></tr>
+      <tr><td>CSS 3</td><td>2011–présent</td><td>Modules indépendants : Flexbox, Grid, Animations, Variables, Media Queries…</td></tr>
+      <tr><td>CSS 4 (draft)</td><td>En cours</td><td>Container queries, :has(), Cascade Layers, Color Level 4</td></tr>
+    </table>
+  </div>
+
+  <h3>La cascade — pourquoi « Cascading » ?</h3>
+  <p>
+    Le terme « cascade » désigne l'algorithme par lequel le navigateur détermine quelle règle CSS
+    s'applique à un élément lorsque plusieurs règles entrent en conflit.
+    Trois critères sont évalués dans l'ordre :
+  </p>
+  <ol class="steps" style="margin-top:16px;">
+    <li><strong>Origine &amp; importance</strong> — Les styles <code>!important</code> des feuilles user-agent, utilisateur, puis auteur l'emportent sur les styles normaux dans l'ordre inverse.</li>
+    <li><strong>Spécificité</strong> — Plus un sélecteur est « précis », plus sa règle prime sur les autres.</li>
+    <li><strong>Ordre d'apparition</strong> — En cas d'égalité de spécificité, la dernière règle déclarée gagne.</li>
+  </ol>
+
+  <h3>Spécificité — la hiérarchie</h3>
+  <p>La spécificité est calculée comme un score à 4 niveaux. Plus le score est élevé, plus la règle prime :</p>
+  <div class="spec-bar">
+    <div class="spec-seg spec-inline">
+      style=""
+      <span class="spec-label">Inline (1,0,0,0)</span>
+    </div>
+    <div class="spec-arrow">›</div>
+    <div class="spec-seg spec-id">
+      #id
+      <span class="spec-label">ID (0,1,0,0)</span>
+    </div>
+    <div class="spec-arrow">›</div>
+    <div class="spec-seg spec-class">
+      .class / :pseudo
+      <span class="spec-label">Classe (0,0,1,0)</span>
+    </div>
+    <div class="spec-arrow">›</div>
+    <div class="spec-seg spec-type">
+      element
+      <span class="spec-label">Type (0,0,0,1)</span>
+    </div>
+  </div>
+
+  <div class="box box-tip">
+    L'héritage : certaines propriétés CSS (<code>color</code>, <code>font-family</code>, <code>font-size</code>…)
+    sont automatiquement héritées par les éléments enfants. D'autres (<code>margin</code>, <code>padding</code>,
+    <code>border</code>…) ne le sont pas et doivent être redéclarées.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SECTION 2 — CONCEPTS
+══════════════════════════════════════════ -->
+<section id="concepts">
+  <div class="section-eyebrow">
+    <span class="section-num">Section 02</span>
+    <div class="section-line"></div>
+  </div>
+  <h2>Concepts <span class="hl">fondamentaux</span></h2>
+
+  <!-- 2a) Sélecteur -->
+  <h3 id="selecteur">a) Sélecteur CSS</h3>
+  <p>
+    Un <strong>sélecteur CSS</strong> est la partie d'une règle CSS qui désigne le ou les éléments HTML
+    auxquels s'appliquent les déclarations de style. Il « cible » des éléments selon leur type,
+    leurs attributs, leur identifiant, leur classe, ou leur position dans l'arbre du document.
+  </p>
+  <pre><code><span class="cmt">/* Quelques sélecteurs fondamentaux */</span>
+
+<span class="sel">p</span>          { <span class="cmt">/* tous les paragraphes */</span> }
+<span class="sel">.carte</span>     { <span class="cmt">/* tous les éléments ayant class="carte" */</span> }
+<span class="sel">#logo</span>      { <span class="cmt">/* l'élément ayant id="logo" */</span> }
+<span class="sel">a:hover</span>    { <span class="cmt">/* les liens au survol */</span> }
+<span class="sel">li::before</span> { <span class="cmt">/* pseudo-élément avant chaque li */</span> }
+<span class="lang-tag">CSS</span></code></pre>
+
+  <!-- 2b) Propriété -->
+  <h3 id="propriete">b) Propriété CSS</h3>
+  <p>
+    Une <strong>propriété CSS</strong> est un mot-clé reconnu par le navigateur qui désigne un aspect
+    visuel à modifier (couleur, taille, position, etc.). Il existe des centaines de propriétés.
+    Voici les familles les plus courantes :
+  </p>
+
+  <div class="prop-grid">
+    <div class="prop-card"><code>color</code><p>Couleur du texte</p></div>
+    <div class="prop-card"><code>background-color</code><p>Couleur d'arrière-plan</p></div>
+    <div class="prop-card"><code>font-family</code><p>Police de caractères</p></div>
+    <div class="prop-card"><code>font-size</code><p>Taille de la police</p></div>
+    <div class="prop-card"><code>font-weight</code><p>Graisse (bold, 700…)</p></div>
+    <div class="prop-card"><code>margin</code><p>Marges extérieures</p></div>
+    <div class="prop-card"><code>padding</code><p>Rembourrage intérieur</p></div>
+    <div class="prop-card"><code>border</code><p>Bordure de l'élément</p></div>
+    <div class="prop-card"><code>width / height</code><p>Largeur et hauteur</p></div>
+    <div class="prop-card"><code>display</code><p>Mode d'affichage</p></div>
+    <div class="prop-card"><code>position</code><p>Mode de positionnement</p></div>
+    <div class="prop-card"><code>opacity</code><p>Transparence (0–1)</p></div>
+    <div class="prop-card"><code>transition</code><p>Animation de changement</p></div>
+    <div class="prop-card"><code>transform</code><p>Rotation, échelle, déplacement</p></div>
+    <div class="prop-card"><code>box-shadow</code><p>Ombre portée</p></div>
+    <div class="prop-card"><code>border-radius</code><p>Coins arrondis</p></div>
+  </div>
+
+  <!-- 2c) Valeur -->
+  <h3 id="valeur">c) Valeur CSS</h3>
+  <p>
+    Une <strong>valeur CSS</strong> est ce qui est assigné à une propriété. Les valeurs peuvent être
+    des mots-clés, des nombres, des pourcentages, des unités, des couleurs, des fonctions…
+  </p>
+
+  <pre><code><span class="cmt">/* ── Mots-clés ── */</span>
+<span class="sel">p</span> { <span class="prop">display</span>: <span class="val">block</span>; <span class="prop">font-weight</span>: <span class="val">bold</span>; }
+
+<span class="cmt">/* ── Unités de longueur ABSOLUES ── */</span>
+<span class="sel">.titre</span> { <span class="prop">font-size</span>: <span class="num">24</span><span class="unit">px</span>; }   <span class="cmt">/* pixel — 1px = 1/96 inch */</span>
+
+<span class="cmt">/* ── Unités RELATIVES ── */</span>
+<span class="sel">.texte</span> { <span class="prop">font-size</span>: <span class="num">1.2</span><span class="unit">rem</span>; }  <span class="cmt">/* relatif à l'élément racine (&lt;html&gt;) */</span>
+<span class="sel">.enfant</span>{ <span class="prop">font-size</span>: <span class="num">1.2</span><span class="unit">em</span>;  }  <span class="cmt">/* relatif à la police de l'élément parent */</span>
+<span class="sel">.hero</span>  { <span class="prop">width</span>:   <span class="num">100</span><span class="unit">%</span>;   }   <span class="cmt">/* pourcentage du conteneur parent */</span>
+<span class="sel">.plein</span> { <span class="prop">width</span>:   <span class="num">100</span><span class="unit">vw</span>;  }   <span class="cmt">/* viewport width  */</span>
+<span class="sel">.haut</span>  { <span class="prop">height</span>:  <span class="num">100</span><span class="unit">vh</span>;  }   <span class="cmt">/* viewport height */</span>
+
+<span class="cmt">/* ── Couleurs ── */</span>
+<span class="sel">h1</span> {
+  <span class="prop">color</span>: <span class="val">red</span>;                <span class="cmt">/* mot-clé */</span>
+  <span class="prop">color</span>: <span class="val">#e63946</span>;            <span class="cmt">/* hexadécimal */</span>
+  <span class="prop">color</span>: <span class="val">rgb(230, 57, 70)</span>;   <span class="cmt">/* rgb() */</span>
+  <span class="prop">color</span>: <span class="val">rgba(230,57,70,.8)</span>; <span class="cmt">/* rgba() avec transparence */</span>
+  <span class="prop">color</span>: <span class="val">hsl(356,76%,56%)</span>;   <span class="cmt">/* teinte / saturation / luminosité */</span>
+}
+
+<span class="cmt">/* ── Fonctions ── */</span>
+<span class="sel">.fond</span> {
+  <span class="prop">background</span>: <span class="val">linear-gradient(135deg, #0d1117, #00d4aa)</span>;
+  <span class="prop">width</span>: <span class="val">calc(100% - 40px)</span>;
+  <span class="prop">transform</span>: <span class="val">rotate(45deg)</span>;
+}
+
+<span class="cmt">/* ── Variables CSS custom (CSS custom properties) ── */</span>
+<span class="sel">:root</span> {
+  <span class="prop">--couleur-primaire</span>: <span class="val">#00d4aa</span>;
+  <span class="prop">--taille-titre</span>: <span class="num">2.5</span><span class="unit">rem</span>;
+  <span class="prop">--espacement</span>: <span class="num">16</span><span class="unit">px</span>;
+}
+<span class="sel">h1</span> {
+  <span class="prop">color</span>:     <span class="val">var(--couleur-primaire)</span>;
+  <span class="prop">font-size</span>: <span class="val">var(--taille-titre)</span>;
+  <span class="prop">margin</span>:    <span class="val">var(--espacement)</span>;
+}
+<span class="lang-tag">CSS</span></code></pre>
+
+  <div class="table-wrap">
+    <table>
+      <tr><th>Unité</th><th>Signification</th><th>Cas d'usage</th></tr>
+      <tr><td><code>px</code></td><td>Pixel (absolu)</td><td>Bordures, icônes, ombres</td></tr>
+      <tr><td><code>rem</code></td><td>Relatif à <code>&lt;html&gt;</code></td><td>Tailles de police, espacements — recommandé</td></tr>
+      <tr><td><code>em</code></td><td>Relatif au parent</td><td>Espacements contextuels</td></tr>
+      <tr><td><code>%</code></td><td>Pourcentage du parent</td><td>Largeurs fluides</td></tr>
+      <tr><td><code>vw</code></td><td>1% de la largeur du viewport</td><td>Sections pleine largeur</td></tr>
+      <tr><td><code>vh</code></td><td>1% de la hauteur du viewport</td><td>Sections pleine hauteur, hero</td></tr>
+      <tr><td><code>clamp()</code></td><td>Valeur fluide entre min et max</td><td>Typographie responsive</td></tr>
+    </table>
+  </div>
+
+  <!-- 2d) Règle CSS -->
+  <h3 id="regle">d) Règle CSS</h3>
+  <p>
+    Une <strong>règle CSS</strong> est l'unité de base du CSS. Elle associe un sélecteur à un bloc
+    de déclarations. Chaque déclaration est une paire propriété–valeur séparée par <code>:</code>
+    et terminée par <code>;</code>.
+  </p>
+
+  <pre><code><span class="cmt">/* ─────────────────────────────
+   Anatomie d'une règle CSS
+   ─────────────────────────────
+   ┌── Sélecteur ──┐
+   │               │
+   ▼               │
+</span><span class="sel">.carte-projet</span><span class="cmt"> ◄─────────────┘
+
+{  ◄─── Accolade ouvrante (début du bloc de déclarations)
+
+  ┌─────── Propriété
+  │        ┌── Valeur        ┌─ Point-virgule obligatoire
+  ▼        ▼                 ▼</span>
+  <span class="prop">background-color</span>: <span class="val">#161b22</span>;
+  <span class="prop">color</span>:            <span class="val">#e6edf3</span>;
+  <span class="prop">padding</span>:          <span class="num">24</span><span class="unit">px</span>;
+  <span class="prop">border-radius</span>:    <span class="num">8</span><span class="unit">px</span>;
+  <span class="prop">border</span>:           <span class="num">1</span><span class="unit">px</span> <span class="val">solid #30363d</span>;
+
+} <span class="cmt">◄─── Accolade fermante</span>
+<span class="lang-tag">CSS</span></code></pre>
+
+  <div class="box box-tip">
+    Il est possible de grouper plusieurs sélecteurs en les séparant par des virgules pour
+    leur appliquer les mêmes déclarations : <code>h1, h2, h3 { color: #00d4aa; }</code>
+  </div>
+
+  <!-- 2e) Application du CSS -->
+  <h3 id="application">e) Application du CSS</h3>
+  <p>Il existe trois manières d'appliquer du CSS à un document HTML :</p>
+
+  <pre><code><span class="cmt">&lt;!-- ──────────────────────────────────
+  1. CSS EXTERNE (recommandé)
+     Fichier .css séparé, lié via &lt;link&gt;
+────────────────────────────────────── --&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;link</span> <span class="att">rel=</span><span class="atv">"stylesheet"</span> <span class="att">href=</span><span class="atv">"style.css"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+
+<span class="cmt">&lt;!-- ──────────────────────────────────
+  2. CSS INTERNE (dans le &lt;head&gt;)
+     Utile pour les styles propres à UNE page
+────────────────────────────────────── --&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;style&gt;</span>
+    <span class="sel">body</span> { <span class="prop">font-family</span>: <span class="val">sans-serif</span>; }
+    <span class="sel">h1</span>   { <span class="prop">color</span>: <span class="val">#00d4aa</span>; }
+  <span class="tag">&lt;/style&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+
+<span class="cmt">&lt;!-- ──────────────────────────────────
+  3. CSS INLINE (directement sur l'élément)
+     À éviter — priorité maximale, non réutilisable
+────────────────────────────────────── --&gt;</span>
+<span class="tag">&lt;p</span> <span class="att">style=</span><span class="atv">"color: red; font-size: 18px;"</span><span class="tag">&gt;</span>Texte rouge<span class="tag">&lt;/p&gt;</span>
+<span class="lang-tag">HTML</span></code></pre>
+
+  <div class="table-wrap">
+    <table>
+      <tr><th>Méthode</th><th>Emplacement</th><th>Réutilisable</th><th>Recommandé</th></tr>
+      <tr><td>Externe (<code>.css</code>)</td><td>Fichier séparé lié par <code>&lt;link&gt;</code></td><td>✅ Toutes les pages</td><td>✅ Oui — bonne pratique</td></tr>
+      <tr><td>Interne (<code>&lt;style&gt;</code>)</td><td>Dans le <code>&lt;head&gt;</code> de la page</td><td>⚠️ Une seule page</td><td>⚠️ Parfois (prototypage)</td></tr>
+      <tr><td>Inline (<code>style=""</code>)</td><td>Attribut de l'élément HTML</td><td>❌ Un seul élément</td><td>❌ À éviter</td></tr>
+    </table>
+  </div>
+
+  <!-- 2f) Sélecteur de type -->
+  <h3 id="sel-type">f) Sélecteur de type</h3>
+  <p>
+    Le <strong>sélecteur de type</strong> (ou sélecteur d'élément) cible tous les éléments d'un
+    certain type HTML. C'est le sélecteur le moins spécifique.
+  </p>
+  <pre><code><span class="cmt">/* Cible TOUS les paragraphes de la page */</span>
+<span class="sel">p</span> {
+  <span class="prop">margin</span>: <span class="num">0</span> <span class="num">0</span> <span class="num">16</span><span class="unit">px</span> <span class="num">0</span>;
+  <span class="prop">line-height</span>: <span class="num">1.75</span>;
+}
+
+<span class="cmt">/* Cible TOUS les liens */</span>
+<span class="sel">a</span> {
+  <span class="prop">color</span>: <span class="val">#00d4aa</span>;
+  <span class="prop">text-decoration</span>: <span class="val">none</span>;
+}
+<span class="sel">a:hover</span> {
+  <span class="prop">text-decoration</span>: <span class="val">underline</span>;
+}
+
+<span class="cmt">/* Cible TOUS les titres h1 à h3 */</span>
+<span class="sel">h1</span>, <span class="sel">h2</span>, <span class="sel">h3</span> {
+  <span class="prop">font-family</span>: <span class="val">'Fraunces', serif</span>;
+  <span class="prop">font-weight</span>: <span class="num">700</span>;
+  <span class="prop">line-height</span>: <span class="num">1.2</span>;
+}
+
+<span class="cmt">/* Sélecteur universel * (tous les éléments) */</span>
+<span class="sel">*</span> {
+  <span class="prop">box-sizing</span>: <span class="val">border-box</span>;
+  <span class="prop">margin</span>: <span class="num">0</span>;
+  <span class="prop">padding</span>: <span class="num">0</span>;
+}
+<span class="lang-tag">CSS</span></code></pre>
+
+  <!-- 2g) Sélecteur d'attribut -->
+  <h3 id="sel-attr">g) Sélecteur d'attribut</h3>
+  <p>
+    Les <strong>sélecteurs d'attribut</strong> ciblent des éléments en fonction de la présence
+    ou de la valeur de leurs attributs HTML. Très puissants pour styliser des formulaires.
+  </p>
+  <pre><code><span class="cmt">/* Élément ayant cet attribut (quelle que soit sa valeur) */</span>
+<span class="sel">input[required]</span> {
+  <span class="prop">border-left</span>: <span class="num">3</span><span class="unit">px</span> <span class="val">solid #ff7b72</span>;
+}
+
+<span class="cmt">/* Attribut ÉGAL à une valeur exacte */</span>
+<span class="sel">input[type="text"]</span>   { <span class="prop">border-radius</span>: <span class="num">6</span><span class="unit">px</span>; }
+<span class="sel">input[type="email"]</span>  { <span class="prop">background-image</span>: <span class="val">url('icons/email.svg')</span>; }
+<span class="sel">input[type="submit"]</span> { <span class="prop">cursor</span>: <span class="val">pointer</span>; <span class="prop">background</span>: <span class="val">#00d4aa</span>; }
+
+<span class="cmt">/* Attribut CONTENANT la valeur (sous-chaîne) */</span>
+<span class="sel">a[href*="github"]</span> { <span class="prop">color</span>: <span class="val">#f0883e</span>; }
+
+<span class="cmt">/* Attribut COMMENÇANT par la valeur */</span>
+<span class="sel">a[href^="https"]</span> {
+  <span class="prop">padding-left</span>: <span class="num">18</span><span class="unit">px</span>;
+  <span class="prop">background</span>: <span class="val">url('lock.svg') no-repeat left center</span>;
+}
+
+<span class="cmt">/* Attribut FINISSANT par la valeur */</span>
+<span class="sel">a[href$=".pdf"]</span> {
+  <span class="prop">color</span>: <span class="val">#ff7b72</span>;
+}
+
+<span class="cmt">/* Attribut lang en français ou sous-langue fr-* */</span>
+<span class="sel">[lang|="fr"]</span> { <span class="prop">font-style</span>: <span class="val">italic</span>; }
+<span class="lang-tag">CSS</span></code></pre>
+
+  <!-- 2h) Sélecteur d'identificateur -->
+  <h3 id="sel-id">h) Sélecteur d'identificateur</h3>
+  <p>
+    Le <strong>sélecteur d'ID</strong> cible un élément unique identifié par son attribut <code>id</code>.
+    Il est précédé du symbole <code>#</code> et a une spécificité très élevée.
+  </p>
+  <pre><code><span class="cmt">/* En HTML :  &lt;header id="entete-principal"&gt; */</span>
+<span class="sel">#entete-principal</span> {
+  <span class="prop">background</span>:     <span class="val">#161b22</span>;
+  <span class="prop">padding</span>:        <span class="num">20</span><span class="unit">px</span> <span class="num">40</span><span class="unit">px</span>;
+  <span class="prop">display</span>:        <span class="val">flex</span>;
+  <span class="prop">justify-content</span>: <span class="val">space-between</span>;
+  <span class="prop">align-items</span>:    <span class="val">center</span>;
+}
+
+<span class="cmt">/* En HTML :  &lt;nav id="nav-principale"&gt; */</span>
+<span class="sel">#nav-principale</span> {
+  <span class="prop">position</span>: <span class="val">sticky</span>;
+  <span class="prop">top</span>:      <span class="num">0</span>;
+  <span class="prop">z-index</span>:  <span class="num">100</span>;
+}
+<span class="lang-tag">CSS</span></code></pre>
+
+  <div class="box box-warn">
+    Un <code>id</code> doit être <strong>unique</strong> dans une page HTML. Pour les styles réutilisables
+    sur plusieurs éléments, préférez les <strong>classes</strong>. Évitez de surcharger les sélecteurs ID
+    dans les grandes applications car leur haute spécificité rend les surcharges difficiles.
+  </div>
+
+  <!-- 2i) Sélecteur de classe -->
+  <h3 id="sel-classe">i) Sélecteur de classe</h3>
+  <p>
+    Le <strong>sélecteur de classe</strong> est le plus utilisé en CSS. Il cible tous les éléments
+    ayant une certaine valeur dans leur attribut <code>class</code>. Il est précédé du symbole <code>.</code>.
+    Un élément peut avoir plusieurs classes.
+  </p>
+  <pre><code><span class="cmt">/* En HTML :  &lt;article class="carte-projet"&gt; */</span>
+<span class="sel">.carte-projet</span> {
+  <span class="prop">background</span>:    <span class="val">#161b22</span>;
+  <span class="prop">border</span>:        <span class="num">1</span><span class="unit">px</span> <span class="val">solid #30363d</span>;
+  <span class="prop">border-radius</span>: <span class="num">10</span><span class="unit">px</span>;
+  <span class="prop">padding</span>:       <span class="num">24</span><span class="unit">px</span>;
+  <span class="prop">transition</span>:    <span class="val">transform .2s, box-shadow .2s</span>;
+}
+<span class="sel">.carte-projet:hover</span> {
+  <span class="prop">transform</span>:  <span class="val">translateY(-4px)</span>;
+  <span class="prop">box-shadow</span>: <span class="num">0</span> <span class="num">12</span><span class="unit">px</span> <span class="num">30</span><span class="unit">px</span> <span class="val">rgba(0,0,0,.4)</span>;
+}
+
+<span class="cmt">/* Plusieurs classes sur un même élément :
+   &lt;button class="btn btn-primaire"&gt; */</span>
+<span class="sel">.btn</span> {
+  <span class="prop">display</span>:       <span class="val">inline-block</span>;
+  <span class="prop">padding</span>:       <span class="num">10</span><span class="unit">px</span> <span class="num">24</span><span class="unit">px</span>;
+  <span class="prop">border</span>:        <span class="val">none</span>;
+  <span class="prop">border-radius</span>: <span class="num">6</span><span class="unit">px</span>;
+  <span class="prop">cursor</span>:        <span class="val">pointer</span>;
+  <span class="prop">font-weight</span>:   <span class="num">600</span>;
+}
+<span class="sel">.btn-primaire</span> { <span class="prop">background</span>: <span class="val">#00d4aa</span>; <span class="prop">color</span>: <span class="val">#0d1117</span>; }
+<span class="sel">.btn-danger</span>   { <span class="prop">background</span>: <span class="val">#ff7b72</span>; <span class="prop">color</span>: <span class="val">white</span>; }
+<span class="sel">.btn-outline</span>  { <span class="prop">background</span>: <span class="val">transparent</span>; <span class="prop">border</span>: <span class="num">2</span><span class="unit">px</span> <span class="val">solid #00d4aa</span>; <span class="prop">color</span>: <span class="val">#00d4aa</span>; }
+<span class="lang-tag">CSS</span></code></pre>
+
+  <!-- 2j) Combinateurs -->
+  <h3 id="combinateurs">j) Combinateurs</h3>
+  <p>
+    Les <strong>combinateurs</strong> permettent de créer des sélecteurs complexes en exprimant
+    des relations entre éléments dans l'arbre DOM.
+  </p>
+
+  <div class="sel-grid">
+    <div class="sel-card">
+      <code>A B</code>
+      <p><strong>Descendant</strong> — Cible B placé n'importe où à l'intérieur de A (enfant, petit-enfant…)</p>
+    </div>
+    <div class="sel-card orange">
+      <code>A > B</code>
+      <p><strong>Enfant direct</strong> — Cible B qui est un enfant immédiat de A uniquement.</p>
+    </div>
+    <div class="sel-card blue">
+      <code>A + B</code>
+      <p><strong>Frère adjacent</strong> — Cible B qui suit immédiatement A au même niveau.</p>
+    </div>
+    <div class="sel-card red">
+      <code>A ~ B</code>
+      <p><strong>Frères généraux</strong> — Cible tous les B frères qui suivent A.</p>
+    </div>
+  </div>
+
+  <pre><code><span class="cmt">/* Descendant : tous les li dans nav */</span>
+<span class="sel">nav li</span> {
+  <span class="prop">list-style</span>: <span class="val">none</span>;
+  <span class="prop">display</span>:    <span class="val">inline-block</span>;
+}
+
+<span class="cmt">/* Enfant direct : li enfants directs de ul seulement */</span>
+<span class="sel">ul > li</span> { <span class="prop">padding</span>: <span class="num">8</span><span class="unit">px</span>; }
+
+<span class="cmt">/* Frère adjacent : label qui suit immédiatement un input */</span>
+<span class="sel">input:focus + label</span> {
+  <span class="prop">color</span>: <span class="val">#00d4aa</span>;
+  <span class="prop">transform</span>: <span class="val">translateY(-20px) scale(0.85)</span>;
+}
+
+<span class="cmt">/* Pseudo-classes structurelles */</span>
+<span class="sel">li:first-child</span>  { <span class="prop">border-top</span>: <span class="val">none</span>; }
+<span class="sel">li:last-child</span>   { <span class="prop">border-bottom</span>: <span class="val">none</span>; }
+<span class="sel">li:nth-child(2n)</span> { <span class="prop">background</span>: <span class="val">rgba(255,255,255,.04)</span>; } <span class="cmt">/* lignes paires */</span>
+<span class="sel">a:not(.btn)</span>     { <span class="prop">text-decoration</span>: <span class="val">underline</span>; }
+<span class="lang-tag">CSS</span></code></pre>
+
+  <!-- 2k) Modèle de boîte -->
+  <h3 id="box-model">k) Modèle de boîte</h3>
+  <p>
+    Le <strong>modèle de boîte</strong> (<em>Box Model</em>) est le fondement du positionnement CSS.
+    Chaque élément HTML est rendu comme une boîte rectangulaire composée de quatre zones concentriques :
+  </p>
+
+  <div class="box-model">
+    <div class="bm-margin" style="position:relative;">
+      <span class="bm-label">MARGIN</span>
+      <div class="bm-border">
+        <span class="bm-border-label">BORDER</span>
+        <div class="bm-padding">
+          <span class="bm-padding-label">PADDING</span>
+          <div class="bm-content">CONTENT<br><small style="opacity:.6;font-size:11px;">width × height</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <pre><code><span class="sel">.carte</span> {
+  <span class="cmt">/* ── CONTENT ── */</span>
+  <span class="prop">width</span>:  <span class="num">320</span><span class="unit">px</span>;   <span class="cmt">/* largeur du contenu */</span>
+  <span class="prop">height</span>: <span class="num">200</span><span class="unit">px</span>;  <span class="cmt">/* hauteur du contenu */</span>
+
+  <span class="cmt">/* ── PADDING (rembourrage intérieur) ── */</span>
+  <span class="prop">padding</span>:        <span class="num">24</span><span class="unit">px</span>;              <span class="cmt">/* tous les côtés */</span>
+  <span class="prop">padding</span>:        <span class="num">16</span><span class="unit">px</span> <span class="num">24</span><span class="unit">px</span>;        <span class="cmt">/* vertical | horizontal */</span>
+  <span class="prop">padding</span>:        <span class="num">10</span><span class="unit">px</span> <span class="num">20</span><span class="unit">px</span> <span class="num">14</span><span class="unit">px</span> <span class="num">20</span><span class="unit">px</span>; <span class="cmt">/* haut | droite | bas | gauche */</span>
+  <span class="prop">padding-top</span>:    <span class="num">12</span><span class="unit">px</span>;
+  <span class="prop">padding-bottom</span>: <span class="num">12</span><span class="unit">px</span>;
+
+  <span class="cmt">/* ── BORDER ── */</span>
+  <span class="prop">border</span>:        <span class="num">2</span><span class="unit">px</span> <span class="val">solid #30363d</span>; <span class="cmt">/* épaisseur | style | couleur */</span>
+  <span class="prop">border-top</span>:    <span class="num">3</span><span class="unit">px</span> <span class="val">solid #00d4aa</span>;
+  <span class="prop">border-radius</span>: <span class="num">8</span><span class="unit">px</span>;               <span class="cmt">/* coins arrondis */</span>
+
+  <span class="cmt">/* ── MARGIN (espace extérieur) ── */</span>
+  <span class="prop">margin</span>:        <span class="num">24</span><span class="unit">px</span>;
+  <span class="prop">margin</span>:        <span class="num">0</span> <span class="val">auto</span>;             <span class="cmt">/* centrage horizontal */</span>
+  <span class="prop">margin-bottom</span>: <span class="num">32</span><span class="unit">px</span>;
+
+  <span class="cmt">/* ── BOX-SIZING (très important !) ── */</span>
+  <span class="prop">box-sizing</span>: <span class="val">border-box</span>; <span class="cmt">/* padding et border inclus dans width/height */</span>
+}
+<span class="lang-tag">CSS</span></code></pre>
+
+  <div class="box box-important">
+    <strong>box-sizing: border-box</strong> est la propriété la plus importante du Box Model.
+    Avec <code>content-box</code> (défaut), <code>width</code> ne compte que le contenu — padding et border s'y ajoutent.
+    Avec <code>border-box</code>, <code>width</code> inclut tout : une boîte <code>width: 300px</code>
+    fait toujours 300px, peu importe son padding ou border. Utilisez toujours <code>* { box-sizing: border-box; }</code>.
+  </div>
+
+  <!-- 2l) Flexbox -->
+  <h3 id="flexbox">l) Boîtes flexibles (Flexbox)</h3>
+  <p>
+    <strong>Flexbox</strong> (Flexible Box Layout) est un système de mise en page CSS conçu pour
+    disposer des éléments en <strong>une dimension</strong> (une ligne ou une colonne).
+    Il résout élégamment des problèmes classiques : centrage vertical, distribution d'espace,
+    réarrangement selon la taille d'écran.
+  </p>
+
+  <div class="box box-def">
+    <strong>Deux acteurs dans Flexbox</strong><br>
+    Le <strong>conteneur flex</strong> (<em>flex container</em>) — l'élément parent avec <code>display: flex</code> — contrôle la disposition de ses enfants.<br>
+    Les <strong>éléments flex</strong> (<em>flex items</em>) — les enfants directs du conteneur — sont positionnés selon les règles du conteneur.
+  </div>
+
+  <pre><code><span class="cmt">/* ══ PROPRIÉTÉS DU CONTENEUR FLEX ══ */</span>
+
+<span class="sel">.conteneur</span> {
+  <span class="prop">display</span>:         <span class="val">flex</span>;          <span class="cmt">/* Active Flexbox */</span>
+
+  <span class="cmt">/* Direction */</span>
+  <span class="prop">flex-direction</span>:  <span class="val">row</span>;           <span class="cmt">/* → gauche à droite (défaut) */</span>
+  <span class="prop">flex-direction</span>:  <span class="val">row-reverse</span>;   <span class="cmt">/* ← droite à gauche */</span>
+  <span class="prop">flex-direction</span>:  <span class="val">column</span>;        <span class="cmt">/* ↓ haut en bas */</span>
+  <span class="prop">flex-direction</span>:  <span class="val">column-reverse</span>;<span class="cmt">/* ↑ bas en haut */</span>
+
+  <span class="cmt">/* Retour à la ligne */</span>
+  <span class="prop">flex-wrap</span>:       <span class="val">nowrap</span>;        <span class="cmt">/* sur 1 ligne (défaut) */</span>
+  <span class="prop">flex-wrap</span>:       <span class="val">wrap</span>;          <span class="cmt">/* passage à la ligne */</span>
+
+  <span class="cmt">/* Alignement sur l'AXE PRINCIPAL */</span>
+  <span class="prop">justify-content</span>: <span class="val">flex-start</span>;   <span class="cmt">/* début */</span>
+  <span class="prop">justify-content</span>: <span class="val">flex-end</span>;     <span class="cmt">/* fin */</span>
+  <span class="prop">justify-content</span>: <span class="val">center</span>;       <span class="cmt">/* centré */</span>
+  <span class="prop">justify-content</span>: <span class="val">space-between</span>;<span class="cmt">/* espacement égal entre éléments */</span>
+  <span class="prop">justify-content</span>: <span class="val">space-around</span>; <span class="cmt">/* espacement autour des éléments */</span>
+  <span class="prop">justify-content</span>: <span class="val">space-evenly</span>; <span class="cmt">/* espacement parfaitement égal */</span>
+
+  <span class="cmt">/* Alignement sur l'AXE TRANSVERSAL */</span>
+  <span class="prop">align-items</span>:     <span class="val">stretch</span>;      <span class="cmt">/* s'étire pour remplir (défaut) */</span>
+  <span class="prop">align-items</span>:     <span class="val">flex-start</span>;   <span class="cmt">/* aligné en haut */</span>
+  <span class="prop">align-items</span>:     <span class="val">flex-end</span>;     <span class="cmt">/* aligné en bas */</span>
+  <span class="prop">align-items</span>:     <span class="val">center</span>;       <span class="cmt">/* centré verticalement */</span>
+
+  <span class="cmt">/* Espace entre les éléments flex */</span>
+  <span class="prop">gap</span>:             <span class="num">16</span><span class="unit">px</span>;
+  <span class="prop">gap</span>:             <span class="num">16</span><span class="unit">px</span> <span class="num">24</span><span class="unit">px</span>;    <span class="cmt">/* row-gap | column-gap */</span>
+}
+
+<span class="cmt">/* ══ PROPRIÉTÉS DES ÉLÉMENTS FLEX ══ */</span>
+
+<span class="sel">.item</span> {
+  <span class="cmt">/* Croissance — occupe l'espace disponible */</span>
+  <span class="prop">flex-grow</span>:   <span class="num">1</span>;    <span class="cmt">/* tous les items grandissent également */</span>
+  <span class="prop">flex-grow</span>:   <span class="num">2</span>;    <span class="cmt">/* prend 2x plus de place que flex-grow: 1 */</span>
+
+  <span class="cmt">/* Rétrécissement */</span>
+  <span class="prop">flex-shrink</span>: <span class="num">0</span>;    <span class="cmt">/* ne rétrécit jamais */</span>
+
+  <span class="cmt">/* Taille de base */</span>
+  <span class="prop">flex-basis</span>:  <span class="num">200</span><span class="unit">px</span>;
+
+  <span class="cmt">/* Raccourci : grow | shrink | basis */</span>
+  <span class="prop">flex</span>:        <span class="num">1</span> <span class="num">1</span> <span class="val">auto</span>;
+  <span class="prop">flex</span>:        <span class="num">1</span>;               <span class="cmt">/* équivalent à 1 1 0 */</span>
+
+  <span class="cmt">/* Alignement individuel (surcharge align-items) */</span>
+  <span class="prop">align-self</span>:  <span class="val">center</span>;
+}
+<span class="lang-tag">CSS</span></code></pre>
+
+  <p>Exemples visuels de Flexbox :</p>
+
+  <div class="flex-demo">
+    <div class="flex-demo-title">flex-direction: row | justify-content: space-between</div>
+    <div class="flex-row" style="justify-content:space-between;">
+      <div class="flex-item">Item 1</div>
+      <div class="flex-item">Item 2</div>
+      <div class="flex-item">Item 3</div>
+    </div>
+  </div>
+
+  <div class="flex-demo">
+    <div class="flex-demo-title">flex-direction: row | justify-content: center | align-items: center</div>
+    <div class="flex-row" style="justify-content:center;align-items:center;min-height:80px;">
+      <div class="flex-item">A</div>
+      <div class="flex-item large">B (grand)</div>
+      <div class="flex-item">C</div>
+    </div>
+  </div>
+
+  <div class="flex-demo">
+    <div class="flex-demo-title">flex-wrap: wrap | gap: 12px</div>
+    <div class="flex-wrap-demo" style="gap:10px;">
+      <div class="flex-item" style="flex:1 1 120px;">Card 1</div>
+      <div class="flex-item" style="flex:1 1 120px;">Card 2</div>
+      <div class="flex-item" style="flex:1 1 120px;">Card 3</div>
+      <div class="flex-item" style="flex:1 1 120px;">Card 4</div>
+      <div class="flex-item" style="flex:1 1 120px;">Card 5</div>
+    </div>
+  </div>
+
+  <div class="box box-tip">
+    <strong>Centrage parfait</strong> : pour centrer un élément horizontalement <em>et</em> verticalement
+    dans son conteneur, utilisez simplement :
+    <code>.parent { display: flex; justify-content: center; align-items: center; }</code>
+    C'est la solution la plus simple et la plus robuste.
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════════
+     SECTION 3 — RÉFÉRENCES
+══════════════════════════════════════════ -->
+<section id="references">
+  <div class="section-eyebrow">
+    <span class="section-num">Section 03</span>
+    <div class="section-line"></div>
+  </div>
+  <h2>Références</h2>
+  <p>Ressources officielles et outils indispensables pour maîtriser CSS :</p>
+
+  <div class="ref-grid">
+    <a class="ref-card" href="https://developer.mozilla.org/fr/docs/Web/CSS" target="_blank">
+      <strong>MDN Web Docs — CSS</strong>
+      <div class="url">developer.mozilla.org/fr/docs/Web/CSS</div>
+      <p>La référence la plus complète sur CSS, avec exemples interactifs. Disponible en français.</p>
+    </a>
+    <a class="ref-card" href="https://www.w3schools.com/css/" target="_blank">
+      <strong>W3Schools CSS Tutorial</strong>
+      <div class="url">w3schools.com/css</div>
+      <p>Tutoriels avec éditeur intégré « Try it Yourself ». Idéal pour les débutants.</p>
+    </a>
+    <a class="ref-card" href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/" target="_blank">
+      <strong>CSS-Tricks — Guide Flexbox</strong>
+      <div class="url">css-tricks.com — A Complete Guide to Flexbox</div>
+      <p>La référence visuelle absolue pour Flexbox. Schémas, exemples, tous les cas couverts.</p>
+    </a>
+    <a class="ref-card" href="https://css-tricks.com/snippets/css/complete-guide-grid/" target="_blank">
+      <strong>CSS-Tricks — Guide CSS Grid</strong>
+      <div class="url">css-tricks.com — A Complete Guide to Grid</div>
+      <p>Guide visuel complet sur CSS Grid Layout pour les mises en page complexes bidimensionnelles.</p>
+    </a>
+    <a class="ref-card" href="https://jigsaw.w3.org/css-validator/" target="_blank">
+      <strong>W3C CSS Validator</strong>
+      <div class="url">jigsaw.w3.org/css-validator</div>
+      <p>Outil officiel de validation CSS du W3C. Vérifiez que votre CSS est conforme aux standards.</p>
+    </a>
+    <a class="ref-card" href="https://specificity.keegan.st/" target="_blank">
+      <strong>Specificity Calculator</strong>
+      <div class="url">specificity.keegan.st</div>
+      <p>Calculateur visuel de spécificité CSS. Entrez un sélecteur et obtenez son score instantanément.</p>
+    </a>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SECTION 4 — DÉMO
+══════════════════════════════════════════ -->
+<section id="demo">
+  <div class="section-eyebrow">
+    <span class="section-num">Section 04</span>
+    <div class="section-line"></div>
+  </div>
+  <h2>Démo — <span class="hl">Styliser le Portfolio</span></h2>
+
+  <p>
+    Nous allons maintenant créer la feuille de style CSS du portfolio HTML et bâtir un
+    <strong>template commun</strong> (en-tête, navigation et pied de page) partagé par toutes les pages.
+  </p>
+
+  <!-- ── Objectifs ── -->
+  <div class="box box-def">
+    <strong>Objectifs de la démo</strong><br>
+    ① Créer <code>style.css</code> — feuille de style commune à toutes les pages.<br>
+    ② Prototyper l'application : palette de couleurs, typographie, variables CSS.<br>
+    ③ Mettre en forme les 3 pages HTML du portfolio.<br>
+    ④ Implémenter un template visuel : header, nav et footer identiques sur toutes les pages.
+  </div>
+
+  <!-- ── STRUCTURE ── -->
+  <h3>Structure du projet mise à jour</h3>
+  <pre><code><span class="val">fullStack_portfolio/</span>
+<span class="unit">├── style.css</span>              <span class="cmt">← nouveau fichier (styles communs)</span>
+<span class="tag">├── lister-projets.html</span>
+<span class="tag">├── detailler-projet.html</span>
+<span class="tag">├── ajouter-projet.html</span>
+<span class="tag">└── images/</span>
+    <span class="cmt">├── projet1.jpg</span>
+    <span class="cmt">├── projet2.jpg</span>
+    └── <span class="cmt">projet3.jpg</span>
+<span class="lang-tag">FS</span></code></pre>
+
+  <!-- ── style.css ── -->
+  <div style="margin-top:40px;">
+    <span class="file-badge fb-teal">📄 style.css</span>
+    <h3>Fichier style.css — Styles communs (template)</h3>
+    <p>
+      Ce fichier CSS central définit : les variables (palette, typographie), le reset,
+      le template visuel (header, nav, footer) et les composants réutilisables.
+    </p>
+
+    <div class="demo-wrap">
+      <div class="demo-header">
+        <div class="dot-row"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+        <span class="file-name">style.css</span>
+      </div>
+      <div class="demo-body">
+<pre><code><span class="cmt">/* ═══════════════════════════════════════════════════
+   PORTFOLIO — FEUILLE DE STYLE PRINCIPALE
+   fullStack_portfolio/style.css
+═══════════════════════════════════════════════════ */</span>
+
+<span class="cmt">/* ── 1. VARIABLES CSS (Design Tokens) ── */</span>
+<span class="sel">:root</span> {
+  <span class="cmt">/* Couleurs */</span>
+  <span class="prop">--couleur-fond</span>:       <span class="val">#0f0f13</span>;
+  <span class="prop">--couleur-surface</span>:    <span class="val">#1a1a24</span>;
+  <span class="prop">--couleur-surface2</span>:   <span class="val">#22222f</span>;
+  <span class="prop">--couleur-bordure</span>:    <span class="val">#2e2e40</span>;
+  <span class="prop">--couleur-texte</span>:      <span class="val">#e8e8f0</span>;
+  <span class="prop">--couleur-muted</span>:      <span class="val">#8888a8</span>;
+  <span class="prop">--couleur-accent</span>:     <span class="val">#7c3aed</span>;  <span class="cmt">/* violet principal */</span>
+  <span class="prop">--couleur-accent2</span>:    <span class="val">#06b6d4</span>;  <span class="cmt">/* cyan secondaire  */</span>
+  <span class="prop">--couleur-danger</span>:     <span class="val">#ef4444</span>;
+
+  <span class="cmt">/* Typographie */</span>
+  <span class="prop">--font-corps</span>:         <span class="val">'Segoe UI', system-ui, sans-serif</span>;
+  <span class="prop">--font-titre</span>:         <span class="val">Georgia, 'Times New Roman', serif</span>;
+  <span class="prop">--font-mono</span>:          <span class="val">'Courier New', Courier, monospace</span>;
+
+  <span class="cmt">/* Tailles */</span>
+  <span class="prop">--fs-xs</span>:  <span class="val">0.75rem</span>;  <span class="cmt">/* 12px */</span>
+  <span class="prop">--fs-sm</span>:  <span class="val">0.875rem</span>; <span class="cmt">/* 14px */</span>
+  <span class="prop">--fs-md</span>:  <span class="val">1rem</span>;     <span class="cmt">/* 16px */</span>
+  <span class="prop">--fs-lg</span>:  <span class="val">1.25rem</span>;  <span class="cmt">/* 20px */</span>
+  <span class="prop">--fs-xl</span>:  <span class="val">1.5rem</span>;   <span class="cmt">/* 24px */</span>
+  <span class="prop">--fs-2xl</span>: <span class="val">2rem</span>;     <span class="cmt">/* 32px */</span>
+  <span class="prop">--fs-3xl</span>: <span class="val">2.5rem</span>;   <span class="cmt">/* 40px */</span>
+
+  <span class="cmt">/* Espacements */</span>
+  <span class="prop">--sp-xs</span>:  <span class="val">4px</span>;
+  <span class="prop">--sp-sm</span>:  <span class="val">8px</span>;
+  <span class="prop">--sp-md</span>:  <span class="val">16px</span>;
+  <span class="prop">--sp-lg</span>:  <span class="val">24px</span>;
+  <span class="prop">--sp-xl</span>:  <span class="val">40px</span>;
+  <span class="prop">--sp-2xl</span>: <span class="val">64px</span>;
+
+  <span class="cmt">/* Forme */</span>
+  <span class="prop">--rayon-sm</span>: <span class="val">4px</span>;
+  <span class="prop">--rayon-md</span>: <span class="val">8px</span>;
+  <span class="prop">--rayon-lg</span>: <span class="val">12px</span>;
+  <span class="prop">--rayon-xl</span>: <span class="val">20px</span>;
+
+  <span class="cmt">/* Largeur max du contenu */</span>
+  <span class="prop">--largeur-max</span>: <span class="val">1100px</span>;
+
+  <span class="cmt">/* Transitions */</span>
+  <span class="prop">--transition</span>: <span class="val">all .2s ease</span>;
+}
+
+<span class="cmt">/* ── 2. RESET ── */</span>
+<span class="sel">*, *::before, *::after</span> {
+  <span class="prop">box-sizing</span>: <span class="val">border-box</span>;
+  <span class="prop">margin</span>:     <span class="num">0</span>;
+  <span class="prop">padding</span>:    <span class="num">0</span>;
+}
+
+<span class="sel">html</span> { <span class="prop">scroll-behavior</span>: <span class="val">smooth</span>; }
+
+<span class="sel">body</span> {
+  <span class="prop">font-family</span>:      <span class="val">var(--font-corps)</span>;
+  <span class="prop">background-color</span>: <span class="val">var(--couleur-fond)</span>;
+  <span class="prop">color</span>:            <span class="val">var(--couleur-texte)</span>;
+  <span class="prop">font-size</span>:        <span class="val">var(--fs-md)</span>;
+  <span class="prop">line-height</span>:      <span class="num">1.75</span>;
+  <span class="prop">min-height</span>:       <span class="num">100</span><span class="unit">vh</span>;
+  <span class="prop">display</span>:          <span class="val">flex</span>;
+  <span class="prop">flex-direction</span>:   <span class="val">column</span>;
+}
+
+<span class="sel">img</span> {
+  <span class="prop">max-width</span>: <span class="num">100</span><span class="unit">%</span>;
+  <span class="prop">height</span>:    <span class="val">auto</span>;
+  <span class="prop">display</span>:   <span class="val">block</span>;
+}
+
+<span class="sel">ul, ol</span> { <span class="prop">list-style</span>: <span class="val">none</span>; }
+
+<span class="sel">a</span> {
+  <span class="prop">color</span>:           <span class="val">var(--couleur-accent2)</span>;
+  <span class="prop">text-decoration</span>: <span class="val">none</span>;
+  <span class="prop">transition</span>:      <span class="val">var(--transition)</span>;
+}
+<span class="sel">a:hover</span> { <span class="prop">color</span>: <span class="val">var(--couleur-accent)</span>; }
+
+<span class="cmt">/* ── 3. TYPOGRAPHIE ── */</span>
+<span class="sel">h1, h2, h3, h4</span> {
+  <span class="prop">font-family</span>: <span class="val">var(--font-titre)</span>;
+  <span class="prop">font-weight</span>: <span class="num">700</span>;
+  <span class="prop">line-height</span>: <span class="num">1.2</span>;
+}
+<span class="sel">h1</span> { <span class="prop">font-size</span>: <span class="val">var(--fs-3xl)</span>; }
+<span class="sel">h2</span> { <span class="prop">font-size</span>: <span class="val">var(--fs-2xl)</span>; <span class="prop">margin-bottom</span>: <span class="val">var(--sp-lg)</span>; }
+<span class="sel">h3</span> { <span class="prop">font-size</span>: <span class="val">var(--fs-xl)</span>;  <span class="prop">margin-bottom</span>: <span class="val">var(--sp-md)</span>; }
+<span class="sel">p</span>  { <span class="prop">margin-bottom</span>: <span class="val">var(--sp-md)</span>; <span class="prop">color</span>: <span class="val">var(--couleur-muted)</span>; }
+
+<span class="cmt">/* ── 4. CONTENEUR CENTRÉ ── */</span>
+<span class="sel">.container</span> {
+  <span class="prop">width</span>:     <span class="num">100</span><span class="unit">%</span>;
+  <span class="prop">max-width</span>: <span class="val">var(--largeur-max)</span>;
+  <span class="prop">margin</span>:    <span class="num">0</span> <span class="val">auto</span>;
+  <span class="prop">padding</span>:   <span class="num">0</span> <span class="val">var(--sp-xl)</span>;
+}
+
+<span class="cmt">/* ─────────────────────────────────────────────────
+   5. TEMPLATE COMMUN — EN-TÊTE (header)
+───────────────────────────────────────────────── */</span>
+<span class="sel">#entete</span> {
+  <span class="prop">background</span>:  <span class="val">var(--couleur-surface)</span>;
+  <span class="prop">border-bottom</span>: <span class="num">1</span><span class="unit">px</span> <span class="val">solid var(--couleur-bordure)</span>;
+  <span class="prop">padding</span>:     <span class="val">var(--sp-xl)</span> <span class="num">0</span>;
+}
+
+<span class="sel">#entete .container</span> {
+  <span class="prop">display</span>:         <span class="val">flex</span>;
+  <span class="prop">align-items</span>:     <span class="val">center</span>;
+  <span class="prop">justify-content</span>: <span class="val">space-between</span>;
+  <span class="prop">gap</span>:             <span class="val">var(--sp-lg)</span>;
+}
+
+<span class="sel">#entete h1</span> {
+  <span class="prop">font-size</span>:   <span class="val">var(--fs-2xl)</span>;
+  <span class="prop">color</span>:       <span class="val">var(--couleur-texte)</span>;
+  <span class="prop">letter-spacing</span>: <span class="val">-0.5px</span>;
+}
+
+<span class="sel">#entete h1 span</span> {
+  <span class="prop">color</span>: <span class="val">var(--couleur-accent)</span>;
+}
+
+<span class="sel">#entete .sous-titre</span> {
+  <span class="prop">font-size</span>: <span class="val">var(--fs-sm)</span>;
+  <span class="prop">color</span>:     <span class="val">var(--couleur-muted)</span>;
+  <span class="prop">margin-top</span>: <span class="val">var(--sp-xs)</span>;
+}
+
+<span class="cmt">/* ─────────────────────────────────────────────────
+   6. TEMPLATE COMMUN — NAVIGATION (nav)
+───────────────────────────────────────────────── */</span>
+<span class="sel">#nav-principale</span> {
+  <span class="prop">background</span>:    <span class="val">rgba(15,15,19,.95)</span>;
+  <span class="prop">backdrop-filter</span>: <span class="val">blur(10px)</span>;
+  <span class="prop">border-bottom</span>: <span class="num">1</span><span class="unit">px</span> <span class="val">solid var(--couleur-bordure)</span>;
+  <span class="prop">position</span>:      <span class="val">sticky</span>;
+  <span class="prop">top</span>:           <span class="num">0</span>;
+  <span class="prop">z-index</span>:       <span class="num">100</span>;
+}
+
+<span class="sel">#nav-principale .container</span> {
+  <span class="prop">display</span>: <span class="val">flex</span>;
+  <span class="prop">gap</span>:     <span class="num">0</span>;
+}
+
+<span class="sel">#nav-principale a</span> {
+  <span class="prop">display</span>:      <span class="val">block</span>;
+  <span class="prop">padding</span>:      <span class="num">14</span><span class="unit">px</span> <span class="num">20</span><span class="unit">px</span>;
+  <span class="prop">color</span>:        <span class="val">var(--couleur-muted)</span>;
+  <span class="prop">font-size</span>:    <span class="val">var(--fs-sm)</span>;
+  <span class="prop">font-weight</span>:  <span class="num">600</span>;
+  <span class="prop">letter-spacing</span>: <span class="val">0.3px</span>;
+  <span class="prop">border-bottom</span>: <span class="num">2</span><span class="unit">px</span> <span class="val">solid transparent</span>;
+  <span class="prop">transition</span>:   <span class="val">var(--transition)</span>;
+}
+<span class="sel">#nav-principale a:hover</span>,
+<span class="sel">#nav-principale a.actif</span> {
+  <span class="prop">color</span>:        <span class="val">var(--couleur-texte)</span>;
+  <span class="prop">border-bottom-color</span>: <span class="val">var(--couleur-accent)</span>;
+}
+
+<span class="cmt">/* ─────────────────────────────────────────────────
+   7. TEMPLATE COMMUN — PIED DE PAGE (footer)
+───────────────────────────────────────────────── */</span>
+<span class="sel">#pied-de-page</span> {
+  <span class="prop">background</span>:    <span class="val">var(--couleur-surface)</span>;
+  <span class="prop">border-top</span>:    <span class="num">1</span><span class="unit">px</span> <span class="val">solid var(--couleur-bordure)</span>;
+  <span class="prop">padding</span>:       <span class="val">var(--sp-xl)</span> <span class="num">0</span>;
+  <span class="prop">margin-top</span>:    <span class="val">auto</span>; <span class="cmt">/* colle au bas (body flex) */</span>
+}
+
+<span class="sel">#pied-de-page .container</span> {
+  <span class="prop">display</span>:         <span class="val">flex</span>;
+  <span class="prop">justify-content</span>: <span class="val">space-between</span>;
+  <span class="prop">align-items</span>:     <span class="val">center</span>;
+  <span class="prop">flex-wrap</span>:       <span class="val">wrap</span>;
+  <span class="prop">gap</span>:             <span class="val">var(--sp-md)</span>;
+}
+
+<span class="sel">#pied-de-page p</span> {
+  <span class="prop">font-size</span>: <span class="val">var(--fs-sm)</span>;
+  <span class="prop">color</span>:     <span class="val">var(--couleur-muted)</span>;
+  <span class="prop">margin</span>:    <span class="num">0</span>;
+}
+
+<span class="cmt">/* ─────────────────────────────────────────────────
+   8. MAIN — Zone de contenu principale
+───────────────────────────────────────────────── */</span>
+<span class="sel">main</span> {
+  <span class="prop">flex</span>:    <span class="num">1</span>;
+  <span class="prop">padding</span>: <span class="val">var(--sp-2xl)</span> <span class="num">0</span>;
+}
+
+<span class="sel">main h2</span> {
+  <span class="prop">padding-bottom</span>: <span class="val">var(--sp-md)</span>;
+  <span class="prop">border-bottom</span>:  <span class="num">2</span><span class="unit">px</span> <span class="val">solid var(--couleur-bordure)</span>;
+  <span class="prop">margin-bottom</span>:  <span class="val">var(--sp-xl)</span>;
+}
+<span class="sel">main h2::after</span> {
+  <span class="prop">content</span>: <span class="str">''</span>;
+  <span class="prop">display</span>: <span class="val">block</span>;
+  <span class="prop">width</span>:  <span class="num">50</span><span class="unit">px</span>;
+  <span class="prop">height</span>: <span class="num">3</span><span class="unit">px</span>;
+  <span class="prop">background</span>: <span class="val">var(--couleur-accent)</span>;
+  <span class="prop">margin-top</span>: <span class="val">var(--sp-sm)</span>;
+}
+
+<span class="cmt">/* ─────────────────────────────────────────────────
+   9. COMPOSANTS — Boutons
+───────────────────────────────────────────────── */</span>
+<span class="sel">.btn</span> {
+  <span class="prop">display</span>:       <span class="val">inline-flex</span>;
+  <span class="prop">align-items</span>:   <span class="val">center</span>;
+  <span class="prop">gap</span>:           <span class="val">var(--sp-sm)</span>;
+  <span class="prop">padding</span>:       <span class="num">10</span><span class="unit">px</span> <span class="num">22</span><span class="unit">px</span>;
+  <span class="prop">border</span>:        <span class="num">2</span><span class="unit">px</span> <span class="val">solid transparent</span>;
+  <span class="prop">border-radius</span>: <span class="val">var(--rayon-md)</span>;
+  <span class="prop">font-size</span>:     <span class="val">var(--fs-sm)</span>;
+  <span class="prop">font-weight</span>:   <span class="num">600</span>;
+  <span class="prop">cursor</span>:        <span class="val">pointer</span>;
+  <span class="prop">transition</span>:    <span class="val">var(--transition)</span>;
+  <span class="prop">text-decoration</span>: <span class="val">none</span>;
+}
+<span class="sel">.btn-primaire</span> {
+  <span class="prop">background</span>: <span class="val">var(--couleur-accent)</span>;
+  <span class="prop">color</span>:      <span class="val">white</span>;
+}
+<span class="sel">.btn-primaire:hover</span> {
+  <span class="prop">background</span>: <span class="val">#6d28d9</span>;
+  <span class="prop">transform</span>:  <span class="val">translateY(-1px)</span>;
+}
+<span class="sel">.btn-danger</span> {
+  <span class="prop">background</span>: <span class="val">transparent</span>;
+  <span class="prop">border-color</span>: <span class="val">var(--couleur-danger)</span>;
+  <span class="prop">color</span>:      <span class="val">var(--couleur-danger)</span>;
+}
+<span class="sel">.btn-danger:hover</span> {
+  <span class="prop">background</span>: <span class="val">var(--couleur-danger)</span>;
+  <span class="prop">color</span>:      <span class="val">white</span>;
+}
+
+<span class="cmt">/* ─────────────────────────────────────────────────
+   10. COMPOSANTS — Carte projet (lister-projets)
+───────────────────────────────────────────────── */</span>
+<span class="sel">.grille-projets</span> {
+  <span class="prop">display</span>:               <span class="val">flex</span>;
+  <span class="prop">flex-wrap</span>:             <span class="val">wrap</span>;
+  <span class="prop">gap</span>:                   <span class="val">var(--sp-lg)</span>;
+}
+
+<span class="sel">.carte-projet</span> {
+  <span class="prop">background</span>:    <span class="val">var(--couleur-surface)</span>;
+  <span class="prop">border</span>:        <span class="num">1</span><span class="unit">px</span> <span class="val">solid var(--couleur-bordure)</span>;
+  <span class="prop">border-top</span>:    <span class="num">3</span><span class="unit">px</span> <span class="val">solid var(--couleur-accent)</span>;
+  <span class="prop">border-radius</span>: <span class="val">var(--rayon-lg)</span>;
+  <span class="prop">overflow</span>:      <span class="val">hidden</span>;
+  <span class="prop">flex</span>:          <span class="num">1</span> <span class="num">1</span> <span class="num">280</span><span class="unit">px</span>;
+  <span class="prop">max-width</span>:     <span class="num">360</span><span class="unit">px</span>;
+  <span class="prop">transition</span>:    <span class="val">transform .2s, box-shadow .2s</span>;
+  <span class="prop">display</span>:       <span class="val">flex</span>;
+  <span class="prop">flex-direction</span>: <span class="val">column</span>;
+}
+<span class="sel">.carte-projet:hover</span> {
+  <span class="prop">transform</span>:  <span class="val">translateY(-5px)</span>;
+  <span class="prop">box-shadow</span>: <span class="num">0</span> <span class="num">16</span><span class="unit">px</span> <span class="num">40</span><span class="unit">px</span> <span class="val">rgba(0,0,0,.4)</span>;
+}
+
+<span class="sel">.carte-projet img</span> {
+  <span class="prop">width</span>:          <span class="num">100</span><span class="unit">%</span>;
+  <span class="prop">height</span>:         <span class="num">190</span><span class="unit">px</span>;
+  <span class="prop">object-fit</span>:     <span class="val">cover</span>;
+  <span class="prop">object-position</span>: <span class="val">top</span>;
+}
+
+<span class="sel">.carte-projet .carte-corps</span> {
+  <span class="prop">padding</span>:        <span class="val">var(--sp-lg)</span>;
+  <span class="prop">flex</span>:           <span class="num">1</span>;
+  <span class="prop">display</span>:        <span class="val">flex</span>;
+  <span class="prop">flex-direction</span>: <span class="val">column</span>;
+  <span class="prop">gap</span>:            <span class="val">var(--sp-md)</span>;
+}
+
+<span class="sel">.carte-projet h3</span> {
+  <span class="prop">margin</span>: <span class="num">0</span>;
+}
+<span class="sel">.carte-projet h3 a</span> {
+  <span class="prop">color</span>: <span class="val">var(--couleur-texte)</span>;
+  <span class="prop">font-size</span>: <span class="val">var(--fs-lg)</span>;
+}
+<span class="sel">.carte-projet h3 a:hover</span> {
+  <span class="prop">color</span>: <span class="val">var(--couleur-accent)</span>;
+}
+
+<span class="sel">.carte-projet .carte-pied</span> {
+  <span class="prop">display</span>:         <span class="val">flex</span>;
+  <span class="prop">justify-content</span>: <span class="val">flex-end</span>;
+  <span class="prop">padding</span>:         <span class="val">var(--sp-md) var(--sp-lg)</span>;
+  <span class="prop">border-top</span>:      <span class="num">1</span><span class="unit">px</span> <span class="val">solid var(--couleur-bordure)</span>;
+}
+
+<span class="cmt">/* ─────────────────────────────────────────────────
+   11. COMPOSANTS — Détail projet (detailler-projet)
+───────────────────────────────────────────────── */</span>
+<span class="sel">.detail-projet</span> {
+  <span class="prop">display</span>:    <span class="val">flex</span>;
+  <span class="prop">gap</span>:        <span class="val">var(--sp-2xl)</span>;
+  <span class="prop">align-items</span>: <span class="val">flex-start</span>;
+}
+
+<span class="sel">.detail-projet .image-conteneur</span> {
+  <span class="prop">flex</span>:          <span class="num">0</span> <span class="num">0</span> <span class="num">420</span><span class="unit">px</span>;
+  <span class="prop">border-radius</span>: <span class="val">var(--rayon-lg)</span>;
+  <span class="prop">overflow</span>:      <span class="val">hidden</span>;
+  <span class="prop">border</span>:        <span class="num">1</span><span class="unit">px</span> <span class="val">solid var(--couleur-bordure)</span>;
+}
+
+<span class="sel">.detail-projet .infos</span> {
+  <span class="prop">flex</span>: <span class="num">1</span>;
+}
+
+<span class="sel">.liste-technologies</span> {
+  <span class="prop">counter-reset</span>: tech;
+}
+<span class="sel">.liste-technologies li</span> {
+  <span class="prop">counter-increment</span>: tech;
+  <span class="prop">display</span>:   <span class="val">flex</span>;
+  <span class="prop">align-items</span>: <span class="val">center</span>;
+  <span class="prop">gap</span>:       <span class="val">var(--sp-md)</span>;
+  <span class="prop">padding</span>:   <span class="val">var(--sp-sm) var(--sp-md)</span>;
+  <span class="prop">margin-bottom</span>: <span class="val">var(--sp-xs)</span>;
+  <span class="prop">background</span>: <span class="val">var(--couleur-surface2)</span>;
+  <span class="prop">border-radius</span>: <span class="val">var(--rayon-sm)</span>;
+  <span class="prop">border-left</span>: <span class="num">3</span><span class="unit">px</span> <span class="val">solid var(--couleur-accent2)</span>;
+}
+<span class="sel">.liste-technologies li::before</span> {
+  <span class="prop">content</span>: <span class="val">counter(tech)</span>;
+  <span class="prop">background</span>: <span class="val">var(--couleur-accent2)</span>;
+  <span class="prop">color</span>:     <span class="val">var(--couleur-fond)</span>;
+  <span class="prop">width</span>:     <span class="num">24</span><span class="unit">px</span>;
+  <span class="prop">height</span>:    <span class="num">24</span><span class="unit">px</span>;
+  <span class="prop">border-radius</span>: <span class="num">50</span><span class="unit">%</span>;
+  <span class="prop">display</span>:   <span class="val">flex</span>;
+  <span class="prop">align-items</span>: <span class="val">center</span>;
+  <span class="prop">justify-content</span>: <span class="val">center</span>;
+  <span class="prop">font-size</span>: <span class="val">var(--fs-xs)</span>;
+  <span class="prop">font-weight</span>: <span class="num">700</span>;
+  <span class="prop">flex-shrink</span>: <span class="num">0</span>;
+}
+
+<span class="sel">.lien-retour</span> {
+  <span class="prop">display</span>:     <span class="val">inline-flex</span>;
+  <span class="prop">align-items</span>: <span class="val">center</span>;
+  <span class="prop">gap</span>:         <span class="val">var(--sp-sm)</span>;
+  <span class="prop">margin-bottom</span>: <span class="val">var(--sp-xl)</span>;
+  <span class="prop">color</span>:       <span class="val">var(--couleur-muted)</span>;
+  <span class="prop">font-size</span>:   <span class="val">var(--fs-sm)</span>;
+}
+<span class="sel">.lien-retour:hover</span> { <span class="prop">color</span>: <span class="val">var(--couleur-texte)</span>; }
+
+<span class="cmt">/* ─────────────────────────────────────────────────
+   12. COMPOSANTS — Formulaire (ajouter-projet)
+───────────────────────────────────────────────── */</span>
+<span class="sel">.formulaire-conteneur</span> {
+  <span class="prop">max-width</span>:     <span class="num">680</span><span class="unit">px</span>;
+  <span class="prop">background</span>:    <span class="val">var(--couleur-surface)</span>;
+  <span class="prop">border</span>:        <span class="num">1</span><span class="unit">px</span> <span class="val">solid var(--couleur-bordure)</span>;
+  <span class="prop">border-radius</span>: <span class="val">var(--rayon-lg)</span>;
+  <span class="prop">padding</span>:       <span class="val">var(--sp-xl)</span>;
+}
+
+<span class="sel">.champ-groupe</span> {
+  <span class="prop">display</span>:       <span class="val">flex</span>;
+  <span class="prop">flex-direction</span>: <span class="val">column</span>;
+  <span class="prop">gap</span>:           <span class="val">var(--sp-sm)</span>;
+  <span class="prop">margin-bottom</span>: <span class="val">var(--sp-lg)</span>;
+}
+
+<span class="sel">label</span> {
+  <span class="prop">font-size</span>:   <span class="val">var(--fs-sm)</span>;
+  <span class="prop">font-weight</span>: <span class="num">600</span>;
+  <span class="prop">color</span>:       <span class="val">var(--couleur-texte)</span>;
+}
+<span class="sel">label .requis</span> { <span class="prop">color</span>: <span class="val">var(--couleur-danger)</span>; <span class="prop">margin-left</span>: <span class="num">2</span><span class="unit">px</span>; }
+
+<span class="sel">input[type="text"],
+input[type="url"],
+input[type="date"],
+input[type="file"],
+select,
+textarea</span> {
+  <span class="prop">width</span>:         <span class="num">100</span><span class="unit">%</span>;
+  <span class="prop">background</span>:    <span class="val">var(--couleur-fond)</span>;
+  <span class="prop">border</span>:        <span class="num">1</span><span class="unit">px</span> <span class="val">solid var(--couleur-bordure)</span>;
+  <span class="prop">border-radius</span>: <span class="val">var(--rayon-md)</span>;
+  <span class="prop">padding</span>:       <span class="num">10</span><span class="unit">px</span> <span class="num">14</span><span class="unit">px</span>;
+  <span class="prop">color</span>:         <span class="val">var(--couleur-texte)</span>;
+  <span class="prop">font-size</span>:     <span class="val">var(--fs-md)</span>;
+  <span class="prop">font-family</span>:   <span class="val">var(--font-corps)</span>;
+  <span class="prop">transition</span>:    <span class="val">border-color .2s, box-shadow .2s</span>;
+}
+
+<span class="sel">input:focus, select:focus, textarea:focus</span> {
+  <span class="prop">outline</span>:     <span class="val">none</span>;
+  <span class="prop">border-color</span>: <span class="val">var(--couleur-accent)</span>;
+  <span class="prop">box-shadow</span>:  <span class="num">0</span> <span class="num">0</span> <span class="num">0</span> <span class="num">3</span><span class="unit">px</span> <span class="val">rgba(124,58,237,.2)</span>;
+}
+
+<span class="sel">input[required]</span> {
+  <span class="prop">border-left</span>: <span class="num">3</span><span class="unit">px</span> <span class="val">solid var(--couleur-accent)</span>;
+}
+
+<span class="sel">fieldset</span> {
+  <span class="prop">border</span>:        <span class="num">1</span><span class="unit">px</span> <span class="val">solid var(--couleur-bordure)</span>;
+  <span class="prop">border-radius</span>: <span class="val">var(--rayon-md)</span>;
+  <span class="prop">padding</span>:       <span class="val">var(--sp-lg)</span>;
+  <span class="prop">margin-bottom</span>: <span class="val">var(--sp-lg)</span>;
+}
+<span class="sel">legend</span> {
+  <span class="prop">padding</span>:    <span class="num">0</span> <span class="val">var(--sp-sm)</span>;
+  <span class="prop">font-weight</span>: <span class="num">600</span>;
+  <span class="prop">color</span>:      <span class="val">var(--couleur-texte)</span>;
+}
+
+<span class="sel">.checkbox-groupe</span> {
+  <span class="prop">display</span>:   <span class="val">flex</span>;
+  <span class="prop">flex-wrap</span>: <span class="val">wrap</span>;
+  <span class="prop">gap</span>:       <span class="val">var(--sp-sm)</span>;
+}
+<span class="sel">.checkbox-groupe label</span> {
+  <span class="prop">display</span>:       <span class="val">flex</span>;
+  <span class="prop">align-items</span>:   <span class="val">center</span>;
+  <span class="prop">gap</span>:           <span class="val">var(--sp-sm)</span>;
+  <span class="prop">cursor</span>:        <span class="val">pointer</span>;
+  <span class="prop">padding</span>:       <span class="val">var(--sp-sm) var(--sp-md)</span>;
+  <span class="prop">background</span>:    <span class="val">var(--couleur-surface2)</span>;
+  <span class="prop">border</span>:        <span class="num">1</span><span class="unit">px</span> <span class="val">solid var(--couleur-bordure)</span>;
+  <span class="prop">border-radius</span>: <span class="val">var(--rayon-sm)</span>;
+  <span class="prop">font-size</span>:     <span class="val">var(--fs-sm)</span>;
+  <span class="prop">transition</span>:    <span class="val">var(--transition)</span>;
+}
+<span class="sel">.checkbox-groupe label:hover</span> {
+  <span class="prop">border-color</span>: <span class="val">var(--couleur-accent2)</span>;
+  <span class="prop">color</span>: <span class="val">var(--couleur-accent2)</span>;
+}
+
+<span class="sel">.boutons-formulaire</span> {
+  <span class="prop">display</span>:   <span class="val">flex</span>;
+  <span class="prop">gap</span>:       <span class="val">var(--sp-md)</span>;
+  <span class="prop">flex-wrap</span>: <span class="val">wrap</span>;
+  <span class="prop">margin-top</span>: <span class="val">var(--sp-xl)</span>;
+}
+
+<span class="cmt">/* ─────────────────────────────────────────────────
+   13. RESPONSIVE — Mobile first
+───────────────────────────────────────────────── */</span>
+<span class="sel">@media (max-width: 768px)</span> {
+  <span class="sel">.container</span>       { <span class="prop">padding</span>: <span class="num">0</span> <span class="val">var(--sp-md)</span>; }
+  <span class="sel">.grille-projets</span>  { <span class="prop">flex-direction</span>: <span class="val">column</span>; }
+  <span class="sel">.carte-projet</span>    { <span class="prop">max-width</span>: <span class="num">100</span><span class="unit">%</span>; }
+  <span class="sel">.detail-projet</span>   { <span class="prop">flex-direction</span>: <span class="val">column</span>; }
+  <span class="sel">.detail-projet .image-conteneur</span> { <span class="prop">flex</span>: <span class="val">none</span>; <span class="prop">width</span>: <span class="num">100</span><span class="unit">%</span>; }
+  <span class="sel">h1</span>               { <span class="prop">font-size</span>: <span class="val">var(--fs-2xl)</span>; }
+  <span class="sel">h2</span>               { <span class="prop">font-size</span>: <span class="val">var(--fs-xl)</span>; }
+}
+<span class="lang-tag">CSS</span></code></pre>
+      </div>
+    </div>
+    <div class="commit-badge">git add style.css &amp;&amp; git commit -m "feat: feuille de style principale et template commun"</div>
+  </div>
+
+  <!-- ── Template HTML mis à jour ── -->
+  <div style="margin-top:50px;">
+    <span class="file-badge fb-orange">🔗 Template HTML — Structure commune</span>
+    <h3>Intégration du CSS dans les pages HTML</h3>
+    <p>
+      Chaque page HTML doit partager la même structure pour que le template soit cohérent.
+      Voici le squelette à utiliser pour les trois pages :
+    </p>
+
+    <div class="demo-wrap">
+      <div class="demo-header">
+        <div class="dot-row"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+        <span class="file-name">lister-projets.html — avec CSS et template</span>
+      </div>
+      <div class="demo-body">
+<pre><code><span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="att">lang=</span><span class="atv">"fr"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="att">charset=</span><span class="atv">"UTF-8"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="att">name=</span><span class="atv">"viewport"</span> <span class="att">content=</span><span class="atv">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;title&gt;</span>Portfolio — Projets<span class="tag">&lt;/title&gt;</span>
+  <span class="cmt">&lt;!-- Lien vers la feuille de style commune --&gt;</span>
+  <span class="tag">&lt;link</span> <span class="att">rel=</span><span class="atv">"stylesheet"</span> <span class="att">href=</span><span class="atv">"style.css"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+
+  <span class="cmt">&lt;!-- ══ TEMPLATE : EN-TÊTE ══ --&gt;</span>
+  <span class="tag">&lt;header</span> <span class="att">id=</span><span class="atv">"entete"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;div</span> <span class="att">class=</span><span class="atv">"container"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;div&gt;</span>
+        <span class="tag">&lt;h1&gt;</span>Mon <span class="tag">&lt;span&gt;</span>Portfolio<span class="tag">&lt;/span&gt;&lt;/h1&gt;</span>
+        <span class="tag">&lt;p</span> <span class="att">class=</span><span class="atv">"sous-titre"</span><span class="tag">&gt;</span>Développeur Full Stack<span class="tag">&lt;/p&gt;</span>
+      <span class="tag">&lt;/div&gt;</span>
+      <span class="tag">&lt;a</span> <span class="att">href=</span><span class="atv">"ajouter-projet.html"</span> <span class="att">class=</span><span class="atv">"btn btn-primaire"</span><span class="tag">&gt;</span>
+        + Nouveau projet
+      <span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;/header&gt;</span>
+
+  <span class="cmt">&lt;!-- ══ TEMPLATE : NAVIGATION ══ --&gt;</span>
+  <span class="tag">&lt;nav</span> <span class="att">id=</span><span class="atv">"nav-principale"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;div</span> <span class="att">class=</span><span class="atv">"container"</span><span class="tag">&gt;</span>
+      <span class="cmt">&lt;!-- Ajouter class="actif" sur le lien de la page courante --&gt;</span>
+      <span class="tag">&lt;a</span> <span class="att">href=</span><span class="atv">"lister-projets.html"</span> <span class="att">class=</span><span class="atv">"actif"</span><span class="tag">&gt;</span>Tous les projets<span class="tag">&lt;/a&gt;</span>
+      <span class="tag">&lt;a</span> <span class="att">href=</span><span class="atv">"ajouter-projet.html"</span><span class="tag">&gt;</span>Ajouter un projet<span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;/nav&gt;</span>
+
+  <span class="cmt">&lt;!-- ══ CONTENU PRINCIPAL (propre à chaque page) ══ --&gt;</span>
+  <span class="tag">&lt;main&gt;</span>
+    <span class="tag">&lt;div</span> <span class="att">class=</span><span class="atv">"container"</span><span class="tag">&gt;</span>
+
+      <span class="tag">&lt;h2&gt;</span>Tous les projets<span class="tag">&lt;/h2&gt;</span>
+
+      <span class="cmt">&lt;!-- Grille de cartes projets --&gt;</span>
+      <span class="tag">&lt;div</span> <span class="att">class=</span><span class="atv">"grille-projets"</span><span class="tag">&gt;</span>
+
+        <span class="cmt">&lt;!-- Carte projet --&gt;</span>
+        <span class="tag">&lt;article</span> <span class="att">class=</span><span class="atv">"carte-projet"</span><span class="tag">&gt;</span>
+          <span class="tag">&lt;img</span>
+            <span class="att">src=</span><span class="atv">"images/projet1.jpg"</span>
+            <span class="att">alt=</span><span class="atv">"Application E-commerce"</span>
+          <span class="tag">&gt;</span>
+          <span class="tag">&lt;div</span> <span class="att">class=</span><span class="atv">"carte-corps"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;h3&gt;</span>
+              <span class="tag">&lt;a</span> <span class="att">href=</span><span class="atv">"detailler-projet.html"</span><span class="tag">&gt;</span>Application E-commerce<span class="tag">&lt;/a&gt;</span>
+            <span class="tag">&lt;/h3&gt;</span>
+          <span class="tag">&lt;/div&gt;</span>
+          <span class="tag">&lt;div</span> <span class="att">class=</span><span class="atv">"carte-pied"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;button</span> <span class="att">class=</span><span class="atv">"btn btn-danger"</span> <span class="att">type=</span><span class="atv">"button"</span><span class="tag">&gt;</span>Supprimer<span class="tag">&lt;/button&gt;</span>
+          <span class="tag">&lt;/div&gt;</span>
+        <span class="tag">&lt;/article&gt;</span>
+
+        <span class="cmt">&lt;!-- Répéter les cartes pour chaque projet... --&gt;</span>
+
+      <span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;/main&gt;</span>
+
+  <span class="cmt">&lt;!-- ══ TEMPLATE : PIED DE PAGE ══ --&gt;</span>
+  <span class="tag">&lt;footer</span> <span class="att">id=</span><span class="atv">"pied-de-page"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;div</span> <span class="att">class=</span><span class="atv">"container"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;p&gt;</span>&amp;copy; 2025 Mon Portfolio — Tous droits réservés<span class="tag">&lt;/p&gt;</span>
+      <span class="tag">&lt;p&gt;</span>Réalisé avec HTML &amp;amp; CSS<span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;/footer&gt;</span>
+
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span>
+<span class="lang-tag">HTML</span></code></pre>
+      </div>
+    </div>
+    <div class="commit-badge">git add lister-projets.html &amp;&amp; git commit -m "style: mise en forme page liste des projets"</div>
+  </div>
+
+  <!-- ── RECAP COMMITS ── -->
+  <div style="margin-top:50px;">
+    <h3>Récapitulatif des commits CSS</h3>
+    <ol class="steps">
+      <li><strong>feat: feuille de style principale et template commun</strong><br>
+        <small style="color:var(--muted);">Création de <code>style.css</code> avec variables, reset, template header/nav/footer</small></li>
+      <li><strong>style: mise en forme page liste des projets</strong><br>
+        <small style="color:var(--muted);">Grille de cartes, hover, bouton supprimer — <code>lister-projets.html</code></small></li>
+      <li><strong>style: mise en forme page détail projet</strong><br>
+        <small style="color:var(--muted);">Layout flex, liste technologies ordonnée, lien retour — <code>detailler-projet.html</code></small></li>
+      <li><strong>style: mise en forme formulaire ajout projet</strong><br>
+        <small style="color:var(--muted);">Champs, checkbox, focus states — <code>ajouter-projet.html</code></small></li>
+      <li><strong>style: responsive mobile (max-width: 768px)</strong><br>
+        <small style="color:var(--muted);">Media queries pour toutes les pages</small></li>
+    </ol>
+  </div>
+
+</section>
+
+</main>
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
+<footer>
+  COURS CSS · Module 02 · Développement Web Full Stack · &copy; 2025
+</footer>
+
+</body>
+</html>
