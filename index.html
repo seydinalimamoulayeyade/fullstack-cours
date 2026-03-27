@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cours Full Stack — Développement Web</title>
+<meta name="description" content="Série de cours complets sur le développement Web Full Stack : HTML, CSS, Tailwind CSS, JavaScript Vanilla avec projets pratiques.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════ */
+:root {
+  --ink:    #08090a;
+  --paper:  #f2f0eb;
+  --cream:  #e8e4db;
+  --border: #d4cfc5;
+  --muted:  #888077;
+  --text:   #1a1714;
+
+  /* Accent per module */
+  --c-html: #e34c26;
+  --c-css:  #264de4;
+  --c-tw:   #06b6d4;
+  --c-js:   #f7df1e;
+
+  /* Shared */
+  --accent: #1a1714;
+  --w: 1140px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--paper);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+  cursor: default;
+}
+
+/* ═══════════════════════════════════════════
+   NOISE TEXTURE OVERLAY
+═══════════════════════════════════════════ */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 999; opacity: .5;
+}
+
+/* ═══════════════════════════════════════════
+   HEADER HERO
+═══════════════════════════════════════════ */
+header {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 60px 80px;
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+/* Animated gradient bg */
+header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 70% 30%, #1a3a2a 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 20% 80%, #1a1a2a 0%, transparent 55%);
+  animation: bgPulse 8s ease-in-out infinite alternate;
+}
+@keyframes bgPulse {
+  from { opacity: .6; }
+  to   { opacity: 1; }
+}
+
+/* Grid lines */
+header::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.hero-inner {
+  max-width: var(--w);
+  margin: 0 auto; width: 100%;
+  position: relative; z-index: 1;
+}
+
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+  color: rgba(255,255,255,.4);
+  margin-bottom: 24px;
+  display: flex; align-items: center; gap: 12px;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 30px; height: 1px;
+  background: rgba(255,255,255,.3);
+}
+
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(72px, 12vw, 160px);
+  line-height: .88;
+  letter-spacing: -1px;
+  color: #fff;
+  margin-bottom: 32px;
+}
+.hero-title .line-2 {
+  display: block;
+  -webkit-text-stroke: 1px rgba(255,255,255,.25);
+  color: transparent;
+}
+.hero-title .accent-word {
+  position: relative;
+  display: inline-block;
+}
+.hero-title .accent-word::after {
+  content: '';
+  position: absolute;
+  bottom: 8px; left: 0; right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #22c55e, #06b6d4);
+  transform: skew(-3deg);
+}
+
+.hero-desc {
+  max-width: 580px;
+  font-size: 18px;
+  font-weight: 300;
+  color: rgba(255,255,255,.55);
+  line-height: 1.75;
+  margin-bottom: 48px;
+}
+
+.hero-badges {
+  display: flex; gap: 10px; flex-wrap: wrap;
+}
+.hero-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: 1px;
+  padding: 6px 14px; border-radius: 2px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+.hb-html { border-color: rgba(227,76,38,.6);  color: #f87171; background: rgba(227,76,38,.08); }
+.hb-css  { border-color: rgba(38,77,228,.5);  color: #93c5fd; background: rgba(38,77,228,.08); }
+.hb-tw   { border-color: rgba(6,182,212,.5);  color: #67e8f9; background: rgba(6,182,212,.08); }
+.hb-js   { border-color: rgba(247,223,30,.5); color: #fde68a; background: rgba(247,223,30,.08); }
+
+/* Scroll hint */
+.scroll-hint {
+  position: absolute;
+  bottom: 80px; right: 60px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(255,255,255,.25);
+  animation: bounce 2s ease-in-out infinite;
+}
+.scroll-hint::after {
+  content: '';
+  width: 1px; height: 50px;
+  background: linear-gradient(to bottom, rgba(255,255,255,.25), transparent);
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+/* ═══════════════════════════════════════════
+   NAV STICKY
+═══════════════════════════════════════════ */
+.sticky-nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(242,240,235,.94);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.sticky-nav-inner {
+  max-width: var(--w); margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 60px;
+  height: 56px;
+}
+.nav-brand {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px; letter-spacing: 1px;
+  color: var(--text);
+  text-decoration: none;
+}
+.nav-links {
+  display: flex; gap: 0;
+}
+.nav-links a {
+  padding: 0 16px;
+  height: 56px;
+  display: flex; align-items: center;
+  font-size: 13px; font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: all .2s;
+}
+.nav-links a:hover { color: var(--text); border-bottom-color: var(--text); }
+
+/* ═══════════════════════════════════════════
+   MAIN CONTENT
+═══════════════════════════════════════════ */
+main { max-width: var(--w); margin: 0 auto; padding: 0 60px 120px; }
+
+/* ═══════════════════════════════════════════
+   SECTION LABEL
+═══════════════════════════════════════════ */
+.sec-label {
+  display: flex; align-items: center; gap: 16px;
+  margin: 90px 0 50px;
+}
+.sec-label-line { flex: 1; height: 1px; background: var(--border); }
+.sec-label-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--muted); white-space: nowrap;
+}
+
+/* ═══════════════════════════════════════════
+   COURSE CARDS GRID
+═══════════════════════════════════════════ */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+}
+
+.course-card {
+  position: relative;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  padding: 44px 44px 40px;
+  text-decoration: none;
+  color: inherit;
+  display: flex; flex-direction: column;
+  min-height: 340px;
+  transition: all .3s;
+  overflow: hidden;
+}
+.course-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 4px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .4s cubic-bezier(.22,1,.36,1);
+}
+.course-card:hover::before { transform: scaleX(1); }
+.course-card:hover { background: #edeae3; }
+
+.cc-html::before  { background: var(--c-html); }
+.cc-css::before   { background: var(--c-css); }
+.cc-tw::before    { background: var(--c-tw); }
+.cc-js::before    { background: var(--c-js); }
+
+.card-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 80px; line-height: 1;
+  color: var(--border);
+  margin-bottom: 16px;
+  transition: color .3s;
+}
+.course-card:hover .card-num { color: var(--border); }
+
+.card-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 2px;
+  display: inline-block; margin-bottom: 14px;
+  font-weight: 600;
+}
+.ct-html { background: rgba(227,76,38,.1);  color: var(--c-html); }
+.ct-css  { background: rgba(38,77,228,.1);  color: var(--c-css);  }
+.ct-tw   { background: rgba(6,182,212,.1);  color: var(--c-tw);   }
+.ct-js   { background: rgba(247,223,30,.2); color: #92710c;       }
+
+.card-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 34px; line-height: 1.1;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.card-desc {
+  font-size: 14px; font-weight: 300;
+  color: var(--muted); line-height: 1.7;
+  flex: 1;
+}
+
+.card-meta {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.card-meta-info {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: var(--muted);
+  display: flex; gap: 16px;
+}
+.card-cta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text);
+  display: flex; align-items: center; gap: 6px;
+  transition: gap .2s;
+}
+.course-card:hover .card-cta { gap: 12px; }
+.cta-arrow { font-size: 16px; }
+
+/* Full-width demo card */
+.course-card.full-width {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: center;
+  min-height: 200px;
+  gap: 60px;
+  background: var(--ink);
+  color: #fff;
+  border-color: #2a2a2a;
+}
+.course-card.full-width:hover { background: #111; }
+.course-card.full-width .card-num  { color: rgba(255,255,255,.08); margin-bottom: 0; }
+.course-card.full-width .card-title { color: #fff; font-size: 28px; }
+.course-card.full-width .card-desc  { color: rgba(255,255,255,.5); }
+.course-card.full-width .card-meta  { border-top-color: rgba(255,255,255,.1); }
+.course-card.full-width .card-meta-info { color: rgba(255,255,255,.35); }
+.course-card.full-width .card-cta  { color: #fff; }
+.course-card.full-width .card-tag  {
+  background: rgba(247,223,30,.15);
+  color: var(--c-js);
+}
+.fw-left  { flex-shrink: 0; }
+.fw-right { flex: 1; display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
+.course-card.full-width .card-badge-row {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin-top: 10px;
+}
+.course-card.full-width .mini-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; padding: 3px 9px;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 2px;
+  color: rgba(255,255,255,.5);
+}
+
+/* ═══════════════════════════════════════════
+   STATS STRIP
+═══════════════════════════════════════════ */
+.stats-strip {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 2px; margin-top: 2px;
+}
+.stat-box {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  padding: 36px 32px;
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 56px; line-height: 1;
+  color: var(--text);
+}
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--muted); margin-top: 6px;
+}
+
+/* ═══════════════════════════════════════════
+   PROGRESSION TIMELINE
+═══════════════════════════════════════════ */
+.timeline {
+  display: flex; gap: 0;
+  margin-top: 32px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  border-radius: 4px;
+}
+.tl-step {
+  flex: 1;
+  padding: 28px 24px;
+  border-right: 1px solid var(--border);
+  position: relative;
+}
+.tl-step:last-child { border-right: none; }
+.tl-step::before {
+  content: attr(data-step);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 40px; line-height: 1;
+  color: var(--border);
+  display: block; margin-bottom: 8px;
+}
+.tl-step-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 2px;
+  display: inline-block; margin-bottom: 10px;
+}
+.tl-step-title { font-weight: 600; font-size: 15px; margin-bottom: 6px; }
+.tl-step-desc  { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* Arrow between steps */
+.tl-step::after {
+  content: '→';
+  position: absolute;
+  right: -14px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: var(--border);
+  z-index: 1;
+  background: var(--paper);
+  padding: 0 2px;
+}
+.tl-step:last-child::after { display: none; }
+
+/* ═══════════════════════════════════════════
+   DEPLOY SECTION
+═══════════════════════════════════════════ */
+.deploy-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 2px; margin-top: 32px;
+}
+.deploy-card {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  padding: 36px 36px 32px;
+}
+.deploy-card.featured {
+  background: var(--ink); color: #fff;
+  border-color: #2a2a2a;
+}
+.deploy-card.featured .deploy-title { color: #fff; }
+.deploy-card.featured .deploy-desc  { color: rgba(255,255,255,.5); }
+.deploy-card.featured .deploy-step  { border-color: rgba(255,255,255,.1); color: rgba(255,255,255,.5); }
+.deploy-card.featured code          { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.1); color: #fde68a; }
+.deploy-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 24px; margin-bottom: 8px;
+}
+.deploy-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 2px;
+  display: inline-block; margin-bottom: 16px;
+  background: rgba(34,197,94,.15); color: #16a34a;
+}
+.deploy-badge.alt { background: rgba(6,182,212,.15); color: #0891b2; }
+.deploy-desc { font-size: 14px; color: var(--muted); margin-bottom: 20px; line-height: 1.7; }
+.deploy-steps { display: flex; flex-direction: column; gap: 8px; }
+.deploy-step {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; color: var(--muted);
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+}
+.deploy-step code {
+  background: rgba(0,0,0,.05);
+  border: 1px solid var(--border);
+  padding: 1px 6px; border-radius: 2px;
+  color: var(--text);
+}
+
+/* ═══════════════════════════════════════════
+   STRUCTURE BLOCK
+═══════════════════════════════════════════ */
+.struct-block {
+  background: var(--ink);
+  border: 1px solid #2a2a2a;
+  padding: 36px 40px;
+  border-radius: 4px;
+  margin-top: 32px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; line-height: 2;
+  color: rgba(255,255,255,.6);
+}
+.sf  { color: #4ade80 }  /* folder */
+.sfi { color: #93c5fd }  /* file html */
+.sfc { color: #fde68a }  /* file js/json */
+.sfm { color: #c4b5fd }  /* file md */
+.sco { color: rgba(255,255,255,.2); font-style: italic; }
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer {
+  background: var(--ink);
+  padding: 70px 60px 50px;
+  margin-top: 2px;
+}
+.footer-inner {
+  max-width: var(--w); margin: 0 auto;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 40px; flex-wrap: wrap;
+}
+.footer-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 64px; line-height: .9;
+  color: rgba(255,255,255,.08);
+  letter-spacing: -1px;
+}
+.footer-links {
+  display: flex; flex-direction: column; gap: 8px; align-items: flex-end;
+}
+.footer-links a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+  color: rgba(255,255,255,.3);
+  text-decoration: none; transition: color .2s;
+}
+.footer-links a:hover { color: rgba(255,255,255,.7); }
+.footer-copy {
+  width: 100%;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(255,255,255,.15);
+  padding-top: 30px;
+  border-top: 1px solid rgba(255,255,255,.06);
+  display: flex; justify-content: space-between;
+}
+
+/* ═══════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-eyebrow { animation: fadeUp .6s ease both .1s; }
+.hero-title   { animation: fadeUp .6s ease both .25s; }
+.hero-desc    { animation: fadeUp .6s ease both .4s; }
+.hero-badges  { animation: fadeUp .6s ease both .55s; }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media (max-width: 900px) {
+  header              { padding: 0 28px 60px; }
+  main                { padding: 0 28px 80px; }
+  .sticky-nav-inner   { padding: 0 28px; }
+  footer              { padding: 50px 28px 40px; }
+  .courses-grid       { grid-template-columns: 1fr; }
+  .course-card.full-width { flex-direction: column; gap: 20px; }
+  .stats-strip        { grid-template-columns: repeat(2, 1fr); }
+  .deploy-grid        { grid-template-columns: 1fr; }
+  .timeline           { flex-direction: column; }
+  .tl-step::after     { display: none; }
+  .hero-title         { font-size: 68px; }
+  .nav-links          { display: none; }
+  .scroll-hint        { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<header>
+  <div class="scroll-hint">Scroll</div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Formation · Développement Web · Full Stack</div>
+    <h1 class="hero-title">
+      <span class="accent-word">Full</span>Stack
+      <span class="line-2">Web Dev</span>
+    </h1>
+    <p class="hero-desc">
+      Série de 4 modules pour maîtriser le développement web front-end,
+      du balisage HTML à l'application interactive en Vanilla JavaScript —
+      avec un projet portfolio fil conducteur.
+    </p>
+    <div class="hero-badges">
+      <span class="hero-badge hb-html">HTML5</span>
+      <span class="hero-badge hb-css">CSS3</span>
+      <span class="hero-badge hb-tw">Tailwind CSS</span>
+      <span class="hero-badge hb-js">JavaScript ES2024</span>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════
+     STICKY NAV
+══════════════════════════════════════ -->
+<nav class="sticky-nav">
+  <div class="sticky-nav-inner">
+    <a href="#" class="nav-brand">FullStack · Web</a>
+    <div class="nav-links">
+      <a href="#modules">Modules</a>
+      <a href="#progression">Progression</a>
+      <a href="#deploiement">Déploiement</a>
+      <a href="#structure">Structure</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ══════════════════════════════════════
+       STATS
+  ══════════════════════════════════════ -->
+  <div class="stats-strip" style="margin-top:60px">
+    <div class="stat-box">
+      <div class="stat-num">04</div>
+      <div class="stat-label">Modules</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">34+</div>
+      <div class="stat-label">Heures de cours</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">01</div>
+      <div class="stat-label">Projet fil conducteur</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Concepts couverts</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       MODULES
+  ══════════════════════════════════════ -->
+  <div class="sec-label" id="modules">
+    <div class="sec-label-line"></div>
+    <span class="sec-label-text">Les modules</span>
+    <div class="sec-label-line"></div>
+  </div>
+
+  <div class="courses-grid">
+
+    <!-- HTML -->
+    <a href="cours-html.html" class="course-card cc-html">
+      <div class="card-num">01</div>
+      <span class="card-tag ct-html">HTML5</span>
+      <h2 class="card-title">HyperText<br>Markup Language</h2>
+      <p class="card-desc">
+        Structure du Web. Éléments, balises, attributs, formulaires,
+        images, liens. Construction des 3 pages du portfolio en HTML pur.
+      </p>
+      <div class="card-meta">
+        <div class="card-meta-info">
+          <span>6 h</span>
+          <span>·</span>
+          <span>Débutant</span>
+          <span>·</span>
+          <span>9 concepts</span>
+        </div>
+        <span class="card-cta">Ouvrir <span class="cta-arrow">→</span></span>
+      </div>
+    </a>
+
+    <!-- CSS -->
+    <a href="cours-css.html" class="course-card cc-css">
+      <div class="card-num">02</div>
+      <span class="card-tag ct-css">CSS3</span>
+      <h2 class="card-title">Cascading<br>Style Sheets</h2>
+      <p class="card-desc">
+        Sélecteurs, Box Model, Flexbox, variables CSS, responsive design.
+        Création du template commun et stylisation de toutes les pages.
+      </p>
+      <div class="card-meta">
+        <div class="card-meta-info">
+          <span>8 h</span>
+          <span>·</span>
+          <span>Débutant</span>
+          <span>·</span>
+          <span>12 concepts</span>
+        </div>
+        <span class="card-cta">Ouvrir <span class="cta-arrow">→</span></span>
+      </div>
+    </a>
+
+    <!-- Tailwind -->
+    <a href="cours-tailwind.html" class="course-card cc-tw">
+      <div class="card-num">03</div>
+      <span class="card-tag ct-tw">Tailwind CSS</span>
+      <h2 class="card-title">Utility-First<br>CSS Framework</h2>
+      <p class="card-desc">
+        Approche utility-first, couleurs, typographie, espacement, Flexbox,
+        responsive et personnalisation. Refactorisation complète du portfolio.
+      </p>
+      <div class="card-meta">
+        <div class="card-meta-info">
+          <span>8 h</span>
+          <span>·</span>
+          <span>Intermédiaire</span>
+          <span>·</span>
+          <span>10 concepts</span>
+        </div>
+        <span class="card-cta">Ouvrir <span class="cta-arrow">→</span></span>
+      </div>
+    </a>
+
+    <!-- JS -->
+    <a href="cours-javascript-v2.html" class="course-card cc-js">
+      <div class="card-num">04</div>
+      <span class="card-tag ct-js">JavaScript</span>
+      <h2 class="card-title">Vanilla JS<br>ES2024</h2>
+      <p class="card-desc">
+        Variables, opérateurs, fonctions, DOM, événements, formulaires,
+        tableaux, objets, AJAX. SPA complète avec json-server.
+      </p>
+      <div class="card-meta">
+        <div class="card-meta-info">
+          <span>10 h</span>
+          <span>·</span>
+          <span>Intermédiaire</span>
+          <span>·</span>
+          <span>11 concepts</span>
+        </div>
+        <span class="card-cta">Ouvrir <span class="cta-arrow">→</span></span>
+      </div>
+    </a>
+
+    <!-- Portfolio SPA -->
+    <a href="portfolio-spa/index.html" class="course-card full-width">
+      <div class="fw-left">
+        <div class="card-num">⚡</div>
+      </div>
+      <div class="fw-right">
+        <div>
+          <span class="card-tag ct-js">Projet final</span>
+          <h2 class="card-title">Portfolio SPA<br>Vanilla JS + json-server</h2>
+          <p class="card-desc">
+            Application Single Page de gestion de portfolio :
+            CRUD complet, persistance REST via json-server,
+            DOM dynamique, validation de formulaire.
+          </p>
+          <div class="card-badge-row">
+            <span class="mini-badge">HTML5</span>
+            <span class="mini-badge">Tailwind CSS</span>
+            <span class="mini-badge">Vanilla JS</span>
+            <span class="mini-badge">Fetch API</span>
+            <span class="mini-badge">json-server</span>
+            <span class="mini-badge">SPA</span>
+          </div>
+        </div>
+        <div class="card-meta">
+          <div class="card-meta-info">
+            <span>Projet complet</span>
+            <span>·</span>
+            <span>4 modules appliqués</span>
+          </div>
+          <span class="card-cta">Lancer le projet <span class="cta-arrow">→</span></span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- ══════════════════════════════════════
+       PROGRESSION
+  ══════════════════════════════════════ -->
+  <div class="sec-label" id="progression">
+    <div class="sec-label-line"></div>
+    <span class="sec-label-text">Progression recommandée</span>
+    <div class="sec-label-line"></div>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-step" data-step="01">
+      <span class="tl-step-tag" style="background:rgba(227,76,38,.1);color:#e34c26">HTML5</span>
+      <div class="tl-step-title">Structurer</div>
+      <div class="tl-step-desc">Apprendre à construire la structure sémantique d'une page Web.</div>
+    </div>
+    <div class="tl-step" data-step="02">
+      <span class="tl-step-tag" style="background:rgba(38,77,228,.1);color:#264de4">CSS3</span>
+      <div class="tl-step-title">Mettre en forme</div>
+      <div class="tl-step-desc">Styliser les pages avec le modèle de boîte et Flexbox.</div>
+    </div>
+    <div class="tl-step" data-step="03">
+      <span class="tl-step-tag" style="background:rgba(6,182,212,.1);color:#06b6d4">Tailwind</span>
+      <div class="tl-step-title">Accélérer</div>
+      <div class="tl-step-desc">Refactoriser avec l'approche utility-first et le responsive intégré.</div>
+    </div>
+    <div class="tl-step" data-step="04">
+      <span class="tl-step-tag" style="background:rgba(247,223,30,.2);color:#92710c">JS</span>
+      <div class="tl-step-title">Animer</div>
+      <div class="tl-step-desc">Rendre le portfolio interactif avec Vanilla JS et une API REST.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       DÉPLOIEMENT
+  ══════════════════════════════════════ -->
+  <div class="sec-label" id="deploiement">
+    <div class="sec-label-line"></div>
+    <span class="sec-label-text">Déploiement</span>
+    <div class="sec-label-line"></div>
+  </div>
+
+  <div class="deploy-grid">
+
+    <div class="deploy-card featured">
+      <div class="deploy-badge">Recommandé · Gratuit</div>
+      <h3 class="deploy-title">GitHub Pages</h3>
+      <p class="deploy-desc">
+        Déployez directement depuis votre dépôt GitHub.
+        Aucune configuration serveur requise. HTTPS automatique.
+      </p>
+      <div class="deploy-steps">
+        <div class="deploy-step">1. Pousser sur GitHub <code>git push origin main</code></div>
+        <div class="deploy-step">2. Settings → Pages → Source : <code>main / root</code></div>
+        <div class="deploy-step">3. URL : <code>https://username.github.io/fullstack-cours</code></div>
+      </div>
+    </div>
+
+    <div class="deploy-card">
+      <div class="deploy-badge alt">Alternative · Drag &amp; Drop</div>
+      <h3 class="deploy-title">Netlify</h3>
+      <p class="deploy-desc">
+        Déployez en glissant votre dossier dans l'interface Netlify
+        ou en connectant votre dépôt GitHub pour un déploiement automatique.
+      </p>
+      <div class="deploy-steps">
+        <div class="deploy-step">1. Installer <code>npm install -g netlify-cli</code></div>
+        <div class="deploy-step">2. Lancer <code>netlify deploy --prod --dir .</code></div>
+        <div class="deploy-step">3. URL : <code>https://votre-projet.netlify.app</code></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════
+       STRUCTURE DU DÉPÔT
+  ══════════════════════════════════════ -->
+  <div class="sec-label" id="structure">
+    <div class="sec-label-line"></div>
+    <span class="sec-label-text">Structure du dépôt GitHub</span>
+    <div class="sec-label-line"></div>
+  </div>
+
+  <div class="struct-block">
+    <div><span class="sf">fullstack-cours/</span>  <span class="sco">← dépôt GitHub</span></div>
+    <div>├── <span class="sfi">index.html</span>                  <span class="sco">← cette page d'accueil</span></div>
+    <div>├── <span class="sfi">cours-html.html</span>             <span class="sco">← Module 01</span></div>
+    <div>├── <span class="sfi">cours-css.html</span>              <span class="sco">← Module 02</span></div>
+    <div>├── <span class="sfi">cours-tailwind.html</span>         <span class="sco">← Module 03</span></div>
+    <div>├── <span class="sfi">cours-javascript-v2.html</span>   <span class="sco">← Module 04</span></div>
+    <div>├── <span class="sfm">README.md</span>                   <span class="sco">← documentation du projet</span></div>
+    <div>└── <span class="sf">portfolio-spa/</span>              <span class="sco">← Application SPA</span></div>
+    <div>    ├── <span class="sfi">index.html</span>              <span class="sco">← SPA page unique</span></div>
+    <div>    ├── <span class="sfc">db.json</span>                 <span class="sco">← base de données json-server</span></div>
+    <div>    ├── <span class="sfc">package.json</span>            <span class="sco">← dépendances npm</span></div>
+    <div>    ├── <span class="sf">js/</span></div>
+    <div>    │   └── <span class="sfc">portfolio.js</span>        <span class="sco">← logique SPA complète</span></div>
+    <div>    └── <span class="sf">images/</span></div>
+    <div>        └── <span class="sco">← images des projets</span></div>
+  </div>
+
+</main>
+
+<!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-title">Full<br>Stack</div>
+    <div class="footer-links">
+      <a href="cours-html.html">Module 01 — HTML</a>
+      <a href="cours-css.html">Module 02 — CSS</a>
+      <a href="cours-tailwind.html">Module 03 — Tailwind</a>
+      <a href="cours-javascript-v2.html">Module 04 — JavaScript</a>
+      <a href="portfolio-spa/index.html">Projet SPA</a>
+    </div>
+  </div>
+  <div class="footer-inner">
+    <div class="footer-copy">
+      <span>&copy; 2025 — Formation Développement Web Full Stack</span>
+      <span>HTML · CSS · Tailwind · Vanilla JS</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
