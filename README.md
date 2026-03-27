@@ -17,66 +17,7 @@
 | 01 | **HTML5** — Structure & contenu | 6 h | Débutant | [`cours-html.html`](cours-html.html) |
 | 02 | **CSS3** — Mise en forme & Flexbox | 8 h | Débutant | [`cours-css.html`](cours-css.html) |
 | 03 | **Tailwind CSS** — Utility-First Framework | 8 h | Intermédiaire | [`cours-tailwind.html`](cours-tailwind.html) |
-| 04 | **JavaScript ES2024** — Vanilla JS & SPA | 10 h | Intermédiaire | [`cours-javascript-v2.html`](cours-javascript-v2.html) |
-
----
-
-## 🗂️ Structure du projet
-
-```
-fullstack-cours/
-├── index.html                   ← Page d'accueil (hub des modules)
-├── cours-html.html              ← Module 01 — HTML5
-├── cours-css.html               ← Module 02 — CSS3
-├── cours-tailwind.html          ← Module 03 — Tailwind CSS
-├── cours-javascript-v2.html     ← Module 04 — JavaScript
-├── README.md                    ← Ce fichier
-└── portfolio-spa/               ← Projet final SPA
-    ├── index.html               ← Application SPA page unique
-    ├── db.json                  ← Base de données json-server
-    ├── package.json             ← Dépendances npm
-    ├── js/
-    │   └── portfolio.js         ← Logique JS complète
-    └── images/                  ← Images des projets
-```
-
----
-
-## 🚀 Lancer le projet portfolio SPA
-
-### Prérequis
-- [Node.js](https://nodejs.org) (v16+)
-- npm (inclus avec Node.js)
-
-### Installation
-
-```bash
-# 1. Cloner le dépôt
-git clone https://github.com/VOTRE-USERNAME/fullstack-cours.git
-cd fullstack-cours/portfolio-spa
-
-# 2. Installer json-server
-npm install
-
-# 3. Lancer le serveur API (port 3000)
-npm start
-# ou directement :
-npx json-server --watch db.json --port 3000
-
-# 4. Ouvrir index.html dans le navigateur
-# (avec Live Server VS Code ou en double-cliquant)
-```
-
-### Endpoints API disponibles
-
-| Méthode | Endpoint | Description |
-|---------|----------|-------------|
-| `GET` | `/projets` | Liste tous les projets |
-| `GET` | `/projets/:id` | Détail d'un projet |
-| `POST` | `/projets` | Créer un projet |
-| `PUT` | `/projets/:id` | Remplacer un projet |
-| `PATCH` | `/projets/:id` | Modifier partiellement |
-| `DELETE` | `/projets/:id` | Supprimer un projet |
+| 04 | **JavaScript ES2024** — Vanilla JS & SPA | 10 h | Intermédiaire | [`cours-javascript-v2.html`](cours-javascript.html) |
 
 ---
 
@@ -131,57 +72,6 @@ npx json-server --watch db.json --port 3000
 
 ---
 
-## 🌍 Déploiement
-
-### GitHub Pages (recommandé)
-
-```bash
-# 1. Activer GitHub Pages
-# → Settings → Pages → Source : main / root
-
-# 2. URL générée automatiquement :
-# https://VOTRE-USERNAME.github.io/fullstack-cours/
-```
-
-### Netlify
-
-```bash
-# Via CLI
-npm install -g netlify-cli
-netlify deploy --prod --dir .
-```
-
-### Vercel
-
-```bash
-# Via CLI
-npm install -g vercel
-vercel --prod
-```
-
-> ⚠️ **Note pour le portfolio SPA** : La partie `json-server` nécessite un serveur Node.js.
-> Pour un déploiement 100% statique, remplacez les appels fetch par `localStorage`.
-> Pour conserver json-server en ligne, utilisez [Render.com](https://render.com) (gratuit).
-
----
-
-## 📁 Commits Git recommandés
-
-```bash
-# Structure de nommage conventionnelle
-git commit -m "init: structure du dépôt"
-git commit -m "feat: ajout cours HTML module 01"
-git commit -m "feat: ajout cours CSS module 02"
-git commit -m "feat: ajout cours Tailwind module 03"
-git commit -m "feat: ajout cours JavaScript module 04"
-git commit -m "feat: page d'accueil index.html"
-git commit -m "feat(spa): prototype HTML portfolio SPA"
-git commit -m "feat(spa): logique JS complète portfolio.js"
-git commit -m "docs: README.md"
-```
-
----
-
 ## 📖 Références
 
 - [MDN Web Docs — HTML](https://developer.mozilla.org/fr/docs/Web/HTML)
@@ -200,4 +90,4 @@ Ce projet est à usage pédagogique. Libre de réutilisation et adaptation.
 
 ---
 
-*Formation Développement Web Full Stack · HTML · CSS · Tailwind · JavaScript · 2025*
+*Formation Développement Web Full Stack · HTML · CSS · Tailwind · JavaScript · 2026*
