@@ -1,0 +1,32 @@
+# Dépendances Node.js
+node_modules/
+portfolio-spa/node_modules/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Éditeurs
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environnement
+.env
+.env.local
+.env.*.local
+
+# Build (si ajout d'un build Tailwind plus tard)
+dist/output.css
